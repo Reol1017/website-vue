@@ -77,6 +77,9 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 } */
+:root{
+  --el-color-primary: green !important;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

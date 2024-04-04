@@ -40,7 +40,7 @@
                     <button class="border border-green-700 w-28 h-10 rounded ml-4  hover:bg-green-700 hover:text-white">Townhouse</button>
                 </template>
             </a-popover>
-            <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded border border-green-700 ml-5 h-1/3 w-1/12 hover:shadow hover:shadow-green-700"><i class="fa fa-filter"></i>All filters</button>
+            <button @click="drawer = true" type="button" style="font-size: 0.9vw;" class=" outline-none rounded border border-green-700 ml-5 h-1/3 w-1/12 hover:shadow hover:shadow-green-700"><i class="fa fa-filter"></i>All filters</button>
             <button @click="resetOut($event)" type="button" style="font-size: 0.9vw;" class=" outline-none rounded border border-green-700 ml-5 h-1/3 w-1/12 hover:shadow hover:shadow-green-700">Reset</button>
         </div>
         <div class="body w-full h-5/6 flex">
@@ -96,6 +96,48 @@
             </div>
         </div>
     </div>
+    <el-drawer v-model="drawer" title="Filters">
+        <p class="font-bold">Price Range:</p>
+        <p class="my-4">
+            <el-input v-model="minPrice2"style="width: 45%;" placeholder="please input min price"></el-input>
+            <span class="mx-4">-</span>
+            <el-input v-model="maxPrice2"style="width: 45%;" placeholder="please input max price"></el-input>
+        </p>
+        <hr>
+        <p class="font-bold my-2">
+            Status:
+        </p>
+        <el-radio-group v-model="status">
+            <el-radio value="For Sale" size="large">For Sale</el-radio>
+            <el-radio value="Sold" size="large">Sold</el-radio>
+        </el-radio-group>
+        <hr>
+        <p class="font-bold my-2">Beds</p>
+        <el-slider v-model="beds" range show-stops :max="7" :min="3" />
+        <p class="font-bold my-2">Baths</p>
+        <el-slider v-model="baths" range show-stops :max="7" :min="3" />
+        <hr class="my-2">
+        <p class="font-bold my-2">Home Type</p>
+        <el-checkbox v-model="house" label="House" />
+        <el-checkbox v-model="townhouse" label="Townhouse" />
+        <hr class="my-2">
+        <p class="font-bold my-2">SQFT</p>
+        <p class="my-4">
+            <el-input v-model="minSqft"style="width: 45%;" placeholder="please input min price"></el-input>
+            <span class="mx-4">-</span>
+            <el-input v-model="maxSqft"style="width: 45%;" placeholder="please input max price"></el-input>
+        </p>
+        <hr class="my-2">
+        <p class="font-bold my-2">City</p>
+        <el-select v-model="cityValue" placeholder="please select city">
+          <el-option v-for="item in city" :label="item" :value="item" :key="item"></el-option>
+        </el-select>
+        <hr class="my-2">
+        <p class="text-right">
+            <el-button @click="resetIn">Reset</el-button>
+            <el-button type="primary" @click="filterIn">Confirm</el-button>
+        </p>
+    </el-drawer>
 </template>
 
 <script setup>
@@ -203,6 +245,79 @@ async function search(){
     await initData()
     data.value = data.value.filter(item => item['Project Address'].includes(searchValue.value))
 }
+
+// 抽屉
+const drawer = ref(false);
+const minPrice2 = ref('');
+const maxPrice2 = ref('');
+const status = ref('For Sale')
+const beds = ref([3, 7])
+const baths = ref([3, 7])
+const house = ref(false)
+const townhouse = ref(false);
+const minSqft = ref(0);
+const maxSqft = ref(0);
+const cityValue = ref('');
+const resetIn = async () => {
+    drawer.value = false;
+    minPrice2.value = '';
+    maxPrice2.value = '';
+    status.value = '';
+    beds.value = [3, 7];
+    baths.value = [3, 7];
+    house.value = false
+    townhouse.value = false
+    minSqft.value = 0;
+    maxSqft.value = 0;
+    cityValue.value = '';
+    await initData();
+}
+const filterIn = async () => {
+    await initData();
+    data.value = data.value.filter(item => item['House Status'] === status.value)
+    console.log(data.value);
+    data.value = data.value.filter(item => {
+        if(!maxPrice2.value && minPrice2.value){
+            return item['List Price'] >= Number(minPrice2.value)
+        } else if(!minPrice2.value && maxPrice2.value){
+            return item['List Price'] <= Number(maxPrice2.value)
+        } else if(minPrice2.value && maxPrice2.value){
+            return item['List Price'] <= Number(maxPrice2.value) && item['List Price'] >= Number(minPrice2.value)
+        } else{
+            return item
+        }
+    })
+    console.log(data.value)
+    data.value = data.value.filter(item => {
+        if(beds.value[0] === beds.value[1]){
+            return item['Number Of Bedrooms'] >= beds.value[0]
+        } else {
+            return item['Number Of Bedrooms'] >= beds.value[0] && item['Number Of Bedrooms'] <= beds.value[1]
+        }
+    })
+    console.log(data.value)
+    data.value = data.value.filter(item => {
+        if(baths.value[0] === baths.value[1]){
+            return item['Number Of Bathrooms'] >= baths.value[0]
+        } else {
+            return item['Number Of Bathrooms'] >= baths.value[0] && item['Number Of Bedrooms'] <= baths.value[1]
+        }
+    })
+    console.log(data.value)
+    data.value = data.value.filter(item => {
+        if(!maxSqft.value && minSqft.value){
+            return item['Total Finished SQFT'] >= Number(maxSqft.value)
+        } else if(!minSqft.value && maxSqft.value){
+            return item['Total Finished SQFT'] <= Number(maxSqft.value)
+        } else if(minSqft.value && maxSqft.value){
+            return item['Total Finished SQFT'] <= Number(maxSqft.value) && item['Total Finished SQFT'] >= Number(minSqft.value)
+        } else{
+            return item
+        }
+    })
+    console.log(data.value)
+    data.value = data.value.filter(item => item['Project Address'].includes(cityValue.value))
+}
 onMounted(() => {
 })
 </script>
@@ -240,5 +355,12 @@ onMounted(() => {
     border: 1px solid green;
     background-color: rgba(0, 255, 0, 0.2);
     border-radius: 5px;
+}
+.active{
+    background-color: green;
+    color: #fff;
+}
+hr{
+    border-color: #000;
 }
 </style>

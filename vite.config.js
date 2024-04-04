@@ -27,7 +27,7 @@ export default defineConfig({
           'arcoblue-6': '#00FF00',
         },
         javascriptEnabled: true,
-      }
+      },
     }
   },
 })

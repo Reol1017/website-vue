@@ -1,5 +1,5 @@
 <template>
-    <div class="home-container w-full h-full relative">
+    <div v-if="width >= 1280" class="home-container w-full h-full relative">
         <div class="header sticky w-full h-1/6 flex items-center shadow">
             <img src="../../assets/logo.png" alt="">
             <input v-model="searchValue" type="text" class="border w-1/5 h-1/3 border-green-700 outline-none rounded rounded-r-none">
@@ -12,25 +12,13 @@
                     <input v-model="maxPrice" @blur="filterPrice" type="text" class="max-price pl-2 h-8 border-green-700 outline-none border rounded">
                 </template>
             </a-popover>
-            <a-popover title="Beds/Baths Filter" trigger="click">
+            <a-popover style="width: 20%;"title="Beds/Baths Filter" trigger="click">
                 <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded border border-green-700 ml-5 h-1/3 w-1/12 hover:shadow hover:shadow-green-700">Beds/Baths filters</button>
                 <template #content>
                     <p>Beds</p>
-                    <div @click="filterBed($event)" class="w-60 h-12 border border-gray-400 rounded flex items-center">
-                        <button style="height: 90%;" class="w-1/2 hover:rounded border-r-2 text-center bed-num hover:border-green-600 hover:border">3+</button>
-                        <button style="height: 90%;" class="w-1/2 hover:rounded border-r-2 text-center bed-num hover:border-green-600 hover:border">4+</button>
-                        <button style="height: 90%;" class="w-1/2 hover:rounded border-r-2 text-center bed-num hover:border-green-600 hover:border">5+</button>
-                        <button style="height: 90%;" class="w-1/2 hover:rounded border-r-2 text-center bed-num hover:border-green-600 hover:border">6+</button>
-                        <button style="height: 90%;" class="w-1/2 hover:rounded border-r-2 text-center bed-num hover:border-green-600 hover:border">7+</button>
-                    </div>
+                    <el-slider @change="changeBedOut" v-model="beds2" range show-stops :max="8" :min="3" />
                     <p>Baths</p>
-                    <div @click="filterBath($event)" class=" w-60 h-12 border border-gray-400 rounded flex items-center">
-                        <button style="height: 90%;" class="w-1/2 hover:rounded border-r-2 text-center bath-num hover:border-green-600 hover:border">3+</button>
-                        <button style="height: 90%;" class="w-1/2 hover:rounded border-r-2 text-center bath-num hover:border-green-600 hover:border">4+</button>
-                        <button style="height: 90%;" class="w-1/2 hover:rounded border-r-2 text-center bath-num hover:border-green-600 hover:border">5+</button>
-                        <button style="height: 90%;" class="w-1/2 hover:rounded border-r-2 text-center bath-num hover:border-green-600 hover:border">6+</button>
-                        <button style="height: 90%;" class="w-1/2 hover:rounded border-r-2 text-center bath-num hover:border-green-600 hover:border">7+</button>
-                    </div>
+                    <el-slider @change="changeBathOut" v-model="bath2" range show-stops :max="8" :min="3" />
                 </template>
             </a-popover>
             <a-popover title="Home Type Filter" trigger="click">
@@ -95,55 +83,89 @@
                 </a-card>
             </div>
         </div>
+        <el-drawer v-model="drawer" title="Filters" size="40%">
+            <p class="font-bold">Price Range:</p>
+            <p class="my-4">
+                <el-input v-model="minPrice2"style="width: 45%;" placeholder="please input min price"></el-input>
+                <span class="mx-4">-</span>
+                <el-input v-model="maxPrice2"style="width: 45%;" placeholder="please input max price"></el-input>
+            </p>
+            <hr>
+            <p class="font-bold my-2">
+                Status:
+            </p>
+            <el-radio-group v-model="status">
+                <el-radio value="For Sale" size="large">For Sale</el-radio>
+                <el-radio value="Sold" size="large">Sold</el-radio>
+            </el-radio-group>
+            <hr>
+            <p class="font-bold my-2">Beds</p>
+            <el-slider v-model="beds" range show-stops :max="8" :min="3" />
+            <p class="font-bold my-2">Baths</p>
+            <el-slider v-model="baths" range show-stops :max="8" :min="3" />
+            <hr class="my-2">
+            <p class="font-bold my-2">Home Type</p>
+            <el-checkbox v-model="house" label="House" />
+            <el-checkbox v-model="townhouse" label="Townhouse" />
+            <hr class="my-2">
+            <p class="font-bold my-2">SQFT</p>
+            <p class="my-4">
+                <el-input v-model="minSqft"style="width: 45%;" placeholder="please input min price"></el-input>
+                <span class="mx-4">-</span>
+                <el-input v-model="maxSqft"style="width: 45%;" placeholder="please input max price"></el-input>
+            </p>
+            <hr class="my-2">
+            <p class="font-bold my-2">City</p>
+            <el-select v-model="cityValue" placeholder="please select city">
+              <el-option v-for="item in city" :label="item" :value="item" :key="item"></el-option>
+            </el-select>
+            <hr class="my-2">
+            <p class="text-right">
+                <el-button @click="resetIn">Reset</el-button>
+                <el-button type="primary" @click="filterIn">Confirm</el-button>
+            </p>
+        </el-drawer>
     </div>
-    <el-drawer v-model="drawer" title="Filters">
-        <p class="font-bold">Price Range:</p>
-        <p class="my-4">
-            <el-input v-model="minPrice2"style="width: 45%;" placeholder="please input min price"></el-input>
-            <span class="mx-4">-</span>
-            <el-input v-model="maxPrice2"style="width: 45%;" placeholder="please input max price"></el-input>
-        </p>
-        <hr>
-        <p class="font-bold my-2">
-            Status:
-        </p>
-        <el-radio-group v-model="status">
-            <el-radio value="For Sale" size="large">For Sale</el-radio>
-            <el-radio value="Sold" size="large">Sold</el-radio>
-        </el-radio-group>
-        <hr>
-        <p class="font-bold my-2">Beds</p>
-        <el-slider v-model="beds" range show-stops :max="7" :min="3" />
-        <p class="font-bold my-2">Baths</p>
-        <el-slider v-model="baths" range show-stops :max="7" :min="3" />
-        <hr class="my-2">
-        <p class="font-bold my-2">Home Type</p>
-        <el-checkbox v-model="house" label="House" />
-        <el-checkbox v-model="townhouse" label="Townhouse" />
-        <hr class="my-2">
-        <p class="font-bold my-2">SQFT</p>
-        <p class="my-4">
-            <el-input v-model="minSqft"style="width: 45%;" placeholder="please input min price"></el-input>
-            <span class="mx-4">-</span>
-            <el-input v-model="maxSqft"style="width: 45%;" placeholder="please input max price"></el-input>
-        </p>
-        <hr class="my-2">
-        <p class="font-bold my-2">City</p>
-        <el-select v-model="cityValue" placeholder="please select city">
-          <el-option v-for="item in city" :label="item" :value="item" :key="item"></el-option>
-        </el-select>
-        <hr class="my-2">
-        <p class="text-right">
-            <el-button @click="resetIn">Reset</el-button>
-            <el-button type="primary" @click="filterIn">Confirm</el-button>
-        </p>
-    </el-drawer>
+    <div v-else-if="width < 1280 && width >= 960" class="home-container w-full h-full relative">平板</div>
+    <div v-else class="home-container w-full h-full relative bg-gray-50">
+        <div class="mobile-header w-full h-1/10 bg-white justify-between flex items-center shadow">
+            <img src="../../assets/logo.png" class=" w-1/3 ml-2" alt="">
+            <el-icon size="25" class="w-1/3 mr-2"><Menu /></el-icon>
+        </div>
+        <div class="body-mobile w-full" style="height: 92%;">
+            <div class="map-mobile w-full h-full bg-white my-1">
+                <GoogleMap ref="mapMobileRef" api-key="AIzaSyDag9MI2Ss2T52lYGcWI2-uKXDlIpco3fY" style="width: 100%; height: 100%"
+                    :center="center" :zoom="13.5">
+                    <Marker ref="markerRef" @click="clickMobileMarker(item)" v-for="item in data" :key="item['Address in MLS']"
+                        :options="{ position: { lat: Number(item['Google Map Location Code'].split(',')[0]), lng: Number(item['Google Map Location Code'].split(',')[1]), label: item['Project Address'], title: item['Project Address'] } }">
+                        <InfoWindow>
+                                <el-card style="width: 200px; height: 220px" >
+                                    <template #header>
+                                        <div>
+                                            <span>Card name</span>
+                                        </div>
+                                    </template>
+                                        <p v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</p>
+                                    <template #footer><el-button type="primary">View Details</el-button></template>
+                                </el-card>
+                        </InfoWindow>
+                    </Marker>
+                    <!-- <CustomMarker @click="clickMobileMarker(item, $event)" v-for="item in data" :key="item['Address in MLS']" :options="{ position: { lat: Number(item['Google Map Location Code'].split(',')[0]), lng: Number(item['Google Map Location Code'].split(',')[1]), label: item['Project Address'], title: item['Project Address'], anchorPoint: 'BOTTOM_CENTER' } }">
+                        <div class=" w-8 h-8">
+                            <i ref="markerRef"  :class="`m${item['Project - Street ID']} fa fa-map-marker w-full h-full text-2xl text-red-700`"></i>
+                        </div>
+                    </CustomMarker> -->
+                </GoogleMap>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script setup>
-import { GoogleMap, Marker, CustomMarker } from 'vue3-google-map'
+import { Menu } from '@element-plus/icons-vue'
+import { GoogleMap, Marker, CustomMarker, InfoWindow } from 'vue3-google-map'
 import { processData } from '../../hooks/index'
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import httpObj from '../../api/api';
 import { useRouter } from 'vue-router';
 const router = useRouter()
@@ -155,12 +177,12 @@ for (let i = 11; i < 46; i++) {
 const markerRef = ref()
 const cardContainer = ref()
 const mapRef = ref()
-console.log(mapRef.value);
+// console.log(mapRef.value);
 watch([() => mapRef.value?.ready, center], ([ready, center]) => {
     if(!ready){
         return
     }
-    console.log(ready, center);
+    // console.log(ready, center);
     mapRef.value.map.panTo(center)
 }, {
     deep: true
@@ -202,6 +224,9 @@ function clickMarker(item, event) {
     document.querySelector(`#h${item['Project - Street ID'].trim()}`).style.border = '2px solid green'
 }
 function clickCard(item){
+    document.querySelectorAll('.card').forEach(item => {
+        item.style.border = 'none'
+    })
     markerRef.value.forEach(item => {
         item.classList.remove('text-5xl')
     })
@@ -209,6 +234,7 @@ function clickCard(item){
     center.value.lng = Number(item['Google Map Location Code'].split(',')[1])
 
     document.querySelector(`.m${item['Project - Street ID'].trim()}`).classList.add('text-5xl')
+    document.querySelector(`#h${item['Project - Street ID'].trim()}`).style.border = '2px solid green'
 }
 function details(item, e){
     console.log(item)
@@ -229,15 +255,36 @@ function filterPrice(){
     }
     // console.log(minPrice.value, maxPrice.value, data.value)
 }
+const beds2 = ref([3,8]);
+const bath2 = ref([3,8]);
+async function changeBedOut(value){
+    await initData()
+    data.value = data.value.filter(item => {
+        if(value[0] === value[1]){
+            return item['Number Of Bedrooms'] === value[0]
+        } else {
+            return item['Number Of Bedrooms'] >= value[0] && item['Number Of Bedrooms'] <= value[1]
+        }
+    })
+}
+async function changeBathOut(value){
+    await initData()
+    data.value = data.value.filter(item => {
+        if(value[0] === value[1]){
+            return item['Number Of Bathrooms'] === value[0]
+        } else {
+            return item['Number Of Bathrooms'] >= value[0] && item['Number Of Bedrooms'] <= value[1]
+        }
+    })
+    // data.value = data.value.filter(item => item['Number Of Bathrooms'] >= Number(e.target.innerText.split('+')[0]))
+}
+async function resetOut(e){
+    await initData()
+    beds2.value = [3,8];
+    bath2.value = [3,8];
+    minPrice.value = 0;
+    maxPrice.value = 0;
 
-function filterBed(e){
-    data.value = data.value.filter(item => item['Number Of Bedrooms'] >= Number(e.target.innerText.split('+')[0]))
-}
-function filterBath(e){
-    data.value = data.value.filter(item => item['Number Of Bathrooms'] >= Number(e.target.innerText.split('+')[0]))
-}
-function resetOut(e){
-    initData()
 }
 
 const searchValue = ref('')
@@ -251,8 +298,8 @@ const drawer = ref(false);
 const minPrice2 = ref('');
 const maxPrice2 = ref('');
 const status = ref('For Sale')
-const beds = ref([3, 7])
-const baths = ref([3, 7])
+const beds = ref([3, 8])
+const baths = ref([3, 8])
 const house = ref(false)
 const townhouse = ref(false);
 const minSqft = ref(0);
@@ -263,8 +310,8 @@ const resetIn = async () => {
     minPrice2.value = '';
     maxPrice2.value = '';
     status.value = '';
-    beds.value = [3, 7];
-    baths.value = [3, 7];
+    beds.value = [3, 8];
+    baths.value = [3, 8];
     house.value = false
     townhouse.value = false
     minSqft.value = 0;
@@ -275,7 +322,7 @@ const resetIn = async () => {
 const filterIn = async () => {
     await initData();
     data.value = data.value.filter(item => item['House Status'] === status.value)
-    console.log(data.value);
+    // console.log(data.value);
     data.value = data.value.filter(item => {
         if(!maxPrice2.value && minPrice2.value){
             return item['List Price'] >= Number(minPrice2.value)
@@ -287,23 +334,23 @@ const filterIn = async () => {
             return item
         }
     })
-    console.log(data.value)
+    // console.log(data.value)
     data.value = data.value.filter(item => {
         if(beds.value[0] === beds.value[1]){
-            return item['Number Of Bedrooms'] >= beds.value[0]
+            return item['Number Of Bedrooms'] === beds.value[0]
         } else {
             return item['Number Of Bedrooms'] >= beds.value[0] && item['Number Of Bedrooms'] <= beds.value[1]
         }
     })
-    console.log(data.value)
+    // console.log(data.value)
     data.value = data.value.filter(item => {
         if(baths.value[0] === baths.value[1]){
-            return item['Number Of Bathrooms'] >= baths.value[0]
+            return item['Number Of Bathrooms'] === baths.value[0]
         } else {
             return item['Number Of Bathrooms'] >= baths.value[0] && item['Number Of Bedrooms'] <= baths.value[1]
         }
     })
-    console.log(data.value)
+    // console.log(data.value)
     data.value = data.value.filter(item => {
         if(!maxSqft.value && minSqft.value){
             return item['Total Finished SQFT'] >= Number(maxSqft.value)
@@ -315,17 +362,26 @@ const filterIn = async () => {
             return item
         }
     })
-    console.log(data.value)
+    // console.log(data.value)
     data.value = data.value.filter(item => item['Project Address'].includes(cityValue.value))
 }
 onMounted(() => {
 })
+
+
+const width = computed(() => {
+    return window.innerWidth;
+})
+function clickMobileMarker(item, event){
+}
 </script>
 
 <style scoped>
 ::deep(.arco-card-size-medium .arco-card-header-title) {
     font-size: 1.3vw !important;
 }
+
+
 /* 修改滚动条的样式 */
 ::-webkit-scrollbar {
   width: 4px;
@@ -362,5 +418,8 @@ onMounted(() => {
 }
 hr{
     border-color: #000;
+}
+.h-1\/10{
+    height: 8%;
 }
 </style>

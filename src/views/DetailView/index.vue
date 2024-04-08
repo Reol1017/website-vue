@@ -70,8 +70,8 @@
             </div>
         </div>
 
-        <div class="w-11/12 mx-auto mt-8">
-            <div class="w-full h-full rounded-lg shadow-md hover:shadow-xl">
+        <div class="w-11/12 h-fit mx-auto mt-8">
+            <div class="w-full h-full rounded-lg shadow-md hover:shadow-xl pb-2">
                     <p class="w-full h-1/12 text-center my-2" style="font-size: 1.2vw;font-family: 'Reddit Mono', monospace;">School And Other Info</p>
                     <p class="w-11/12 justify-between mx-auto leading-6 h-8 my-2 flex"
                         style="font-size: 1.2vw; font-family: 'Reddit Mono', monospace;">
@@ -98,7 +98,7 @@
                         <span><i class="fa fa-home"></i> Builder Model: {{ detail['Builder Model'] }}</span>
                     </p>
                     <hr/>
-                    <p class="w-11/12 text-sm m-auto leading-7" style="font-size: 0.95vw; font-family: 'Reddit Mono', monospace;">{{
+                    <p class="w-11/12 text-sm m-auto mt-3 leading-7" style="font-size: 0.95vw; font-family: 'Reddit Mono', monospace;">{{
                         detail['Description'] }}</p>
                 </div>
         </div>
@@ -119,10 +119,13 @@
                 <p class="w-full text-center mb-2" style="font-size: 1.2vw;font-family: 'Reddit Mono', monospace;">
                     Gallery</p>
                 <div class="carousel-container w-full h-2/3">
-                    <el-carousel ref="swiperRef" indicator-position="none" style="height: 100%;" :autoplay="false">
+                    <el-carousel  @change="changeImage" ref="swiperRef" indicator-position="none" style="height: 100%;" :autoplay="false">
                         <el-carousel-item style="height: 100%;" v-for="(image, index) in picData"
                             :key="image['MLS House - Project - Street ID']">
-                            <img :src="image['Link To File']" class="h-full w-full" alt="">
+                            <div class="w-full h-full">
+                                <el-image :src="image['Link To File']" fit="contain" :preview-teleported="true" :preview-src-list="[image['Link To File']]"></el-image>
+                            </div>
+                            <!-- <img :src="image['Link To File']" class="w-full h-full" alt=""> -->
                         </el-carousel-item>
                     </el-carousel>
                 </div>
@@ -131,20 +134,19 @@
                     <div @click="picToggle(index)"
                         :class="{ border: index === picIndex, 'border-green-700': index === picIndex, active: index === picIndex }"
                         class=" w-1/4 h-4/5 flex-shrink-0 mx-2 hover:shadow hover:shadow-green-700"
-                        v-for="(image, index) in picData" :key="image['MLS House - Project - Street ID']">
-                        <img :id="`i${index}`" class="h-full object-contain" :src="image['Link To File']" alt="">
+                        v-for="(image, index) in picData" :key="image['MLS House - Project - Street ID']" :style="{ backgroundImage: `url(${image['Link To File']})`, backgroundRepeat: 'no-repeat', backgroundSize: 'contain', backgroundPosition: 'center' }">
+                        <!-- <img :id="`i${index}`" class="w-full h-full object-cover" :src="image['Link To File']" alt=""> -->
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
 <script setup>
 import { GoogleMap, Marker, CustomMarker } from 'vue3-google-map'
 import { useRoute } from 'vue-router';
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import httpObj from '../../api/api';
 import { processData } from '../../hooks';
 const route = useRoute()
@@ -199,6 +201,21 @@ function pressKeyToggle(e) {
 function locationToggle(url) {
     window.location.href = url;
 }
+
+function changeImage(index){
+    picIndex.value = index;
+    document.querySelector('.active').scrollIntoView({ behavior: 'smooth', inline: 'center' })
+
+}
+
+const user = computed(() => {
+    const ua = navigator.userAgent;
+  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)) {
+    return 'Mobile';
+  } else {
+    return 'Desktop';
+  }
+})
 </script>
 
 <style scoped>

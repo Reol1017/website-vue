@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full h-full">
+    <div class="pc w-full h-full">
         <p class="w-11/12 text-sm mx-auto my-2 leading-7"
             style="font-size: 0.95vw; font-family: 'Reddit Mono', monospace;">Spring Madness Sale! $35K Closing Credit
             Through 04/30/2024! Offer valid only on to-be-built properties owned by Anchor Homes. Contract must be fully

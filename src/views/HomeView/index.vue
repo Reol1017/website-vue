@@ -130,7 +130,7 @@
     <div v-else class="home-container w-full h-full relative bg-gray-50">
         <div class="mobile-header w-full h-1/10 bg-white justify-between flex items-center shadow">
             <img src="../../assets/logo.png" class=" w-1/3 ml-2" alt="">
-            <el-icon size="25" class="w-1/3 mr-2"><Menu /></el-icon>
+            <el-icon size="25" class="w-1/3 mr-2" @click="mobileDrawer = true"><Menu /></el-icon>
         </div>
         <div class="body-mobile w-full" style="height: 92%;">
             <div class="map-mobile w-full h-full bg-white my-1">
@@ -138,16 +138,27 @@
                     :center="center" :zoom="13.5">
                     <Marker ref="markerRef" @click="clickMobileMarker(item)" v-for="item in data" :key="item['Address in MLS']"
                         :options="{ position: { lat: Number(item['Google Map Location Code'].split(',')[0]), lng: Number(item['Google Map Location Code'].split(',')[1]), label: item['Project Address'], title: item['Project Address'] } }">
-                        <InfoWindow>
-                                <el-card style="width: 200px; height: 220px" >
-                                    <template #header>
-                                        <div>
-                                            <span>Card name</span>
+                        <InfoWindow v-model="InfoWindowVisible.find(item2 => item2.id === item['Project - Street ID']).visible" v-if="sid === item['Project - Street ID']">
+                                <div class="window h-60 w-64">
+                                    <div class="window-header w-full h-1/4 flex justify-between items-center border-b font-bold" style="font-size: 0.6rem;">{{ item['Project Address'] }}</div>
+                                        <div class="img w-full h-3/4 rounded" :style="{ backgroundImage: `url(${item['Profile Pic Link']})`, backgroundRepeat: 'no-repeat', backgroundSize: 'contain', backgroundPosition: 'center' }">
                                         </div>
-                                    </template>
-                                        <p v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</p>
-                                    <template #footer><el-button type="primary">View Details</el-button></template>
-                                </el-card>
+                                        <div class="info w-full">
+                                            <p style="font-size: 0.65rem;" class=" flex leading-7 justify-between ml-2">
+                                                <span style="width: 8rem;"><i class="fa fa-dollar mr-1 text-black"></i>Price: {{ item['List Price'].toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}</span>
+                                                <span style="width: 8rem;" class=" ml-2"><i class="fa fa-bath mr-1 text-black"></i>Baths: {{ item['Number Of Bathrooms'] }}</span>
+                                            </p>
+                                            <p style="font-size: 0.65rem;" class=" flex leading-7 justify-between ml-2">
+                                                <span style="width: 8rem;"><i class="fa fa-bed mr-1 text-black"></i>Bed: {{ item['Number Of Bedrooms'] }}</span>
+                                                <span style="width: 8rem;" class=" ml-2"><i class="fa fa-home mr-1 text-black"></i>Garage: {{ item['Number Of Garage'] }}-Car</span>
+                                            </p>
+                                            <p style="font-size: 0.65rem;" class=" flex leading-7 ml-2">
+                                                <span style="width: 8rem;"><i class="fa fa-square mr-1 text-black"></i>SQFT: {{ item['Total Finished SQFT'].toLocaleString() }} SQFT</span>
+                                                <span style="width: 8rem;"><i class="fa fa-home mr-1 text-black"></i>Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
+                                            </p>
+                                        <el-link @click="mobileDetails(item)" class="my-2" style="font-size: 0.65rem; width: 6rem;" :underline="false" type="primary">View Details</el-link>
+                                    </div>
+                                </div>
                         </InfoWindow>
                     </Marker>
                     <!-- <CustomMarker @click="clickMobileMarker(item, $event)" v-for="item in data" :key="item['Address in MLS']" :options="{ position: { lat: Number(item['Google Map Location Code'].split(',')[0]), lng: Number(item['Google Map Location Code'].split(',')[1]), label: item['Project Address'], title: item['Project Address'], anchorPoint: 'BOTTOM_CENTER' } }">
@@ -158,6 +169,49 @@
                 </GoogleMap>
             </div>
         </div>
+        <!-- 抽屉 -->
+        <el-drawer v-model="mobileDrawer" size="100%" title="Filter" direction="ttb">
+            <p class="font-bold">Price Range:</p>
+            <p class="my-4">
+                <el-input v-model="minPrice2"style="width: 40%;" placeholder="min price"></el-input>
+                <span class="mx-4">-</span>
+                <el-input v-model="maxPrice2"style="width: 40%;" placeholder="max price"></el-input>
+            </p>
+            <hr>
+            <p class="font-bold my-2">
+                Status:
+            </p>
+            <el-radio-group v-model="status">
+                <el-radio value="For Sale" size="large">For Sale</el-radio>
+                <el-radio value="Sold" size="large">Sold</el-radio>
+            </el-radio-group>
+            <hr>
+            <p class="font-bold my-2">Beds</p>
+            <el-slider v-model="beds" range show-stops :max="8" :min="3" />
+            <p class="font-bold my-2">Baths</p>
+            <el-slider v-model="baths" range show-stops :max="8" :min="3" />
+            <hr class="my-2">
+            <p class="font-bold my-2">Home Type</p>
+            <el-checkbox v-model="house" label="House" />
+            <el-checkbox v-model="townhouse" label="Townhouse" />
+            <hr class="my-2">
+            <p class="font-bold my-2">SQFT</p>
+            <p class="my-4">
+                <el-input v-model="minSqft"style="width: 40%;" placeholder="please input min sqft"></el-input>
+                <span class="mx-4">-</span>
+                <el-input v-model="maxSqft"style="width: 40%;" placeholder="please input max sqft"></el-input>
+            </p>
+            <hr class="my-2">
+            <p class="font-bold my-2">City</p>
+            <el-select v-model="cityValue" placeholder="please select city">
+              <el-option v-for="item in city" :label="item" :value="item" :key="item"></el-option>
+            </el-select>
+            <hr class="my-2">
+            <p class="text-right">
+                <el-button @click="resetIn">Reset</el-button>
+                <el-button type="primary" @click="filterIn">Confirm</el-button>
+            </p>
+        </el-drawer>
     </div>
 </template>
 
@@ -207,6 +261,7 @@ async function initData() {
 		const cityB = city.value.indexOf(b['Project Address'].split(', ')[1])
 		return cityA - cityB
     })
+    // console.log(data.value);
 }
 initData()
 function clickMarker(item, event) {
@@ -307,9 +362,10 @@ const maxSqft = ref(0);
 const cityValue = ref('');
 const resetIn = async () => {
     drawer.value = false;
+    mobileDrawer.value = false;
     minPrice2.value = '';
     maxPrice2.value = '';
-    status.value = '';
+    status.value = 'For Sale';
     beds.value = [3, 8];
     baths.value = [3, 8];
     house.value = false
@@ -353,17 +409,29 @@ const filterIn = async () => {
     // console.log(data.value)
     data.value = data.value.filter(item => {
         if(!maxSqft.value && minSqft.value){
-            return item['Total Finished SQFT'] >= Number(maxSqft.value)
+            return Number(item['Total Finished SQFT']) >= Number(minSqft.value)
         } else if(!minSqft.value && maxSqft.value){
-            return item['Total Finished SQFT'] <= Number(maxSqft.value)
+            return Number(item['Total Finished SQFT']) <= Number(maxSqft.value)
         } else if(minSqft.value && maxSqft.value){
-            return item['Total Finished SQFT'] <= Number(maxSqft.value) && item['Total Finished SQFT'] >= Number(minSqft.value)
+            return Number(item['Total Finished SQFT']) <= Number(maxSqft.value) && item['Total Finished SQFT'] >= Number(minSqft.value)
         } else{
             return item
         }
     })
     // console.log(data.value)
     data.value = data.value.filter(item => item['Project Address'].includes(cityValue.value))
+    // console.log(data.value);
+    mobileDrawer.value = false;
+    minPrice2.value = '';
+    maxPrice2.value = '';
+    status.value = 'For Sale';
+    beds.value = [3, 8];
+    baths.value = [3, 8];
+    house.value = false
+    townhouse.value = false
+    minSqft.value = 0;
+    maxSqft.value = 0;
+    cityValue.value = '';
 }
 onMounted(() => {
 })
@@ -372,8 +440,24 @@ onMounted(() => {
 const width = computed(() => {
     return window.innerWidth;
 })
+const sid = ref('')
+const InfoWindowVisible = computed(() => {
+    return data.value.map(item => {
+        return {
+            id: item['Project - Street ID'],
+            visible: true
+        }
+    })
+})
 function clickMobileMarker(item, event){
+    sid.value = item['Project - Street ID']
+
 }
+function mobileDetails(item){
+    router.push(`/detail/${item['Project - Street ID']}`)
+}
+
+const mobileDrawer = ref(false);
 </script>
 
 <style scoped>

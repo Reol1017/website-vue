@@ -1,5 +1,5 @@
 <template>
-    <div class="pc w-full h-full">
+    <div v-if="width > 1280" class="pc w-full h-full">
         <p class="w-11/12 text-sm mx-auto my-2 leading-7"
             style="font-size: 0.95vw; font-family: 'Reddit Mono', monospace;">Spring Madness Sale! $35K Closing Credit
             Through 04/30/2024! Offer valid only on to-be-built properties owned by Anchor Homes. Contract must be fully
@@ -141,6 +141,130 @@
             </div>
         </div>
     </div>
+    <div v-else-if="width <= 1280 && width > 768">平板</div>
+    <div v-else-if="width <= 768" class="mobile w-full h-full">
+        <p class="w-11/12 text-sm mx-auto font-bold my-2 leading-7" style=" font-family: 'Reddit Mono', monospace;">
+            Spring Madness Sale! $35K Closing Credit Through 04/30/2024! Offer valid only on to-be-built properties owned by Anchor Homes. Contract must be fully ratified and full deposit received by 04/30/2024.
+        </p>
+        <div class="img w-11/12 h-1/3 flex justify-center items-center mx-auto">
+            <img :src="picData[0]['Link To File']" class="h-full w-full object-cover rounded" alt="">
+        </div>
+        <div class="card mx-auto my-4 w-11/12 h-fit  p-2 rounded shadow-md hover:shadow-lg">
+                    <p class="title w-full font-bold text-center text-xs"
+                        style="font-family: 'Reddit Mono', monospace;">{{ detail['Project Address'] }}
+                    </p>
+                    <p class="w-11/12 justify-between leading-6 h-8 my-4 flex mx-auto text-xs"
+                        style="font-family: 'Reddit Mono', monospace;">
+                        <span><i class="fa fa-dollar"></i> Price: {{ detail['List Price'].toLocaleString('en-US', {
+                    style:
+                        'currency', currency: 'USD'
+                }) }}</span>
+                        <span><i class="fa fa-bath"></i> Baths: {{ detail['Number Of Bathrooms'] }}</span>
+                    </p>
+                    <p class="w-11/12 text-xs justify-between mx-auto leading-6 h-8 my-4 flex"
+                        style="font-family: 'Reddit Mono', monospace;">
+                        <span><i class="fa fa-bed"></i> Beds: {{ detail['Number Of Bedrooms'] }}</span>
+                        <span><i class="fa fa-home"></i> Garage: {{ detail['Number Of Garage'] }}</span>
+                    </p>
+                    <p class="w-11/12 text-xs justify-between mx-auto leading-6 h-8 my-4 flex"
+                        style="font-family: 'Reddit Mono', monospace;">
+                        <span><i class="fa fa-square"></i> SQFT: {{ detail['Total Finished SQFT'].toLocaleString() }}
+                            SQFT</span>
+                        <span><i class="fa fa-home"></i> Lot Size: {{ detail['Lot Size Acres'] }} Acres</span>
+                    </p>
+                    <hr>
+                    <p class="w-11/12 text-xs justify-between mx-auto leading-6 h-8 my-2 flex"
+                        style="font-family: 'Reddit Mono', monospace;">
+                        <span><i class="fa fa-bed"></i> Main Level Beds: {{ detail['Main Level Bedroom'] }}</span>
+                        <span><i class="fa fa-bath"></i> Main Level Baths: {{ detail['Main Level Bathroom'] }}</span>
+                    </p>
+                    <hr>
+                    <p class="w-11/12 text-xs justify-between mx-auto leading-6 h-8 my-2 flex"
+                        style="font-family: 'Reddit Mono', monospace;">
+                        <span><i class="fa fa-bed"></i> Upper Level Beds: {{ detail['Upper Level Bedroom'] }}</span>
+                        <span><i class="fa fa-bath"></i> Upper Level Baths: {{ detail['Upper Level Bathroom'] }}</span>
+                    </p>
+                    <hr>
+                    <p class="w-11/12 text-xs justify-between mx-auto leading-6 h-8 my-2 flex"
+                        style="font-family: 'Reddit Mono', monospace;">
+                        <span><i class="fa fa-bed"></i> Lower Level Beds: {{ detail['Lower Level Bedroom'] }}</span>
+                        <span><i class="fa fa-bath"></i> Lower Level Baths: {{ detail['Lower Level Bathroom'] }}</span>
+                    </p>
+                    <p class="btn-line w-full h-16 mt-2 flex">
+                        <button type="button"
+                            class="border w-1/4 rounded border-gray-300 text-xs flex flex-col items-center justify-center mx-auto hover:shadow-lg hover:bg-gray-100"><i
+                                style="" class="fa m-auto fa-book"></i><span
+                                style="font-family: 'Reddit Mono', monospace;">BROCHURE</span></button>
+                        <button @click="locationToggle('https://www.myanchorhomes.com/remote-home-tour')" type="button"
+                            class="border w-1/4 rounded border-gray-300 text-xs flex flex-col items-center justify-center mx-auto hover:shadow-lg hover:bg-gray-100"><i
+                                style="" class="fa m-auto fa-video-camera"></i><span
+                                style="font-family: 'Reddit Mono', monospace;">VIDEO
+                                TOUR</span></button>
+                        <button @click="locationToggle('https://www.myanchorhomes.com/virtual-tour')" type="button"
+                            class="border w-1/4 rounded border-gray-300 text-xs flex flex-col items-center justify-center mx-auto hover:shadow-lg hover:bg-gray-100"><i
+                                style="" class="fa m-auto fa-rotate-left"></i><span
+                                style="font-family: 'Reddit Mono', monospace;">VIRTUAI
+                                TOUR</span></button>
+                    </p>
+        </div>
+        <hr class="w-11/12 mx-auto my-4">
+        <div class="w-11/12 mx-auto my-4 h-fit rounded-lg shadow-md hover:shadow-xl pb-2">
+                    <p class="w-full h-1/12 text-center my-2 text-xs" style="font-family: 'Reddit Mono', monospace;">School And Other Info</p>
+                    <p class="w-11/12 text-xs justify-between mx-auto leading-6 h-8 my-2 flex"
+                        style="font-family: 'Reddit Mono', monospace;">
+                        <span><i class="fa fa-square"></i> Above Grade Finished SQFT: {{ detail['Above Grade Finished SQFT'].toLocaleString() }} SQFT</span>
+                    </p>
+                    <p class="w-11/12 text-xs justify-between mx-auto leading-6 h-8 my-2 flex"
+                        style="font-family: 'Reddit Mono', monospace;">
+                        <span><i class="fa fa-square"></i> Below Grade Finished SQFT: {{ detail['Below Grade Finished SQFT'].toLocaleString() }} SQFT</span>
+                    </p>
+                    <p class="w-11/12 text-xs justify-between mx-auto leading-6 h-8 my-2 flex"
+                        style="font-family: 'Reddit Mono', monospace;">
+                        <span><i class="fa fa-graduation-cap"></i> Elementary School: {{ detail['Elementary School'] }}</span>
+                    </p>
+                    <p class="w-11/12 text-xs justify-between mx-auto leading-6 h-8 my-2 flex"
+                        style="font-family: 'Reddit Mono', monospace;">
+                        <span><i class="fa fa-graduation-cap"></i> Middle Or Junior School: {{ detail['Middle Or Junior School'] }}</span>
+                    </p>
+                    <p class="w-11/12 text-xs justify-between mx-auto leading-6 h-8 my-2 flex"
+                        style="font-family: 'Reddit Mono', monospace;">
+                        <span><i class="fa fa-graduation-cap"></i> High School: {{ detail['High School'] }}</span>
+                    </p>
+                    <p class="w-11/12 text-xs justify-between mx-auto leading-6 h-8 my-2 flex"
+                        style="font-family: 'Reddit Mono', monospace;">
+                        <span><i class="fa fa-home"></i> Builder Model: {{ detail['Builder Model'] }}</span>
+                    </p>
+                </div>
+                <hr class="w-11/12 mx-auto my-4">
+                <div class="w-11/12 mx-auto my-4 h-1/3 rounded-lg bg-transparent">
+                    <p class="w-full text-center mb-2 text-sm" style="font-family: 'Reddit Mono', monospace;">
+                    Gallery</p>
+                    <van-swipe class="my-swipe" autoplay="3000" :show-indicators="false">
+                        <van-swipe-item @click="mobilePicPreview(image)"  v-for="(image, index) in picData" :key="image['MLS House - Project - Street ID']">
+                            <img class="w-full h-full object-cover rounded" :src="image['Link To File']" alt="">
+                        </van-swipe-item>
+                    </van-swipe>
+                </div>
+                <hr class="w-11/12 mx-auto my-4">
+                <div class="w-11/12 mx-auto my-4 h-fit rounded-lg shadow-md hover:shadow-xl pb-2">
+                    <p class="w-full text-center mb-2 text-sm" style="font-family: 'Reddit Mono', monospace;">
+                        Description</p>
+                    <p class="w-11/12 text-xs m-auto mt-3 leading-7" style="font-family: 'Reddit Mono', monospace;">{{
+                        detail['Description'] }}</p>
+                </div>
+                <hr class="w-11/12 mx-auto my-4">
+                <div class="w-11/12 mx-auto my-4 h-1/2 rounded-lg shadow-md hover:shadow-xl pb-2">
+                    <p class="w-full text-center mb-2 text-sm" style="font-family: 'Reddit Mono', monospace;">
+                    Direction</p>
+                    <GoogleMap api-key="AIzaSyDag9MI2Ss2T52lYGcWI2-uKXDlIpco3fY" style="width: 100%; height: 100%"
+                        :center="{ lat: Number(detail['Google Map Location Code'].split(',')[0]), lng: Number(detail['Google Map Location Code'].split(',')[1]) }"
+                        :zoom="16">
+                        <Marker
+                            :options="{ position: { lat: Number(detail['Google Map Location Code'].split(',')[0]), lng: Number(detail['Google Map Location Code'].split(',')[1]), label: detail['Project Address'], title: detail['Project Address'] } }">
+                        </Marker>
+                    </GoogleMap>
+                </div>
+    </div>
 </template>
 
 <script setup>
@@ -204,7 +328,7 @@ function locationToggle(url) {
 
 function changeImage(index){
     picIndex.value = index;
-    document.querySelector('.active').scrollIntoView({ behavior: 'smooth', inline: 'center' })
+    document.querySelector('.active').scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'center' })
 
 }
 
@@ -216,6 +340,18 @@ const user = computed(() => {
     return 'Desktop';
   }
 })
+
+const width = computed(() => {
+    return window.innerWidth;
+})
+
+
+// 移动端轮播
+// const mobilePicIndex = ref(0);
+// const vanSwiperRef = ref(null);
+function mobilePicPreview(image) {
+    showImagePreview([image['Link To File']]);
+}
 </script>
 
 <style scoped>

@@ -1,10 +1,10 @@
 <template>
-    <div v-if="width >= 1280" class="home-container w-full h-full relative">
-        <div class="header sticky w-full h-1/6 flex items-center shadow">
-            <input v-model="searchValue" type="text" class=" ml-4 border w-1/5 h-1/3 border-green-700 outline-none rounded rounded-r-none">
-            <button @click="search" class="border-green-600 mr-auto w-1/12 h-1/3 bg-green-600 text-white hover:bg-green-500 rounded-r"><i class="fa fa-search"></i></button>
+    <div v-if="width >= 768" class="home-container w-full h-full relative">
+        <div style="height: 10%;"class="header sticky w-full flex items-center shadow">
+            <input v-model="searchValue" type="text" class=" ml-4 border w-1/5 h-1/2 border-green-700 outline-none rounded rounded-r-none">
+            <button @click="search" class="border-green-600 mr-auto w-1/12 h-1/2 bg-green-600 text-white hover:bg-green-500 rounded-r"><i class="fa fa-search"></i></button>
             <a-popover title="Price Filter" trigger="click">
-                <button type="button" style="font-size: 0.9vw;" class="ml-40 outline-none rounded border border-green-700 h-1/3 w-1/12 hover:shadow hover:shadow-green-700">Price</button>
+                <button type="button" style="font-size: 0.9vw;" class="ml-40 outline-none rounded border border-green-700 h-1/2 w-1/12 hover:shadow hover:shadow-green-700">Price</button>
                 <template #content>
                     <input v-model="minPrice" @blur="filterPrice" type="text" class="min-price pl-2 h-8 border-green-700 outline-none border rounded">
                     <span class=" ml-2 mr-2">-</span>
@@ -12,7 +12,7 @@
                 </template>
             </a-popover>
             <a-popover style="width: 20%;"title="Beds/Baths Filter" trigger="click">
-                <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded border border-green-700 ml-5 h-1/3 w-1/12 hover:shadow hover:shadow-green-700">Beds/Baths</button>
+                <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded border border-green-700 ml-5 h-1/2 w-1/12 hover:shadow hover:shadow-green-700">Beds/Baths</button>
                 <template #content>
                     <p>Beds</p>
                     <el-slider @change="changeBedOut" v-model="beds2" range show-stops :max="8" :min="3" />
@@ -21,16 +21,16 @@
                 </template>
             </a-popover>
             <a-popover title="Home Type Filter" trigger="click">
-                <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded border border-green-700 ml-5 h-1/3 w-1/12 hover:shadow hover:shadow-green-700">Home Type</button>
+                <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded border border-green-700 ml-5 h-1/2 w-1/12 hover:shadow hover:shadow-green-700">Home Type</button>
                 <template #content>
                     <button class="border border-green-700 w-28 h-10 rounded hover:bg-green-700 hover:text-white">House</button>
                     <button class="border border-green-700 w-28 h-10 rounded ml-4  hover:bg-green-700 hover:text-white">Townhouse</button>
                 </template>
             </a-popover>
-            <button @click="drawer = true" type="button" style="font-size: 0.9vw;" class=" outline-none rounded border border-green-700 ml-5 h-1/3 w-1/12 hover:shadow hover:shadow-green-700"><i class="fa fa-filter"></i>All filters</button>
-            <button @click="resetOut($event)" type="button" style="font-size: 0.9vw;" class=" mr-4 outline-none rounded border border-green-700 ml-5 h-1/3 w-1/12 hover:shadow hover:shadow-green-700">Reset</button>
+            <button @click="drawer = true" type="button" style="font-size: 0.9vw;" class=" outline-none rounded border border-green-700 ml-5 h-1/2 w-1/12 hover:shadow hover:shadow-green-700"><i class="fa fa-filter"></i>All filters</button>
+            <button @click="resetOut($event)" type="button" style="font-size: 0.9vw;" class=" mr-4 outline-none rounded border border-green-700 ml-5 h-1/2 w-1/12 hover:shadow hover:shadow-green-700">Reset</button>
         </div>
-        <div class="body w-full h-5/6 flex">
+        <div style="height: 90%;" class="body w-full flex">
             <div class="map w-1/2 h-full">
                 <GoogleMap ref="mapRef" api-key="AIzaSyDag9MI2Ss2T52lYGcWI2-uKXDlIpco3fY" style="width: 100%; height: 100%"
                     :center="center" :zoom="13.5">
@@ -45,32 +45,32 @@
                 </GoogleMap>
             </div>
             <div ref="cardContainer" class="card bg-gray-100 w-1/2 h-full overflow-x-hidden overflow-y-scroll">
-                <div style="width: 98%;" :id="`h${item['Project - Street ID'].trim()}`" class="card h-1/2 mx-auto rounded bg-white mt-2 mb-2 border hover:shadow-lg" v-for="item in data" :key="item['Address in MLS']">
+                <div @click="clickCard(item)" style="width: 98%; height: 40%;" :id="`h${item['Project - Street ID'].trim()}`" class="card mx-auto rounded-lg bg-white mt-2 mb-2 border hover:shadow-lg" v-for="item in data" :key="item['Address in MLS']">
                     <div class="card-header flex justify-between items-center w-full h-1/4 border border-b">
-                        <div class="ml-2 font-bold" >{{ item['Project Address'] }}</div>
-                        <div class="mr-2 border border-green-700 rounded p-1 text-green-700" >{{ item['House Status'] }}</div>
+                        <div style="font-size: 1vw;" class="ml-2 font-bold" >{{ item['Project Address'] }}</div>
+                        <div style="font-size: 1vw;" class="mr-2 border border-green-700 rounded p-1 text-green-700" >{{ item['House Status'] }}</div>
                     </div>
                     <div class="card-body w-full h-3/4 p-1 flex">
-                        <div class="img w-1/3 h-full rounded-lg">
-                            <img :src="item['Profile Pic Link']" class="h-full w-full object-contain rounded-lg"lt="">
+                        <div class="img w-1/3 h-full rounded-lg flex justify-center items-center">
+                            <img :src="item['Profile Pic Link']" class="h-full rounded-lg"lt="">
                         </div>
                         <div class="info w-2/3 h-full py-4 flex flex-col justify-between">
-                            <div class="conten w-full h-fit">
-                                <p style="font-size: 1vw;" class=" flex leading-7 justify-between ml-2">
-                                    <span style="width: 200px;"><i class="fa fa-dollar mr-1 text-black"></i>Price: {{ item['List Price'].toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}</span>
-                                    <span style="width: 200px;" class=" ml-2"><i class="fa fa-bath mr-1 text-black"></i>Baths: {{ item['Number Of Bathrooms'] }}</span>
+                            <div style="font-size: 0.9vw;" class=" flex-grow conten w-full flex flex-col">
+                                <p class=" w-full flex leading-7 justify-between ml-2 flex-grow">
+                                    <span class="flex w-1/2 items-center"><img class="mr-1"style="width: 1vw; height: 1vw;" src="../../assets/dollar.svg" alt="">Price: {{ item['List Price'].toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}</span>
+                                    <span class="flex w-1/2 items-center  ml-2"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/bath.svg" alt="">Baths: {{ item['Number Of Bathrooms'] }}</span>
                                 </p>
-                                <p style="font-size: 1vw;" class=" flex leading-7 justify-between ml-2">
-                                    <span style="width: 200px;"><i class="fa fa-bed mr-1 text-black"></i>Bed: {{ item['Number Of Bedrooms'] }}</span>
-                                    <span style="width: 200px;" class=" ml-2"><i class="fa fa-home mr-1 text-black"></i>Garage: {{ item['Number Of Garage'] }}-Car</span>
+                                <p class=" w-full flex leading-7 justify-between ml-2 flex-grow">
+                                    <span class="flex w-1/2 items-center"><img class="mr-1"style="width: 1vw; height: 1vw;" src="../../assets/bed.svg" alt="">Bed: {{ item['Number Of Bedrooms'] }}</span>
+                                    <span class="flex w-1/2 items-center  ml-2"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/car.svg" alt="">Garage: {{ item['Number Of Garage'] }}-Car</span>
                                 </p>
-                                <p style="font-size: 1vw;" class=" flex leading-7 ml-2 justify-between">
-                                    <span style="width: 200px;"><i class="fa fa-square mr-1 text-black"></i>SQFT: {{ item['Total Finished SQFT'].toLocaleString() }} SQFT</span>
-                                    <span style="width: 200px;"><i class="fa fa-home mr-1 text-black"></i>Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
+                                <p class=" w-full flex leading-7 ml-2 justify-between flex-grow">
+                                    <span class="flex w-1/2 items-center"><img class="mr-1"style="width: 1vw; height: 1vw;" src="../../assets/SQFT.svg" alt="">SQFT: {{ item['Total Finished SQFT'].toLocaleString() }} SQFT</span>
+                                    <span class="flex w-1/2 items-center  ml-2"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/ruler.svg" alt="">Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
                                 </p>
                             </div>
-                            <p style="font-size: 0.9vw;" class=" mt-4 flex justify-end leading-7">
-                                <button @click="details(item, $event)" class="text-white bg-green-700 hover:bg-green-600 p-2 rounded">View Details</button>
+                            <p style="font-size: 0.85vw;" class=" m-2 flex justify-end items-end flex-grow">
+                                <button @click="details(item, $event)" class="text-white h-3/4 bg-green-700 hover:bg-green-600 p-2 rounded flex items-center justify-center">View Details</button>
                             </p>
                         </div>
                     </div>
@@ -120,7 +120,7 @@
             </p>
         </el-drawer>
     </div>
-    <div v-else-if="width < 1280 && width >= 960" class="home-container w-full h-full relative">平板</div>
+    <!-- <div v-else-if="width < 1280 && width >= 960" class="home-container w-full h-full relative">平板</div> -->
     <div v-else class="home-container w-full h-full relative bg-gray-50">
         <div class="mobile-header w-full h-1/10 bg-white justify-between flex items-center shadow">
             <!-- <img src="../../assets/logo.png" class=" w-1/3 ml-2" alt=""> -->
@@ -140,16 +140,16 @@
                                         </div>
                                         <div class="info w-full">
                                             <p style="font-size: 0.65rem;" class=" flex leading-7 justify-between ml-2">
-                                                <span style="width: 8rem;"><i class="fa fa-dollar mr-1 text-black"></i>Price: {{ item['List Price'].toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}</span>
-                                                <span style="width: 8rem;" class=" ml-2"><i class="fa fa-bath mr-1 text-black"></i>Baths: {{ item['Number Of Bathrooms'] }}</span>
+                                                <span style="width: 8rem;" class="flex items-center"><img class="mr-1"style="width: 0.65rem; height: 0.65rem;" src="../../assets/dollar.svg" alt="">Price: {{ item['List Price'].toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}</span>
+                                                <span style="width: 8rem;" class=" ml-2 flex items-center"><img class="mr-1"style="width: 0.65rem; height: 0.65rem;" src="../../assets/bath.svg" alt="">Baths: {{ item['Number Of Bathrooms'] }}</span>
                                             </p>
                                             <p style="font-size: 0.65rem;" class=" flex leading-7 justify-between ml-2">
-                                                <span style="width: 8rem;"><i class="fa fa-bed mr-1 text-black"></i>Bed: {{ item['Number Of Bedrooms'] }}</span>
-                                                <span style="width: 8rem;" class=" ml-2"><i class="fa fa-home mr-1 text-black"></i>Garage: {{ item['Number Of Garage'] }}-Car</span>
+                                                <span style="width: 8rem;" class="flex items-center"><img class="mr-1"style="width: 0.65rem; height: 0.65rem;" src="../../assets/bed.svg" alt="">Bed: {{ item['Number Of Bedrooms'] }}</span>
+                                                <span style="width: 8rem;" class=" ml-2 flex items-center"><img class="mr-1"style="width: 0.65rem; height: 0.65rem;" src="../../assets/car.svg" alt="">Garage: {{ item['Number Of Garage'] }}-Car</span>
                                             </p>
                                             <p style="font-size: 0.65rem;" class=" flex leading-7 ml-2">
-                                                <span style="width: 8rem;"><i class="fa fa-square mr-1 text-black"></i>SQFT: {{ item['Total Finished SQFT'].toLocaleString() }} SQFT</span>
-                                                <span style="width: 8rem;"><i class="fa fa-home mr-1 text-black"></i>Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
+                                                <span style="width: 8rem;" class="flex items-center"><img class="mr-1"style="width: 0.65rem; height: 0.65rem;" src="../../assets/SQFT.svg" alt="">SQFT: {{ item['Total Finished SQFT'].toLocaleString() }} SQFT</span>
+                                                <span style="width: 8rem;" class="flex items-center" ><img class="mr-1"style="width: 0.65rem; height: 0.65rem;" src="../../assets/ruler.svg" alt="">Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
                                             </p>
                                         <el-link @click="mobileDetails(item)" class="my-2" style="font-size: 0.65rem; width: 6rem;" :underline="false" type="primary">View Details</el-link>
                                     </div>

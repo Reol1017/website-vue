@@ -363,4 +363,30 @@ function mobilePicPreview(image) {
   background: #555;
   /* 设置滑块悬停时的背景颜色 */
 }
+
+/* 修改滚动条的样式 */
+.img-preview::-webkit-scrollbar {
+  width: 1px !important;
+  /* 设置滚动条的宽度 */
+}
+
+/* 滚动条轨道 */
+.img-preview::-webkit-scrollbar-track {
+  background: transparent;
+  /* 设置轨道的背景颜色 */
+}
+
+/* 滚动条滑块 */
+.img-preview::-webkit-scrollbar-thumb {
+  background: #888;
+  /* 设置滑块的背景颜色 */
+  border-radius: 6px;
+  /* 设置滑块的圆角 */
+}
+
+/* 滚动条滑块悬停时的样式 */
+.img-preview::-webkit-scrollbar-thumb:hover {
+  background: #555;
+  /* 设置滑块悬停时的背景颜色 */
+}
 </style>

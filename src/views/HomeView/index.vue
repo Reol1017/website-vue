@@ -1,18 +1,16 @@
 <template>
     <div v-if="width >= 768" class="home-container w-full h-full relative">
         <div style="height: 10%;"class="header sticky w-full flex items-center shadow">
-            <input v-model="searchValue" type="text" class=" ml-4 border w-1/5 h-1/2 border-green-700 outline-none rounded rounded-r-none">
-            <button @click="search" class="border-green-600 mr-auto w-1/12 h-1/2 bg-green-600 text-white hover:bg-green-500 rounded-r"><i class="fa fa-search"></i></button>
-            <a-popover title="Price Filter" trigger="click">
-                <button type="button" style="font-size: 0.9vw;" class="ml-40 outline-none rounded border border-green-700 h-1/2 w-1/12 hover:shadow hover:shadow-green-700">Price</button>
+            <input v-model="searchValue" type="text" class=" ml-4 border w-1/5 h-1/2 border-green-700 outline-none rounded rounded-r-none pl-2">
+            <button @click="search" class="border-green-600 mr-auto w-1/12 h-1/2 text-green-700 border border-l-0 rounded-r hover:shadow"><i class="fa fa-search"></i></button>
+            <a-popover style="width: 30%" title="Price Filter" trigger="click">
+                <button type="button" style="font-size: 0.9vw;" class="ml-40 outline-none rounded border text-green-700 border-green-700 h-1/2 w-1/12 hover:shadow">Price</button>
                 <template #content>
-                    <input v-model="minPrice" @blur="filterPrice" type="text" class="min-price pl-2 h-8 border-green-700 outline-none border rounded">
-                    <span class=" ml-2 mr-2">-</span>
-                    <input v-model="maxPrice" @blur="filterPrice" type="text" class="max-price pl-2 h-8 border-green-700 outline-none border rounded">
+                    <el-slider :format-tooltip="(value) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })" @change="filterPrice" v-model="priceFilter" show-stops  :min="2000000" range :max="5000000" :step="100000"></el-slider>
                 </template>
             </a-popover>
             <a-popover style="width: 20%;"title="Beds/Baths Filter" trigger="click">
-                <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded border border-green-700 ml-5 h-1/2 w-1/12 hover:shadow hover:shadow-green-700">Beds/Baths</button>
+                <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded border text-green-700 border-green-700 ml-5 h-1/2 w-1/12 hover:shadow">Beds/Baths</button>
                 <template #content>
                     <p>Beds</p>
                     <el-slider @change="changeBedOut" v-model="beds2" range show-stops :max="8" :min="3" />
@@ -21,25 +19,25 @@
                 </template>
             </a-popover>
             <a-popover title="Home Type Filter" trigger="click">
-                <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded border border-green-700 ml-5 h-1/2 w-1/12 hover:shadow hover:shadow-green-700">Home Type</button>
+                <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded border text-green-700 border-green-700 ml-5 h-1/2 w-1/12 hover:shadow">Home Type</button>
                 <template #content>
                     <button class="border border-green-700 w-28 h-10 rounded hover:bg-green-700 hover:text-white">House</button>
                     <button class="border border-green-700 w-28 h-10 rounded ml-4  hover:bg-green-700 hover:text-white">Townhouse</button>
                 </template>
             </a-popover>
-            <button @click="drawer = true" type="button" style="font-size: 0.9vw;" class=" outline-none rounded border border-green-700 ml-5 h-1/2 w-1/12 hover:shadow hover:shadow-green-700"><i class="fa fa-filter"></i>All filters</button>
-            <button @click="resetOut($event)" type="button" style="font-size: 0.9vw;" class=" mr-4 outline-none rounded border border-green-700 ml-5 h-1/2 w-1/12 hover:shadow hover:shadow-green-700">Reset</button>
+            <button @click="drawer = true" type="button" style="font-size: 0.9vw;" class=" outline-none text-green-700 rounded border border-green-700 ml-5 h-1/2 w-1/12 hover:shadow"><i class="fa fa-filter"></i>All filters</button>
+            <button @click="resetOut($event)" type="button" style="font-size: 0.9vw;" class=" mr-4 outline-none text-green-700 rounded border border-green-700 ml-5 h-1/2 w-1/12 hover:shadow">Reset</button>
         </div>
         <div style="height: 90%;" class="body w-full flex">
             <div class="map w-1/2 h-full">
                 <GoogleMap ref="mapRef" api-key="AIzaSyDag9MI2Ss2T52lYGcWI2-uKXDlIpco3fY" style="width: 100%; height: 100%"
                     :center="center" :zoom="13.5">
-                    <!-- <Marker ref="markerRef" @click="clickMarker(item)" v-for="item in data" :key="item['Address in MLS']"
+                    <!-- <Marker ref="markerRef" @click="clickMarker(item, $event, index)" v-for="(item, index) in data" :key="item['Address in MLS']"
                         :options="{ position: { lat: Number(item['Google Map Location Code'].split(',')[0]), lng: Number(item['Google Map Location Code'].split(',')[1]), label: item['Project Address'], title: item['Project Address'] } }">
                     </Marker> -->
-                    <CustomMarker @click="clickMarker(item, $event)" v-for="item in data" :key="item['Address in MLS']" :options="{ position: { lat: Number(item['Google Map Location Code'].split(',')[0]), lng: Number(item['Google Map Location Code'].split(',')[1]), label: item['Project Address'], title: item['Project Address'], anchorPoint: 'BOTTOM_CENTER' } }">
-                        <div class=" w-8 h-8">
-                            <i ref="markerRef"  :class="`m${item['Project - Street ID']} fa fa-map-marker w-full h-full text-2xl text-red-700`"></i>
+                    <CustomMarker   v-for="item in data" :key="item['Address in MLS']" :options="{ position: { lat: Number(item['Google Map Location Code'].split(',')[0]), lng: Number(item['Google Map Location Code'].split(',')[1]), label: item['Project Address'], title: item['Project Address'], anchorPoint: 'BOTTOM_CENTER' } }">
+                        <div class=" w-10 h-10" >
+                            <i ref="markerRef" @click.self="clickMarker(item, $event)"  :class="`m${item['Project - Street ID']} fa fa-map-marker w-full h-full text-2xl text-red-700`"></i>
                         </div>
                     </CustomMarker>
                 </GoogleMap>
@@ -70,7 +68,7 @@
                                 </p>
                             </div>
                             <p style="font-size: 0.85vw;" class=" m-2 flex justify-end items-end flex-grow">
-                                <button @click="details(item, $event)" class="text-white h-3/4 bg-green-700 hover:bg-green-600 p-2 rounded flex items-center justify-center">View Details</button>
+                                <button @click="details(item, $event)" class="text-green-700 border border-green-700 w-1/2 h-3/4 hover:shadow-lg p-2 rounded flex items-center justify-center">View Details</button>
                             </p>
                         </div>
                     </div>
@@ -80,9 +78,7 @@
         <el-drawer v-model="drawer" title="Filters" size="40%">
             <p class="font-bold">Price Range:</p>
             <p class="my-4">
-                <el-input v-model="minPrice2"style="width: 45%;" placeholder="please input min price"></el-input>
-                <span class="mx-4">-</span>
-                <el-input v-model="maxPrice2"style="width: 45%;" placeholder="please input max price"></el-input>
+                <el-slider :format-tooltip="(value) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })" v-model="priceFilter2" show-stops  :min="2000000" range :max="5000000" :step="100000"></el-slider>
             </p>
             <hr>
             <p class="font-bold my-2">
@@ -168,9 +164,7 @@
         <el-drawer v-model="mobileDrawer" size="100%" title="Filter" direction="ttb">
             <p class="font-bold">Price Range:</p>
             <p class="my-4">
-                <el-input v-model="minPrice2"style="width: 40%;" placeholder="min price"></el-input>
-                <span class="mx-4">-</span>
-                <el-input v-model="maxPrice2"style="width: 40%;" placeholder="max price"></el-input>
+                <el-slider :format-tooltip="(value) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })" @change="filterPrice" v-model="priceFilter2" show-stops  :min="2000000" range :max="5000000" :step="100000"></el-slider>
             </p>
             <hr>
             <p class="font-bold my-2">
@@ -292,18 +286,17 @@ function details(item, e){
     router.push(`/detail/${item['Project - Street ID']}`)
 }
 
-const minPrice = ref(0)
-const maxPrice = ref(0)
-// 外部价格过滤 class="w-1/2 h-11/12 border-r-2"
-function filterPrice(){
-    if (minPrice.value && !maxPrice.value) {
-        data.value = data.value.filter(item => Number(item['List Price']) >= Number(minPrice.value))
-    } else if (!minPrice.value && maxPrice.value) {
-        data.value = data.value.filter(item => Number(item['List Price']) <= Number(maxPrice.value))
-    } else if (minPrice.value && maxPrice.value) {
-        data.value = data.value.filter(item => Number(item['List Price']) >= Number(minPrice.value) && Number(item['List Price']) <= Number(maxPrice.value))
-    }
-    // console.log(minPrice.value, maxPrice.value, data.value)
+const priceFilter = ref([2000000, 5000000])
+// 外部价格过滤
+async function filterPrice(){
+    await initData()
+    data.value = data.value.filter(item => {
+        if(priceFilter.value[0] === priceFilter.value[1]){
+            return item['List Price'] === priceFilter.value[0]
+        } else {
+            return item['List Price'] >= priceFilter.value[0] && item['List Price'] <= priceFilter.value[1]
+        }
+    })
 }
 const beds2 = ref([3,8]);
 const bath2 = ref([3,8]);
@@ -332,8 +325,7 @@ async function resetOut(e){
     await initData()
     beds2.value = [3,8];
     bath2.value = [3,8];
-    minPrice.value = 0;
-    maxPrice.value = 0;
+    priceFilter.value = [2000000, 5000000]
 
 }
 
@@ -345,8 +337,7 @@ async function search(){
 
 // 抽屉
 const drawer = ref(false);
-const minPrice2 = ref('');
-const maxPrice2 = ref('');
+const priceFilter2 = ref([2000000, 5000000])
 const status = ref('For Sale')
 const beds = ref([3, 8])
 const baths = ref([3, 8])
@@ -358,8 +349,7 @@ const cityValue = ref('');
 const resetIn = async () => {
     drawer.value = false;
     mobileDrawer.value = false;
-    minPrice2.value = '';
-    maxPrice2.value = '';
+    priceFilter2.value = [2000000, 5000000]
     status.value = 'For Sale';
     beds.value = [3, 8];
     baths.value = [3, 8];
@@ -373,19 +363,15 @@ const resetIn = async () => {
 const filterIn = async () => {
     await initData();
     data.value = data.value.filter(item => item['House Status'] === status.value)
-    // console.log(data.value);
+    console.log(data.value);
     data.value = data.value.filter(item => {
-        if(!maxPrice2.value && minPrice2.value){
-            return item['List Price'] >= Number(minPrice2.value)
-        } else if(!minPrice2.value && maxPrice2.value){
-            return item['List Price'] <= Number(maxPrice2.value)
-        } else if(minPrice2.value && maxPrice2.value){
-            return item['List Price'] <= Number(maxPrice2.value) && item['List Price'] >= Number(minPrice2.value)
-        } else{
-            return item
+        if(priceFilter2.value[0] === priceFilter2.value[1]){
+            return item['List Price'] === priceFilter2.value[0]
+        } else {
+            return item['List Price'] >= priceFilter2.value[0] && item['List Price'] <= priceFilter2.value[1]
         }
     })
-    // console.log(data.value)
+    console.log(data.value, priceFilter2.value)
     data.value = data.value.filter(item => {
         if(beds.value[0] === beds.value[1]){
             return item['Number Of Bedrooms'] === beds.value[0]
@@ -417,8 +403,7 @@ const filterIn = async () => {
     data.value = data.value.filter(item => item['Project Address'].includes(cityValue.value))
     // console.log(data.value);
     mobileDrawer.value = false;
-    minPrice2.value = '';
-    maxPrice2.value = '';
+    priceFilter2.value = [2000000, 5000000]
     status.value = 'For Sale';
     beds.value = [3, 8];
     baths.value = [3, 8];
@@ -427,6 +412,7 @@ const filterIn = async () => {
     minSqft.value = 0;
     maxSqft.value = 0;
     cityValue.value = '';
+    drawer.value = false;
 }
 onMounted(() => {
 })

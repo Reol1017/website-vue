@@ -77,22 +77,34 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 } */
-:root{
-  font-family: 'Reddit Mono', monospace;
+:root {
   --el-color-primary: green !important;
 }
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-html, body{
+@font-face {
+  font-family: "Font1";
+  src: url("./assets/font/BAHNSCHRIFT.TTF") format("truetype");
+}
+@font-face {
+  font-family: "Font2";
+  src: url("./assets/font/Boon-400.woff2.otf") format("opentype");
+}
+@font-face {
+  font-family: "Font3";
+  src: url("./assets/font/menulis-1.ttf") format("truetype");
+
+}
+html,
+body {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: 'Reddit Mono', monospace;
 }
-#app{
+#app {
   width: 100%;
   height: 100%;
-  font-family: 'Reddit Mono', monospace;
+  font-family: 'Font3';
 }

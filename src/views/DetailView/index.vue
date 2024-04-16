@@ -1,127 +1,103 @@
 <template>
-    <div v-if="width >= 768" class="pc w-full h-full">
-        <p class="w-11/12 text-sm mx-auto my-2"
-            style="font-size: 0.95vw; line-height: 5vh">Spring Madness Sale! $35K Closing Credit
-            Through 04/30/2024! Offer valid only on to-be-built properties owned by Anchor Homes. Contract must be fully
-            ratified and full deposit received by 04/30/2024.</p>
-        <div class="line-one w-11/12 h-3/4 flex m-auto">
-            <div class="img w-1/2 h-full flex justify-center items-center">
-                <img :src="picData[0]['Link To File']" class="h-5/6 rounded" alt="">
-            </div>
-            <div class="info w-1/2 h-full flex justify-center items-center">
-                <div class="card w-11/12 h-5/6 flex flex-col  p-2 rounded shadow-md hover:shadow-lg">
-                    <p class="title w-full flex-grow font-bold text-center"
-                        style="font-size: 1.2vw; ">{{ detail['Project Address'] }}
-                    </p>
-                    <p class="w-11/12 flex-grow leading-6  flex mx-auto"
-                        style="font-size: 0.95vw; ">
-                        <span class="flex items-center flex-grow"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/dollar.svg" alt=""> Price: {{ detail['List Price'].toLocaleString('en-US', {
-                    style:
-                        'currency', currency: 'USD'
-                }) }}</span>
-                        <span class="flex items-center flex-grow justify-end"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/bath.svg" alt=""> Baths: {{ detail['Number Of Bathrooms'] }}</span>
-                    </p>
-                    <p class="w-11/12 flex-grow mx-auto leading-6 flex"
-                        style="font-size: 0.95vw; ">
-                        <span class="flex items-center flex-grow"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/bed.svg" alt=""> Beds: {{ detail['Number Of Bedrooms'] }}</span>
-                        <span class="flex items-center flex-grow justify-end"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/car.svg" alt=""> Garage: {{ detail['Number Of Garage'] }}</span>
-                    </p>
-                    <p class="w-11/12 flex-grow  mx-auto leading-6  flex"
-                        style="font-size: 0.95vw; ">
-                        <span class="flex items-center flex-grow"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/SQFT.svg" alt=""> SQFT: {{ detail['Total Finished SQFT'].toLocaleString() }}SQFT</span>
-                        <span class="flex items-center flex-grow justify-end"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/ruler.svg" alt="">Lot Size: {{ detail['Lot Size Acres'] }} Acres</span>
-                    </p>
-                    <p class="w-11/12 flex-grow mx-auto leading-6  flex"
-                        style="font-size: 0.95vw; ">
-                        <span class="flex items-center flex-grow"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/bed.svg" alt=""> Main Level Beds: {{ detail['Main Level Bedroom'] }}</span>
-                        <span class="flex items-center flex-grow justify-end"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/bath.svg" alt=""> Main Level Baths: {{ detail['Main Level Bathroom'] }}</span>
-                    </p>
-                    <p class="w-11/12 flex-grow mx-auto leading-6 flex"
-                        style="font-size: 0.95vw; ">
-                        <span class="flex items-center flex-grow"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/bed.svg" alt=""> Upper Level Beds: {{ detail['Upper Level Bedroom'] }}</span>
-                        <span class="flex items-center flex-grow justify-end"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/bath.svg" alt=""> Upper Level Baths: {{ detail['Upper Level Bathroom'] }}</span>
-                    </p>
-                    <p class="w-11/12 flex-grow  mx-auto leading-6 flex"
-                        style="font-size: 0.95vw; ">
-                        <span class="flex items-center flex-grow"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/bed.svg" alt=""> Lower Level Beds: {{ detail['Lower Level Bedroom'] }}</span>
-                        <span class="flex items-center flex-grow justify-end"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/bath.svg" alt=""> Lower Level Baths: {{ detail['Lower Level Bathroom'] }}</span>
-                    </p>
-                    <p class="btn-line flex-grow w-full flex">
-                        <button type="button" @click="previewPdf(detail['Brochure'].url)" class="border w-1/4 rounded border-gray-300 flex items-center justify-center mx-auto hover:shadow-lg hover:bg-gray-100"><img class="mr-1" style="width: 1.2vw; height: 1.2vw;" src="../../assets/book.svg" alt=""><span style=" font-size: 1.2vw;">BROCHURE</span></button>
-                        <button @click="locationToggle('https://www.myanchorhomes.com/remote-home-tour')" type="button" class="border w-1/4 rounded border-gray-300 flex items-center justify-center mx-auto hover:shadow-lg hover:bg-gray-100"><img class="mr-1" style="width: 1.2vw; height: 1.2vw;" src="../../assets/video.svg" alt=""><span style=" font-size: 1.2vw;">VIDEO TOUR</span></button>
-                        <button @click="locationToggle('https://www.myanchorhomes.com/virtual-tour')" type="button" class="border w-1/4 rounded border-gray-300 flex items-center justify-center mx-auto hover:shadow-lg hover:bg-gray-100"><img class="mr-1" style="width: 1.2vw; height: 1.2vw;" src="../../assets/virtual.svg" alt=""><span style=" font-size: 1.2vw;">VIRTUA TOUR</span></button>
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="w-11/12 h-fit mx-auto mt-8">
-            <div class="w-full h-full rounded-lg shadow-md hover:shadow-xl pb-2">
-                    <p class="w-full h-1/12 text-center my-2" style="font-size: 1.2v;">School And Other Info</p>
-                    <p class="w-11/12 justify-between mx-auto leading-8 h-8 my-4 flex"
-                        style="font-size: 1.2vw;">
-                        <span class="flex items-center"><img class="mr-2" style="width: 1vw; height: 1vw;" src="../../assets/SQFT.svg" alt=""> Above Grade Finished SQFT: {{ detail['Above Grade Finished SQFT'].toLocaleString() }} SQFT</span>
-                    </p>
-                    <p class="w-11/12 justify-between mx-auto leading-8 h-8 my-4 flex"
-                        style="font-size: 1.2vw;">
-                        <span class="flex items-center"><img class="mr-2" style="width: 1vw; height: 1vw;" src="../../assets/SQFT.svg" alt=""> Below Grade Finished SQFT: {{ detail['Below Grade Finished SQFT'].toLocaleString() }} SQFT</span>
-                    </p>
-                    <p class="w-11/12 justify-between mx-auto leading-8 h-8 my-4 flex"
-                        style="font-size: 1.2vw;">
-                        <span><i class="fa fa-graduation-cap"></i> Elementary School: {{ detail['Elementary School'] }}</span>
-                    </p>
-                    <p class="w-11/12 justify-between mx-auto leading-8 h-8 my-4 flex"
-                        style="font-size: 1.2vw;">
-                        <span><i class="fa fa-graduation-cap"></i> Middle Or Junior School: {{ detail['Middle Or Junior School'] }}</span>
-                    </p>
-                    <p class="w-11/12 justify-between mx-auto leading-8 h-8 my-4 flex"
-                        style="font-size: 1.2vw;">
-                        <span><i class="fa fa-graduation-cap"></i> High School: {{ detail['High School'] }}</span>
-                    </p>
-                    <p class="w-11/12 justify-between mx-auto leading-8 h-8 my-4 flex"
-                        style="font-size: 1.2vw;">
-                        <span><i class="fa fa-home"></i> Builder Model: {{ detail['Builder Model'] }}</span>
-                    </p>
-                    <hr/>
-                    <p class="w-11/12 m-auto mt-3" style="font-size: 0.95vw; line-height: 5vh">{{
-                        detail['Description'] }}</p>
-                </div>
-        </div>
-        <div class="img-carousel w-11/12 h-4/5 m-auto mt-5 mb-5 flex">
-            <div class="map-container w-1/2 h-full p-2" ref="mapContainer">
-                <p class="w-full text-center mb-2" style="font-size: 1.2vw;">
-                    Direction</p>
-                <GoogleMap api-key="AIzaSyDag9MI2Ss2T52lYGcWI2-uKXDlIpco3fY" style="width: 100%; height: 100%"
-                    :center="{ lat: Number(detail['Google Map Location Code'].split(',')[0]), lng: Number(detail['Google Map Location Code'].split(',')[1]) }"
-                    :zoom="16">
-                    <Marker
-                        :options="{ position: { lat: Number(detail['Google Map Location Code'].split(',')[0]), lng: Number(detail['Google Map Location Code'].split(',')[1]), label: detail['Project Address'], title: detail['Project Address'] } }">
-                    </Marker>
-                </GoogleMap>
-
-            </div>
-            <div class="img-container w-1/2 h-full p-2">
-                <p class="w-full text-center mb-2" style="font-size: 1.2vw;">
-                    Gallery</p>
-                <div class="carousel-container w-full h-2/3">
-                    <el-carousel  @change="changeImage" ref="swiperRef" indicator-position="none" style="height: 100%;" :autoplay="false">
-                        <el-carousel-item style="height: 100%;" v-for="(image, index) in picData"
-                            :key="image['MLS House - Project - Street ID']">
-                            <div class="w-full h-full">
-                                <el-image style="width: 100%; height: 100%;" :src="image['Link To File']" fit="contain" :preview-teleported="true" :preview-src-list="[image['Link To File']]"></el-image>
-                            </div>
-                            <!-- <img :src="image['Link To File']" class="w-full h-full" alt=""> -->
-                        </el-carousel-item>
-                    </el-carousel>
-                </div>
-                <div tabindex="0" ref="previewRef" @keydown="pressKeyToggle($event)"
-                    class="img-preview w-full h-1/3 overflow-x-scroll overflow-y-hidden flex items-center">
-                    <div @click="picToggle(index)"
-                        :class="{ border: index === picIndex, 'border-green-700': index === picIndex, active: index === picIndex }"
-                        class=" w-1/4 h-4/5 flex-shrink-0 mx-2 hover:shadow hover:shadow-green-700"
-                        v-for="(image, index) in picData" :key="image['MLS House - Project - Street ID']" :style="{ backgroundImage: `url(${image['Link To File']})`, backgroundRepeat: 'no-repeat', backgroundSize: 'contain', backgroundPosition: 'center' }">
-                        <!-- <img :id="`i${index}`" class="w-full h-full object-cover" :src="image['Link To File']" alt=""> -->
+    <div v-if="width >= 768" class="pc w-full h-full ">
+        <div class="container w-11/12 mx-auto h-full flex justify-center overflow-y-scroll  pt-3 relative">
+            <div class="col-left w-4/5">
+                <p class="my-2 text-center font-bold" style="font-size: 1.2vw;">{{ detail['Project Address'] }}</p>
+                <div class="img w-full mx-auto h-2/3 flex">
+                    <div class="carsouel h-full w-4/5">
+                        <el-carousel @change="changeImage" ref=swiperRef style="height: 100%; width: 100%;" indicator-position="none" arrow="always" :autoplay="false">
+                          <el-carousel-item v-for="(img, index) in picData" :key="index">
+                            <el-image style="width: 100%; height: 100%;" :preview-teleported="true" :preview-src-list="picData.map(item => item['Link To File'])" :src="img['Link To File']"></el-image>
+                          </el-carousel-item>
+                        </el-carousel>
                     </div>
+                    <div class="preview h-full w-1/5 overflow-y-scroll flex flex-col" tabindex="0" ref="previewRef" @keydown="pressKeyToggle($event)">
+                        <div class="img-container w-full h-1/4" v-for="(img, index) in picData">
+                            <img :src="img['Link To File']" class="object-contain w-4/5 h-4/5" :class="{ border: index === picIndex, 'border-green-700': index === picIndex, active: index === picIndex }" @click="picToggle(index)" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-container w-full h-fit my-4 mx-auto shadow">
+                    <el-tabs v-model="detailName" type="border-card" style="width: 100%;font-family: 'Font2'; font-size: 1.1vw;" tab-position="top">
+                        <el-tab-pane label="Details" name="first">
+                            <div class="details w-full h-full">
+                                <p class="w-full p-2 text-center font-bold" style="font-size: 1.5vw;" >Details</p>
+                                <p class="w-full flex justify-around border-b p-2 my-2">
+                                    <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-dollar mr-2"></span>Price: {{ detail['List Price'].toLocaleString('en-US', {style:'currency', currency: 'USD'}) }}</span>
+                                    <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-bathroom-fill mr-2"></span>Baths: {{ detail['Number Of Bathrooms'] }}</span>
+                                </p>
+                                <p class="w-full flex justify-around border-b p-2 my-2">
+                                    <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-Bed-1 mr-2"></span>Beds: {{ detail['Number Of Bedrooms'] }}</span>
+                                    <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-garage mr-2"></span>Garage: {{ detail['Number Of Garage'] }}</span>
+                                </p>
+                                <p class="w-full flex justify-around border-b p-2 my-2">
+                                    <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span>SQFT: {{ detail['Total Finished SQFT'].toLocaleString() }}</span>
+                                    <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-feature-lot-size mr-2"></span>Lot Size: {{ detail['Lot Size Acres'] }}</span>
+                                </p>
+                                <p class="w-full flex justify-around border-b p-2 my-2">
+                                    <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-Bed-1 mr-2"></span>Main Level Bedrooms: {{ detail['Main Level Bedroom'] }}</span>
+                                    <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-bathroom-fill mr-2"></span>Main Level Bathrooms: {{ detail['Main Level Bathroom'] }}</span>
+                                </p>
+                                <p class="w-full flex justify-around border-b p-2 my-2">
+                                    <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-Bed-1 mr-2"></span>Upper Level Bedrooms: {{ detail['Upper Level Bedroom'] }}</span>
+                                    <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-bathroom-fill mr-2"></span>Upper Level Bathrooms: {{ detail['Upper Level Bathroom'] }}</span>
+                                </p>
+                                <p class="w-full flex justify-around border-b p-2 my-2">
+                                    <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-Bed-1 mr-2"></span>Lower Level Bedrooms: {{ detail['Upper Level Bedroom'] }}</span>
+                                    <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-bathroom-fill mr-2"></span>Lower Level Bathrooms: {{ detail['Lower Level Bathroom'] }}</span>
+                                </p>
+                            </div>
+                        </el-tab-pane>
+                        <el-tab-pane label="Description" name="second">
+                            <p class="w-full p-2 text-center font-bold" style="font-size: 1.5vw;" >Description</p>
+                            <p class="w-full p-2" style="line-height: 2.2vw;">{{ detail['Description'] }}</p>
+                        </el-tab-pane>
+                        <el-tab-pane label="Other Details" name="third">
+                            <div class="details w-full h-full">
+                                <p class="w-full p-2 text-center font-bold" style="font-size: 1.5vw;" >Other Details</p>
+                                <p class="w-full flex justify-start border-b p-2 my-2">
+                                    <span class="flex"><span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span> Above Grade Finished SQFT: {{ detail['Above Grade Finished SQFT'].toLocaleString() }} SQFT</span>
+                                </p>
+                                <p class="w-full flex justify-start border-b p-2 my-2">
+                                    <span class="flex"><span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span> Below Grade Finished SQFT: {{ detail['Below Grade Finished SQFT'].toLocaleString() }} SQFT</span>
+                                </p>
+                                <p class="w-full flex justify-start border-b p-2 my-2">
+                                    <span class="flex"><span style="font-size: 1.25vw;" class="iconfont icon-elementary-school-4 mr-2"></span> Elementary School: {{ detail['Elementary School'] }}</span>
+                                </p>
+                                <p class="w-full flex justify-start border-b p-2 my-2">
+                                    <span class="flex"><span style="font-size: 1.25vw;" class="iconfont icon-_huabanfuben mr-2"></span> Middle Or Junior School: {{ detail['Middle Or Junior School'] }}</span>
+                                </p>
+                                <p class="w-full flex justify-start border-b p-2 my-2">
+                                    <span class="flex"><span style="font-size: 1.25vw;" class="iconfont icon-high-school-1 mr-2"></span> High School: {{ detail['High School'] }}</span>
+                                </p>
+                                <p class="w-full flex justify-start border-b p-2 my-2">
+                                    <span class="flex"><span style="font-size: 1.25vw;" class="iconfont icon-bg-model mr-2"></span> Builder Model: {{ detail['Builder Model'] }}</span>
+                                </p>
+                            </div>
+                        </el-tab-pane>
+                    </el-tabs>
+                </div>
+                <div class="map-container w-full h-2/3 border"></div>
+            </div>
+            <div class="col-right w-1/5 sticky top-0 h-fit p-3 ml-2">
+                <p style="font-size: 0.95vw; font-weight: bold;" class="border p-2 rounded-lg shadow">
+                    Spring Madness Sale! $35K Closing Credit
+            Through 04/30/2024! Offer valid only on to-be-built properties owned by Anchor Homes. Contract must be fully
+            ratified and full deposit received by 04/30/2024.
+                </p>
+                <div style="font-size: 1vw;" class="view-other w-full h-fit flex flex-col justify-center items-center border shadow mt-3 p-2 rounded-lg">
+                    <button type="button" class="border w-11/12 mb-2 rounded-lg hover:shadow" style="height: 5vh;" >
+                        <span style="font-size: 1.25vw;" class="iconfont icon-Brochure mr-2"></span>
+                        <span>BROCHURE</span>
+                    </button>
+                    <button @click="locationToggle('https://www.myanchorhomes.com/remote-home-tour')" type="button" class="border w-11/12 mb-2 rounded-lg hover:shadow" style="height: 5vh;" >
+                        <span style="font-size: 1.25vw;" class="iconfont icon-video_fill mr-2"></span>
+                        <span>VIDEO TOUR</span>
+                    </button>
+                    <button @click="locationToggle('https://www.myanchorhomes.com/virtual-tour')" type="button" class="border w-11/12 mb-2 rounded-lg hover:shadow" style="height: 5vh;" >
+                        <span style="font-size: 1.25vw;" class="iconfont icon-virtual-reality mr-2"></span>
+                        <span>VIRTUAL TOUR</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -253,6 +229,7 @@ const filedNum = []
 for (let i = 11; i < 47; i++) {
     filedNum.push(i)
 }
+const detailName = ref('first')
 const detail = ref({})
 const picData = ref([])
 const picIndex = ref(0)
@@ -292,7 +269,7 @@ function pressKeyToggle(e) {
             picIndex.value === picData.value.length - 1 ? picIndex.value = 0 : picIndex.value++
         }
         picToggle(picIndex.value)
-        document.querySelector('.active').scrollIntoView({ behavior: 'smooth', inline: 'center' })
+        document.querySelector('.active').scrollIntoView({ behavior: 'smooth', block: 'center' })
     }
 }
 

@@ -3,7 +3,7 @@
         <div style="height: 10%;"class="header sticky w-full flex items-center shadow">
             <input v-model="searchValue" type="text" class=" ml-4 border w-1/5 h-1/2 border-green-700 outline-none rounded rounded-r-none pl-2">
             <button @click="search" class="border-green-600 mr-auto w-1/12 h-1/2 text-green-700 border border-l-0 rounded-r hover:shadow"><i class="fa fa-search"></i></button>
-            <a-popover style="width: 30%" title="Price Filter" trigger="click">
+            <a-popover style="width: 30%; font-family: 'Font1'" title="Price Filter" trigger="click">
                 <button type="button" style="font-size: 0.9vw;" class="ml-40 outline-none rounded border text-green-700 border-green-700 h-1/2 w-1/12 hover:shadow">Price</button>
                 <template #content>
                     <el-slider :format-tooltip="(value) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })" @change="filterPrice" v-model="priceFilter" show-stops  :min="2000000" range :max="5000000" :step="100000"></el-slider>
@@ -43,32 +43,32 @@
                 </GoogleMap>
             </div>
             <div ref="cardContainer" class="card bg-gray-100 w-1/2 h-full overflow-x-hidden overflow-y-scroll">
-                <div @click="clickCard(item)" style="width: 98%; height: 40%;" :id="`h${item['Project - Street ID'].trim()}`" class="card mx-auto rounded-lg bg-white mt-2 mb-2 border hover:shadow-lg" v-for="item in data" :key="item['Address in MLS']">
-                    <div class="card-header flex justify-between items-center w-full h-1/4 border border-b">
+                <div @click="clickCard(item)" style="width: 98%; height: 38%;" :id="`h${item['Project - Street ID'].trim()}`" class="card mx-auto rounded-lg bg-white mt-2 mb-2 border hover:shadow-lg" v-for="item in data" :key="item['Address in MLS']">
+                    <div class="card-header flex justify-between items-center w-full h-1/5 border border-b">
                         <div style="font-size: 1vw;" class="ml-2 font-bold" >{{ item['Project Address'] }}</div>
                         <div style="font-size: 1vw;" class="mr-2 border border-green-700 rounded p-1 text-green-700" >{{ item['House Status'] }}</div>
                     </div>
-                    <div class="card-body w-full h-3/4 p-1 flex">
-                        <div class="img w-1/3 h-full rounded-lg flex justify-center items-center">
-                            <img :src="item['Profile Pic Link']" class="h-full rounded-lg"lt="">
+                    <div class="card-body w-full h-4/5 p-1 flex">
+                        <div class="img w-1/3 h-full rounded-lg">
+                            <img :src="item['Profile Pic Link']" class="h-full object-scale-down"lt="">
                         </div>
-                        <div class="info w-2/3 h-full py-4 flex flex-col justify-between">
-                            <div style="font-size: 0.9vw;" class=" flex-grow conten w-full flex flex-col">
+                        <div class="info w-2/3 h-full flex flex-col justify-between">
+                            <div style="font-size: 0.9vw; font-family: 'Font2'" class=" flex-grow conten w-full flex flex-col">
                                 <p class=" w-full flex leading-7 justify-between ml-2 flex-grow">
-                                    <span class="flex w-1/2 items-center"><img class="mr-1"style="width: 1vw; height: 1vw;" src="../../assets/dollar.svg" alt="">Price: {{ item['List Price'].toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}</span>
-                                    <span class="flex w-1/2 items-center  ml-2"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/bath.svg" alt="">Baths: {{ item['Number Of Bathrooms'] }}</span>
+                                    <span class="flex w-1/2 items-center"><span style="font-size: 1.25vw;" class="iconfont icon-dollar mr-2"></span>Price: {{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}</span>
+                                    <span class="flex w-1/2 items-center  ml-2"><span style="font-size: 1.25vw;" class="iconfont icon-bathroom-fill mr-2"></span>Baths: {{ item['Number Of Bathrooms'] }}</span>
                                 </p>
                                 <p class=" w-full flex leading-7 justify-between ml-2 flex-grow">
-                                    <span class="flex w-1/2 items-center"><img class="mr-1"style="width: 1vw; height: 1vw;" src="../../assets/bed.svg" alt="">Bed: {{ item['Number Of Bedrooms'] }}</span>
-                                    <span class="flex w-1/2 items-center  ml-2"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/car.svg" alt="">Garage: {{ item['Number Of Garage'] }}-Car</span>
+                                    <span class="flex w-1/2 items-center"><span style="font-size: 1.25vw;" class="iconfont icon-Bed-1 mr-2"></span>Bed: {{ item['Number Of Bedrooms'] }}</span>
+                                    <span class="flex w-1/2 items-center  ml-2"><span style="font-size: 1.25vw;" class="iconfont icon-garage mr-2"></span>Garage: {{ item['Number Of Garage'] }}-Car</span>
                                 </p>
                                 <p class=" w-full flex leading-7 ml-2 justify-between flex-grow">
-                                    <span class="flex w-1/2 items-center"><img class="mr-1"style="width: 1vw; height: 1vw;" src="../../assets/SQFT.svg" alt="">SQFT: {{ item['Total Finished SQFT'].toLocaleString() }} SQFT</span>
-                                    <span class="flex w-1/2 items-center  ml-2"><img class="mr-1" style="width: 1vw; height: 1vw;" src="../../assets/ruler.svg" alt="">Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
+                                    <span class="flex w-1/2 items-center"><span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span>SQFT: {{ item['Total Finished SQFT'].toLocaleString() }} SQFT</span>
+                                    <span class="flex w-1/2 items-center  ml-2"><span style="font-size: 1.25vw;" class="iconfont icon-feature-lot-size mr-2"></span>Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
                                 </p>
                             </div>
-                            <p style="font-size: 0.85vw;" class=" m-2 flex justify-end items-end flex-grow">
-                                <button @click="details(item, $event)" class="text-green-700 border border-green-700 w-1/2 h-3/4 hover:shadow-lg p-2 rounded flex items-center justify-center">View Details</button>
+                            <p style="font-size: 0.85vw; font-family: 'Font2'" class=" m-2 flex justify-end items-center flex-grow">
+                                <button @click="details(item, $event)" class="text-green-700 border border-green-700 w-1/2 h-2/3 hover:shadow-lg p-2 rounded flex items-center justify-center">View Details</button>
                             </p>
                         </div>
                     </div>
@@ -244,12 +244,13 @@ async function initData() {
 		const cityB = city.value.indexOf(b['Project Address'].split(', ')[1])
 		return cityA - cityB
     })
-    data2.value = processData(res.data.data, res.data.fields)
-    data2.value = data.value.sort((a, b) => {
-        const cityA = city.value.indexOf(a['Project Address'].split(', ')[1])
-		const cityB = city.value.indexOf(b['Project Address'].split(', ')[1])
-		return cityA - cityB
-    })
+    data.value = data.value.filter(item => item['Display'])
+    // data2.value = processData(res.data.data, res.data.fields)
+    // data2.value = data.value.sort((a, b) => {
+    //     const cityA = city.value.indexOf(a['Project Address'].split(', ')[1])
+	// 	const cityB = city.value.indexOf(b['Project Address'].split(', ')[1])
+	// 	return cityA - cityB
+    // })
     // console.log(data.value);
 }
 initData()

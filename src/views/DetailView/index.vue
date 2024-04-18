@@ -1,13 +1,13 @@
 <template>
-    <div v-if="width >= 768" class="pc w-full h-full ">
-        <div class="container w-11/12 mx-auto h-full flex justify-center overflow-y-scroll  pt-3 relative">
+    <div v-if="width >= 768" class="pc w-full h-full pb-4">
+        <div class="container w-full mx-auto h-full flex justify-center overflow-y-scroll  pt-3 relative">
             <div class="col-left w-4/5">
                 <p class="my-2 text-center font-bold" style="font-size: 1.2vw;">{{ detail['Project Address'] }}</p>
-                <div class="img w-full mx-auto h-2/3 flex">
+                <div class="img hover:border hover:border-gray-300 p-1 rounded-lg w-11/12 mx-auto h-2/3 flex">
                     <div class="carsouel h-full w-4/5">
                         <el-carousel @change="changeImage" ref=swiperRef style="height: 100%; width: 100%;" indicator-position="none" arrow="always" :autoplay="false">
                           <el-carousel-item v-for="(img, index) in picData" :key="index">
-                            <el-image style="width: 100%; height: 100%;" :preview-teleported="true" :preview-src-list="picData.map(item => item['Link To File'])" :src="img['Link To File']"></el-image>
+                            <el-image :hide-on-click-modal="true" fit="contain" style="width: 100%; height: 100%;" :preview-teleported="true" :initial-index="index" :preview-src-list="picData.map(item => item['Link To File'])" :src="img['Link To File']"></el-image>
                           </el-carousel-item>
                         </el-carousel>
                     </div>
@@ -17,7 +17,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-container w-full h-fit my-4 mx-auto shadow">
+                <div class="tab-container hover:shadow-lg w-11/12 h-fit my-4 mx-auto shadow">
                     <el-tabs v-model="detailName" type="border-card" style="width: 100%;font-family: 'Font2'; font-size: 1.1vw;" tab-position="top">
                         <el-tab-pane label="Details" name="first">
                             <div class="details w-full h-full">
@@ -77,16 +77,22 @@
                         </el-tab-pane>
                     </el-tabs>
                 </div>
-                <div class="map-container w-full h-2/3 border"></div>
+                <div class="map-container w-11/12 h-full border mx-auto">
+                    <iframe v-if="detail['Google Map Link']" :src="detail['Google Map Link']" width="100%" height="100%" frameborder="0"></iframe>
+                    <div style="font-size: 1vw;" v-else class="w-full h-full flex flex-col justify-center items-center">
+                        <CircleClose style="height: 20vh; width: 10vw;" ></CircleClose>
+                        This map is not available!
+                    </div>
+                </div>
             </div>
             <div class="col-right w-1/5 sticky top-0 h-fit p-3 ml-2">
-                <p style="font-size: 0.95vw; font-weight: bold;" class="border p-2 rounded-lg shadow">
+                <p style="font-size: 0.95vw; font-weight: bold;" class="border hover:border-gray-500 p-2 rounded-lg shadow">
                     Spring Madness Sale! $35K Closing Credit
             Through 04/30/2024! Offer valid only on to-be-built properties owned by Anchor Homes. Contract must be fully
             ratified and full deposit received by 04/30/2024.
                 </p>
                 <div style="font-size: 1vw;" class="view-other w-full h-fit flex flex-col justify-center items-center border shadow mt-3 p-2 rounded-lg">
-                    <button type="button" class="border w-11/12 mb-2 rounded-lg hover:shadow" style="height: 5vh;" >
+                    <button @click="previewPdf" type="button" class="border w-11/12 mb-2 rounded-lg hover:shadow" style="height: 5vh;" >
                         <span style="font-size: 1.25vw;" class="iconfont icon-Brochure mr-2"></span>
                         <span>BROCHURE</span>
                     </button>
@@ -219,14 +225,16 @@
 </template>
 
 <script setup>
+import { CircleClose } from '@element-plus/icons-vue'
 import { GoogleMap, Marker, CustomMarker } from 'vue3-google-map'
 import { useRoute } from 'vue-router';
 import { ref, onMounted, computed } from 'vue'
 import httpObj from '../../api/api';
 import { processData } from '../../hooks';
+import { ElMessage } from 'element-plus';
 const route = useRoute()
 const filedNum = []
-for (let i = 11; i < 47; i++) {
+for (let i = 11; i < 48; i++) {
     filedNum.push(i)
 }
 const detailName = ref('first')
@@ -296,11 +304,33 @@ const user = computed(() => {
 const width = computed(() => {
     return window.innerWidth;
 })
-function previewPdf(url){
-    const a = document.createElement('a');
-    a.href = 'https://anchorhomes.quickbase.com' + url;
-    a.target = '_blank';
-    a.click();
+// 预览pdf
+const pdfUrl = ref('');
+async function previewPdf(){
+    const res = await httpObj.sendGet(`/files/btwxxiycs/${picData.value[0]['Related MLS House']}/46/1`)
+    if(res.status === 200){
+        // 将 base64 数据转换为 Blob 对象
+        const byteCharacters = atob(res.data);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: "application/pdf" });
+
+        // 创建一个 URL 对象，并设置给 window.open() 方法
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+    } else {
+        ElMessage({
+            type: 'error',
+            message: 'Something went wrong!'
+        })
+    }
+    // const a = document.createElement('a');
+    // a.href = 'https://anchorhomes.quickbase.com' + url;
+    // a.target = '_blank';
+    // a.click();
 }
 
 // 移动端轮播

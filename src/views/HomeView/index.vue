@@ -37,7 +37,7 @@
                     </Marker> -->
                     <CustomMarker   v-for="item in data" :key="item['Address in MLS']" :options="{ position: { lat: Number(item['Google Map Location Code'].split(',')[0]), lng: Number(item['Google Map Location Code'].split(',')[1]), label: item['Project Address'], title: item['Project Address'], anchorPoint: 'BOTTOM_CENTER' } }">
                         <div class=" w-10 h-10" >
-                            <i ref="markerRef" @click.self="clickMarker(item, $event)"  :class="`m${item['Project - Street ID']} fa fa-map-marker w-full h-full text-2xl text-red-700`"></i>
+                            <i ref="markerRef" @click.self="clickMarker(item, $event)" :class="{ 'text-red-700': item['House Status'] === 'For Sale', 'text-green-700': item['House Status'] === 'Pending', 'text-gray-700': item['House Status'] === 'Sold', [`m${item['Project - Street ID']} fa fa-map-marker w-full h-full text-2xl`]: 1===1 }"></i>
                         </div>
                     </CustomMarker>
                 </GoogleMap>
@@ -274,7 +274,7 @@ function clickMarker(item, event) {
         })
         document.querySelector(`#h${item['Project - Street ID'].trim()}`).style.border = '2px solid green'
     } else {
-        ElMessage.warning('The House Status is Pending!');
+        ElMessage.warning(`The House Status is ${item['House Status']}!`);
     }
 }
 function clickCard(item){

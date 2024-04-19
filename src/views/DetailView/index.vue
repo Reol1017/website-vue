@@ -12,18 +12,18 @@
                         </el-carousel>
                     </div>
                     <div class="preview h-full w-1/5 overflow-y-scroll flex flex-col" tabindex="0" ref="previewRef" @keydown="pressKeyToggle($event)">
-                        <div class="img-container w-full h-1/4" v-for="(img, index) in picData">
-                            <img :src="img['Link To File']" class="object-contain w-4/5 h-4/5" :class="{ border: index === picIndex, 'border-green-700': index === picIndex, active: index === picIndex }" @click="picToggle(index)" alt="">
+                        <div class="img-container w-full h-1/4 flex justify-center items-center" v-for="(img, index) in picData" :class="{ border: index === picIndex, 'border-green-700': index === picIndex, active: index === picIndex }" @click="picToggle(index)">
+                            <img :src="img['Link To File']" class="object-contain w-4/5 h-4/5"  alt="">
                         </div>
                     </div>
                 </div>
                 <div class="tab-container hover:shadow-lg w-11/12 h-fit my-4 mx-auto shadow">
-                    <el-tabs v-model="detailName" type="border-card" style="width: 100%;font-family: 'Font2'; font-size: 1.1vw;" tab-position="top">
+                    <el-tabs @tab-click="tabClick" v-model="detailName" type="border-card" style="width: 100%;font-family: 'Font2'; font-size: 1.1vw;" tab-position="top">
                         <el-tab-pane label="Details" name="first">
                             <div class="details w-full h-full">
                                 <p class="w-full p-2 text-center font-bold" style="font-size: 1.5vw;" >Details</p>
                                 <p class="w-full flex justify-around border-b p-2 my-2">
-                                    <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-dollar mr-2"></span>Price: {{ detail['List Price'].toLocaleString('en-US', {style:'currency', currency: 'USD'}) }}</span>
+                                    <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-dollar mr-2"></span>Price: {{ detail['List Price']?.toLocaleString('en-US', {style:'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0}) }}</span>
                                     <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-bathroom-fill mr-2"></span>Baths: {{ detail['Number Of Bathrooms'] }}</span>
                                 </p>
                                 <p class="w-full flex justify-around border-b p-2 my-2">
@@ -31,7 +31,7 @@
                                     <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-garage mr-2"></span>Garage: {{ detail['Number Of Garage'] }}</span>
                                 </p>
                                 <p class="w-full flex justify-around border-b p-2 my-2">
-                                    <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span>SQFT: {{ detail['Total Finished SQFT'].toLocaleString() }}</span>
+                                    <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span>SQFT: {{ detail['Total Finished SQFT']?.toLocaleString() }}</span>
                                     <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-feature-lot-size mr-2"></span>Lot Size: {{ detail['Lot Size Acres'] }}</span>
                                 </p>
                                 <p class="w-full flex justify-around border-b p-2 my-2">
@@ -56,10 +56,10 @@
                             <div class="details w-full h-full">
                                 <p class="w-full p-2 text-center font-bold" style="font-size: 1.5vw;" >Other Details</p>
                                 <p class="w-full flex justify-start border-b p-2 my-2">
-                                    <span class="flex"><span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span> Above Grade Finished SQFT: {{ detail['Above Grade Finished SQFT'].toLocaleString() }} SQFT</span>
+                                    <span class="flex"><span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span> Above Grade Finished SQFT: {{ detail['Above Grade Finished SQFT']?.toLocaleString() }} SQFT</span>
                                 </p>
                                 <p class="w-full flex justify-start border-b p-2 my-2">
-                                    <span class="flex"><span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span> Below Grade Finished SQFT: {{ detail['Below Grade Finished SQFT'].toLocaleString() }} SQFT</span>
+                                    <span class="flex"><span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span> Below Grade Finished SQFT: {{ detail['Below Grade Finished SQFT']?.toLocaleString() }} SQFT</span>
                                 </p>
                                 <p class="w-full flex justify-start border-b p-2 my-2">
                                     <span class="flex"><span style="font-size: 1.25vw;" class="iconfont icon-elementary-school-4 mr-2"></span> Elementary School: {{ detail['Elementary School'] }}</span>
@@ -258,7 +258,7 @@ async function getPic() {
         where: `{8.EX.'${route.params.id === '6800' ? '6800 ' : route.params.id }'}`
     })
     picData.value = processData(res.data.data, res.data.fields)
-    console.log(picData.value)
+    // console.log(picData.value)
 }
 initDetail()
 getPic()
@@ -267,7 +267,7 @@ function picToggle(index) {
     swiperRef.value.setActiveItem(index)
 }
 function pressKeyToggle(e) {
-    console.log(e);
+    // console.log(e);
     e.preventDefault();
     e.stopPropagation();
     if (e.target === previewRef.value) {
@@ -331,6 +331,10 @@ async function previewPdf(){
     // a.href = 'https://anchorhomes.quickbase.com' + url;
     // a.target = '_blank';
     // a.click();
+}
+
+function tabClick(pane, e){
+    detailName.value = e.target.innerText;
 }
 
 // 移动端轮播

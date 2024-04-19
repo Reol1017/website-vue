@@ -25,7 +25,7 @@
                     <button class="border border-green-700 w-28 h-10 rounded ml-4  hover:bg-green-700 hover:text-white">Townhouse</button>
                 </template>
             </a-popover>
-            <button @click="drawer = true" type="button" style="font-size: 0.9vw;" class=" outline-none text-green-700 rounded border border-green-700 ml-5 h-1/2 w-1/12 hover:shadow"><i class="fa fa-filter"></i>All filters</button>
+            <button @click="drawer = true" type="button" style="font-size: 0.9vw;" class=" outline-none text-green-700 rounded border border-green-700 ml-5 h-1/2 w-1/12 hover:shadow"><i class="fa fa-filter"></i>All Filters</button>
             <button @click="resetOut($event)" type="button" style="font-size: 0.9vw;" class=" mr-4 outline-none text-green-700 rounded border border-green-700 ml-5 h-1/2 w-1/12 hover:shadow">Reset</button>
         </div>
         <div style="height: 90%;" class="body w-full flex">
@@ -43,19 +43,19 @@
                 </GoogleMap>
             </div>
             <div ref="cardContainer" class="card bg-gray-100 w-1/2 h-full overflow-x-hidden overflow-y-scroll">
-                <div @click="clickCard(item)" style="width: 98%; height: 38%;" :id="`h${item['Project - Street ID'].trim()}`" class="card mx-auto rounded-lg bg-white mt-2 mb-2 border hover:shadow-lg" v-for="item in data" :key="item['Address in MLS']">
+                <div @click="clickCard(item)" style="width: 98%; height: 38%;" :id="`h${item['Project - Street ID'].trim()}`" class="card mx-auto rounded-lg bg-white mt-2 mb-2 border hover:shadow-lg" v-for="item in data.filter(item => item['House Status'] === 'For Sale')" :key="item['Address in MLS']">
                     <div class="card-header flex justify-between items-center w-full h-1/5 border border-b">
-                        <div style="font-size: 1vw;" class="ml-2 font-bold" >{{ item['Project Address'] }}</div>
-                        <div style="font-size: 1vw;" class="mr-2 border border-green-700 rounded p-1 text-green-700" >{{ item['House Status'] }}</div>
+                        <div style="font-size: 1vw;" class="ml-2" >{{ item['Project Address'] }}</div>
+                        <div style="font-size: 1vw;" class="mr-2 border  rounded p-1 " :class="{ 'border-green-700 text-green-700': item['House Status'] === 'For Sale', 'border-red-700 text-red-700': item['House Status'] === 'Pending', 'border-gray-700 text-gray-700': item['House Status'] === 'Sold' }" >{{ item['House Status'] }}</div>
                     </div>
                     <div class="card-body w-full h-4/5 p-1 flex">
                         <div class="img w-1/3 h-full rounded-lg">
-                            <img :src="item['Profile Pic Link']" class="h-full object-scale-down"lt="">
+                            <img :src="item['Profile Pic Link']" class="h-full mx-auto object-scale-down"lt="">
                         </div>
                         <div class="info w-2/3 h-full flex flex-col justify-between">
-                            <div style="font-size: 0.9vw; font-family: 'Font2'" class=" flex-grow conten w-full flex flex-col">
+                            <div style="font-size: 0.9vw;" class=" flex-grow conten w-full flex flex-col">
                                 <p class=" w-full flex leading-7 justify-between ml-2 flex-grow">
-                                    <span class="flex w-1/2 items-center"><span style="font-size: 1.25vw;" class="iconfont icon-dollar mr-2"></span>Price: {{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}</span>
+                                    <span class="flex w-1/2 items-center"><span style="font-size: 1.25vw;" class="iconfont icon-dollar mr-2"></span>Price: {{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}</span>
                                     <span class="flex w-1/2 items-center  ml-2"><span style="font-size: 1.25vw;" class="iconfont icon-bathroom-fill mr-2"></span>Baths: {{ item['Number Of Bathrooms'] }}</span>
                                 </p>
                                 <p class=" w-full flex leading-7 justify-between ml-2 flex-grow">
@@ -63,11 +63,11 @@
                                     <span class="flex w-1/2 items-center  ml-2"><span style="font-size: 1.25vw;" class="iconfont icon-garage mr-2"></span>Garage: {{ item['Number Of Garage'] }}-Car</span>
                                 </p>
                                 <p class=" w-full flex leading-7 ml-2 justify-between flex-grow">
-                                    <span class="flex w-1/2 items-center"><span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span>SQFT: {{ item['Total Finished SQFT'].toLocaleString() }} SQFT</span>
+                                    <span class="flex w-1/2 items-center"><span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span>SQFT: {{ item['Total Finished SQFT']?.toLocaleString() }} SQFT</span>
                                     <span class="flex w-1/2 items-center  ml-2"><span style="font-size: 1.25vw;" class="iconfont icon-feature-lot-size mr-2"></span>Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
                                 </p>
                             </div>
-                            <p style="font-size: 0.85vw; font-family: 'Font2'" class=" m-2 flex justify-end items-center flex-grow">
+                            <p style="font-size: 0.85vw;" class=" m-2 flex justify-end items-center flex-grow">
                                 <button @click="details(item, $event)" class="text-green-700 border border-green-700 w-1/2 h-2/3 hover:shadow-lg p-2 rounded flex items-center justify-center">View Details</button>
                             </p>
                         </div>
@@ -86,6 +86,7 @@
             </p>
             <el-radio-group v-model="status">
                 <el-radio value="For Sale" size="large">For Sale</el-radio>
+                <el-radio value="Pending" size="large">Pending</el-radio>
                 <el-radio value="Sold" size="large">Sold</el-radio>
             </el-radio-group>
             <hr>
@@ -416,6 +417,24 @@ const filterIn = async () => {
     drawer.value = false;
 }
 onMounted(() => {
+    ElMessageBox({
+        message: /*html*/`
+            <div style="width: 100%; height: 100%;">
+                <p style="font-size: 1.5vw; font-weight: bold;line-height: 2;">Spring Madness Sale! $35K Closing Credit Through 04/30/2024! </p>
+                <p style="font-size: 0.8vw; line-height: 1.5;font-family: 'Font1';font-weight: normal;">*Offer valid only on to-be-built properties owned by Anchor Homes. Contract must be fully ratified and full deposit received by 04/30/2024.</p>
+            </div>
+        `,
+        dangerouslyUseHTMLString: true,
+        customStyle: {
+            textAlign: 'center',
+            fontFamily: 'Font3',
+            fontWeight: 'bold',
+            width: '40vw',
+        },
+        title: '',
+        showConfirmButton: false,
+        showCancelButton: false,
+    })
 })
 
 
@@ -488,4 +507,5 @@ hr{
 .h-1\/10{
     height: 8%;
 }
+
 </style>

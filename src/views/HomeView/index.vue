@@ -43,7 +43,7 @@
                 </GoogleMap>
             </div>
             <div ref="cardContainer" class="card bg-gray-100 w-1/2 h-full overflow-x-hidden overflow-y-scroll">
-                <div @click="clickCard(item)" style="width: 98%; height: 38%;" :id="`h${item['Project - Street ID'].trim()}`" class="card mx-auto rounded-lg bg-white mt-2 mb-2 border hover:shadow-lg" v-for="item in data.filter(item => item['House Status'] === 'For Sale')" :key="item['Address in MLS']">
+                <div v-if="data.filter(item => item['House Status'] === 'For Sale').length" @click="clickCard(item)" style="width: 98%; height: 38%;" :id="`h${item['Project - Street ID'].trim()}`" class="card mx-auto rounded-lg bg-white mt-2 mb-2 border hover:shadow-lg" v-for="item in data.filter(item => item['House Status'] === 'For Sale')" :key="item['Address in MLS']">
                     <div class="card-header flex justify-between items-center w-full h-1/5 border border-b">
                         <div style="font-size: 1vw;" class="ml-2" >{{ item['Project Address'] }}</div>
                         <div style="font-size: 1vw;" class="mr-2 border  rounded p-1 " :class="{ 'border-green-700 text-green-700': item['House Status'] === 'For Sale', 'border-red-700 text-red-700': item['House Status'] === 'Pending', 'border-gray-700 text-gray-700': item['House Status'] === 'Sold' }" >{{ item['House Status'] }}</div>
@@ -72,6 +72,10 @@
                             </p>
                         </div>
                     </div>
+                </div>
+                <div v-else class="w-full h-full flex flex-col justify-center item-center">
+                    <CircleClose style="height: 20vh; width: 10vw;margin-left: auto;margin-right: auto;" />
+                    <p class="text-center" style="font-size: 1vw;">No Data</p>
                 </div>
             </div>
         </div>
@@ -206,7 +210,7 @@
 </template>
 
 <script setup>
-import { Menu } from '@element-plus/icons-vue'
+import { Menu, CircleClose } from '@element-plus/icons-vue'
 import { GoogleMap, Marker, CustomMarker, InfoWindow } from 'vue3-google-map'
 import { processData } from '../../hooks/index'
 import { computed, onMounted, ref, watch } from 'vue';
@@ -256,18 +260,22 @@ async function initData() {
 }
 initData()
 function clickMarker(item, event) {
-    document.querySelectorAll('.card').forEach(item => {
-        item.style.border = 'none'
-    })
-    markerRef.value.forEach(item => {
-        item.classList.remove('text-5xl')
-    })
-    event.target.classList.toggle('text-5xl')
-    document.querySelector(`#h${item['Project - Street ID'].trim()}`).scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-    })
-    document.querySelector(`#h${item['Project - Street ID'].trim()}`).style.border = '2px solid green'
+    if(item['House Status'] === 'For Sale'){
+        document.querySelectorAll('.card').forEach(item => {
+            item.style.border = 'none'
+        })
+        markerRef.value.forEach(item => {
+            item.classList.remove('text-5xl')
+        })
+        event.target.classList.toggle('text-5xl')
+        document.querySelector(`#h${item['Project - Street ID'].trim()}`).scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        })
+        document.querySelector(`#h${item['Project - Street ID'].trim()}`).style.border = '2px solid green'
+    } else {
+        ElMessage.warning('The House Status is Pending!');
+    }
 }
 function clickCard(item){
     document.querySelectorAll('.card').forEach(item => {

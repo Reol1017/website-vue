@@ -307,7 +307,7 @@ const width = computed(() => {
 // 预览pdf
 const pdfUrl = ref('');
 async function previewPdf(){
-    const res = await httpObj.sendGet(`/files/btwxxiycs/${picData.value[0]['Related MLS House']}/46/1`)
+    const res = await httpObj.sendGet(`${detail.value['Brochure'].url}`)
     if(res.status === 200){
         // 将 base64 数据转换为 Blob 对象
         const byteCharacters = atob(res.data);

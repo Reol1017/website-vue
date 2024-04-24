@@ -2,7 +2,7 @@
     <div v-if="width >= 768" class="pc w-full h-full pb-4">
         <div class="container w-full mx-auto h-full flex justify-center overflow-y-scroll  pt-3 relative">
             <div class="col-left w-4/5">
-                <p class="my-2 text-center font-bold" style="font-size: 1.2vw;">{{ detail['Project Address'] }}</p>
+                <p class="my-2 text-center" style="font-size: 1.2vw;">{{ detail['Project Address'] }}</p>
                 <div class="img hover:border hover:border-gray-300 p-1 rounded-lg w-11/12 mx-auto h-2/3 flex">
                     <div class="carsouel h-full w-4/5">
                         <el-carousel @change="changeImage" ref=swiperRef style="height: 100%; width: 100%;" indicator-position="none" arrow="always" :autoplay="false">
@@ -18,10 +18,10 @@
                     </div>
                 </div>
                 <div class="tab-container hover:shadow-lg w-11/12 h-fit my-4 mx-auto shadow">
-                    <el-tabs @tab-click="tabClick" v-model="detailName" type="border-card" style="width: 100%;font-family: 'Font2'; font-size: 1.1vw;" tab-position="top">
+                    <el-tabs @tab-click="tabClick" v-model="detailName" type="border-card" style="width: 100%; font-size: 1.1vw;" tab-position="top">
                         <el-tab-pane label="Details" name="first">
                             <div class="details w-full h-full">
-                                <p class="w-full p-2 text-center font-bold" style="font-size: 1.5vw;" >Details</p>
+                                <p class="w-full p-2 text-center" style="font-size: 1.5vw;" >Details</p>
                                 <p class="w-full flex justify-around border-b p-2 my-2">
                                     <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-dollar mr-2"></span>Price: {{ detail['List Price']?.toLocaleString('en-US', {style:'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0}) }}</span>
                                     <span class="flex items-center w-1/2"><span style="font-size: 1.25vw;" class="iconfont icon-bathroom-fill mr-2"></span>Baths: {{ detail['Number Of Bathrooms'] }}</span>
@@ -49,12 +49,12 @@
                             </div>
                         </el-tab-pane>
                         <el-tab-pane label="Description" name="second">
-                            <p class="w-full p-2 text-center font-bold" style="font-size: 1.5vw;" >Description</p>
+                            <p class="w-full p-2 text-center" style="font-size: 1.5vw;" >Description</p>
                             <p class="w-full p-2" style="line-height: 2.2vw;">{{ detail['Description'] }}</p>
                         </el-tab-pane>
                         <el-tab-pane label="Other Details" name="third">
                             <div class="details w-full h-full">
-                                <p class="w-full p-2 text-center font-bold" style="font-size: 1.5vw;" >Other Details</p>
+                                <p class="w-full p-2 text-center" style="font-size: 1.5vw;" >Other Details</p>
                                 <p class="w-full flex justify-start border-b p-2 my-2">
                                     <span class="flex"><span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span> Above Grade Finished SQFT: {{ detail['Above Grade Finished SQFT']?.toLocaleString() }} SQFT</span>
                                 </p>

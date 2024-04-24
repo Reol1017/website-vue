@@ -46,7 +46,7 @@
                 <img :src="img_big" class="min-w-full min-h-full object-contain">
             </div>
             <div ref="cardContainer" class="card-container bg-gray-100 w-1/2 h-full overflow-x-hidden overflow-y-scroll relative">
-                <div v-if="data.filter(item => item['House Status'] === 'For Sale').length" style="width: 98%; height: 38%;" :id="`h${item['Project - Street ID'].trim()}`" class="card mx-auto rounded-lg bg-white mt-2 mb-2 border hover:shadow-lg" v-for="item in data.filter(item => item['House Status'] === 'For Sale')" :key="item['Address in MLS']">
+                <div @click="details(item, $event)" v-if="data.filter(item => item['House Status'] === 'For Sale').length" style="width: 98%; height: 38%;" :id="`h${item['Project - Street ID'].trim()}`" class="card mx-auto rounded-lg bg-white mt-2 mb-2 border hover:shadow-lg" v-for="item in data.filter(item => item['House Status'] === 'For Sale')" :key="item['Address in MLS']">
                     <div class="card-header flex justify-between items-center w-full h-1/5 border border-b">
                         <div style="font-size: 1vw;" class="ml-2" >{{ item['Project Address'] }}</div>
                         <div style="font-size: 1vw;" class="mr-2 border  rounded p-1 " :class="{ 'border-green-700 text-green-700': item['House Status'] === 'For Sale', 'border-red-700 text-red-700': item['House Status'] === 'Pending', 'border-gray-700 text-gray-700': item['House Status'] === 'Sold' }" >{{ item['House Status'] }}</div>

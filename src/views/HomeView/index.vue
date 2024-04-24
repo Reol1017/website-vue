@@ -28,22 +28,25 @@
             <button @click="drawer = true" type="button" style="font-size: 0.9vw;" class=" outline-none text-green-700 rounded border border-green-700 ml-5 h-1/2 w-1/12 hover:shadow"><i class="fa fa-filter"></i>All Filters</button>
             <button @click="resetOut($event)" type="button" style="font-size: 0.9vw;" class=" mr-4 outline-none text-green-700 rounded border border-green-700 ml-5 h-1/2 w-1/12 hover:shadow">Reset</button>
         </div>
-        <div style="height: 90%;" class="body w-full flex">
-            <div class="map w-1/2 h-full">
-                <GoogleMap ref="mapRef" api-key="AIzaSyDag9MI2Ss2T52lYGcWI2-uKXDlIpco3fY" style="width: 100%; height: 100%"
-                    :center="center" :zoom="13.5">
+        <div style="height: 90%;" class="body w-full flex relative">
+            <!-- <div class="map w-1/2 h-full"> -->
+                <!-- <GoogleMap ref="mapRef" api-key="AIzaSyDag9MI2Ss2T52lYGcWI2-uKXDlIpco3fY" style="width: 100%; height: 100%"
+                    :center="center" :zoom="13.5"> -->
                     <!-- <Marker ref="markerRef" @click="clickMarker(item, $event, index)" v-for="(item, index) in data" :key="item['Address in MLS']"
                         :options="{ position: { lat: Number(item['Google Map Location Code'].split(',')[0]), lng: Number(item['Google Map Location Code'].split(',')[1]), label: item['Project Address'], title: item['Project Address'] } }">
                     </Marker> -->
-                    <CustomMarker   v-for="item in data" :key="item['Address in MLS']" :options="{ position: { lat: Number(item['Google Map Location Code'].split(',')[0]), lng: Number(item['Google Map Location Code'].split(',')[1]), label: item['Project Address'], title: item['Project Address'], anchorPoint: 'BOTTOM_CENTER' } }">
+                    <!-- <CustomMarker   v-for="item in data" :key="item['Address in MLS']" :options="{ position: { lat: Number(item['Google Map Location Code'].split(',')[0]), lng: Number(item['Google Map Location Code'].split(',')[1]), label: item['Project Address'], title: item['Project Address'], anchorPoint: 'BOTTOM_CENTER' } }">
                         <div class=" w-10 h-10" >
                             <i ref="markerRef" @click.self="clickMarker(item, $event)" :class="[item['House Status'] === 'For Sale' ? 'text-red-700' : '', item['House Status'] === 'Pending' ? 'text-green-700' : '', item['House Status'] === 'Sold' ? 'text-gray-700': '', `m${item['Project - Street ID']} fa fa-map-marker w-full h-full text-2xl` ]"></i>
                         </div>
                     </CustomMarker>
-                </GoogleMap>
+                </GoogleMap> -->
+            <!-- </div> -->
+            <div class="img-container w-1/2 h-full flex justify-center items-center overflow-hidden">
+                <img :src="img_big" class="min-w-full min-h-full object-contain">
             </div>
-            <div ref="cardContainer" class="card bg-gray-100 w-1/2 h-full overflow-x-hidden overflow-y-scroll">
-                <div v-if="data.filter(item => item['House Status'] === 'For Sale').length" @click="clickCard(item)" style="width: 98%; height: 38%;" :id="`h${item['Project - Street ID'].trim()}`" class="card mx-auto rounded-lg bg-white mt-2 mb-2 border hover:shadow-lg" v-for="item in data.filter(item => item['House Status'] === 'For Sale')" :key="item['Address in MLS']">
+            <div ref="cardContainer" class="card-container bg-gray-100 w-1/2 h-full overflow-x-hidden overflow-y-scroll relative">
+                <div v-if="data.filter(item => item['House Status'] === 'For Sale').length" style="width: 98%; height: 38%;" :id="`h${item['Project - Street ID'].trim()}`" class="card mx-auto rounded-lg bg-white mt-2 mb-2 border hover:shadow-lg" v-for="item in data.filter(item => item['House Status'] === 'For Sale')" :key="item['Address in MLS']">
                     <div class="card-header flex justify-between items-center w-full h-1/5 border border-b">
                         <div style="font-size: 1vw;" class="ml-2" >{{ item['Project Address'] }}</div>
                         <div style="font-size: 1vw;" class="mr-2 border  rounded p-1 " :class="{ 'border-green-700 text-green-700': item['House Status'] === 'For Sale', 'border-red-700 text-red-700': item['House Status'] === 'Pending', 'border-gray-700 text-gray-700': item['House Status'] === 'Sold' }" >{{ item['House Status'] }}</div>
@@ -67,9 +70,9 @@
                                     <span class="flex w-1/2 items-center  ml-2"><span style="font-size: 1.25vw;" class="iconfont icon-feature-lot-size mr-2"></span>Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
                                 </p>
                             </div>
-                            <p style="font-size: 0.85vw;" class=" m-2 flex justify-end items-center flex-grow">
+                            <!-- <p style="font-size: 0.85vw;" class=" m-2 flex justify-end items-center flex-grow">
                                 <button @click="details(item, $event)" class="text-green-700 border border-green-700 w-1/2 h-2/3 hover:shadow-lg p-2 rounded flex items-center justify-center">View Details</button>
-                            </p>
+                            </p> -->
                         </div>
                     </div>
                 </div>
@@ -77,6 +80,7 @@
                     <CircleClose style="height: 20vh; width: 10vw;margin-left: auto;margin-right: auto;" />
                     <p class="text-center" style="font-size: 1vw;">No Data</p>
                 </div>
+                <div ref="hrRef" class="top-1/2 h-3 fixed w-full bg-black invisible"></div>
             </div>
         </div>
         <el-drawer v-model="drawer" title="Filters" size="40%">
@@ -213,7 +217,7 @@
 import { Menu, CircleClose } from '@element-plus/icons-vue'
 import { GoogleMap, Marker, CustomMarker, InfoWindow } from 'vue3-google-map'
 import { processData } from '../../hooks/index'
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch, onUnmounted, nextTick } from 'vue';
 import httpObj from '../../api/api';
 import { useRouter } from 'vue-router';
 const router = useRouter()
@@ -224,6 +228,7 @@ for (let i = 11; i < 46; i++) {
 }
 const markerRef = ref()
 const cardContainer = ref()
+const hrRef = ref()
 const mapRef = ref()
 // console.log(mapRef.value);
 watch([() => mapRef.value?.ready, center], ([ready, center]) => {
@@ -237,6 +242,7 @@ watch([() => mapRef.value?.ready, center], ([ready, center]) => {
 })
 const data = ref([])
 const data2 = ref([])
+const img_big = ref('https://static.wixstatic.com/media/d7263e_553e79a1d02d4c2da0d526214ab9890b~mv2.jpg/v1/fill/w_1356,h_1000,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/26-1002_Photo%20-%2010.jpg')
 const city = ref(['McLean', 'Falls Church', 'Vienna', 'Arlington'])
 async function initData() {
     const res = await httpObj.sendPost('/records/query', {
@@ -258,7 +264,6 @@ async function initData() {
     // })
     // console.log(data.value);
 }
-initData()
 function clickMarker(item, event) {
     if(item['House Status'] === 'For Sale'){
         document.querySelectorAll('.card').forEach(item => {
@@ -345,6 +350,8 @@ async function search(){
     data.value = data.value.filter(item => item['Project Address'].includes(searchValue.value))
 }
 
+
+
 // 抽屉
 const drawer = ref(false);
 const priceFilter2 = ref([2000000, 5000000])
@@ -424,7 +431,28 @@ const filterIn = async () => {
     cityValue.value = '';
     drawer.value = false;
 }
-onMounted(() => {
+onMounted(async () => {
+    await initData()
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting){
+                img_big.value = data.value.find(item => {
+                    if(entry.target.id.split('h')[1] === '6800'){
+                        return item['Project - Street ID'] === '6800 '
+                    } else {
+                        return item['Project - Street ID'] === entry.target.id.split('h')[1]
+                    }
+                })['Profile Pic Link']
+            }
+        })
+    }, {
+        root: document.querySelector('.card-container'),
+        threshold: 0.5,
+        rootMargin: `-20% 0px -20% 0px`,
+    })
+    document.querySelectorAll('.card').forEach(item => {
+        observer.observe(item)
+    })
     ElMessageBox({
         message: /*html*/`
             <div style="width: 100%; height: 100%;">
@@ -443,6 +471,7 @@ onMounted(() => {
         showConfirmButton: false,
         showCancelButton: false,
     })
+
 })
 
 

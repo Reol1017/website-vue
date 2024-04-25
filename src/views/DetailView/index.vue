@@ -254,11 +254,22 @@ async function initDetail() {
 async function getPic() {
     const res = await httpObj.sendPost('/records/query', {
         from: 'btwxxjnn4',
-        select: [6, 7, 8, 9, 10, 11],
+        select: [3, 6, 7, 8, 9, 10, 11, 12, 13],
         where: `{8.EX.'${route.params.id === '6800' ? '6800 ' : route.params.id }'}`
     })
     picData.value = processData(res.data.data, res.data.fields)
-    // console.log(picData.value)
+    picData.value.forEach(item => {
+        if(item['Pic_Number'] === null){
+            item['Pic_Number'] = 3;
+        }
+    })
+    picData.value = picData.value.sort((a, b) => {
+        if(a['Pic_Number'] === b['Pic_Number']){
+            return a['Record ID#'] - b['Record ID#'];
+        }
+        return a['Pic_Number'] - b['Pic_Number']
+    })
+    console.log(picData.value)
 }
 initDetail()
 getPic()

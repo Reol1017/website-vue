@@ -54,19 +54,19 @@
                     </div>
                     <div class="card-body w-full h-4/5 p-1 flex">
                         <div class="img w-1/3 h-full rounded-lg">
-                            <img :src="item['Profile Pic Link']" class="h-full mx-auto object-scale-down"lt="">
+                            <img :src="item['Profile Pic Link']" class="object-contain h-full" alt="">
                         </div>
                         <div class="info w-2/3 h-full flex flex-col justify-between">
                             <div style="font-size: 0.9vw;" class=" flex-grow conten w-full flex flex-col">
-                                <p class=" w-full flex leading-7 justify-between ml-2 mt-2 ">
+                                <p class=" w-full flex leading-7 justify-between ml-2 mt-2 flex-grow items-center">
                                     <span class="flex w-1/2 items-start"><span style="font-size: 1.25vw;" class="iconfont icon-dollar mr-2"></span>Price: {{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}</span>
                                     <span class="flex w-1/2 items-start  ml-2"><span style="font-size: 1.25vw;" class="iconfont icon-bathroom-fill mr-2"></span>Baths: {{ item['Number Of Bathrooms'] }}</span>
                                 </p>
-                                <p class=" w-full flex leading-7 justify-between ml-2 mt-2">
+                                <p class=" w-full flex leading-7 justify-between ml-2 mt-2 flex-grow items-center">
                                     <span class="flex w-1/2 items-start"><span style="font-size: 1.25vw;" class="iconfont icon-Bed-1 mr-2"></span>Bed: {{ item['Number Of Bedrooms'] }}</span>
                                     <span class="flex w-1/2 items-start  ml-2"><span style="font-size: 1.25vw;" class="iconfont icon-garage mr-2"></span>Garage: {{ item['Number Of Garage'] }}-Car</span>
                                 </p>
-                                <p class=" w-full flex leading-7 ml-2 justify-between mt-2">
+                                <p class=" w-full flex leading-7 ml-2 justify-between mt-2 flex-grow items-center">
                                     <span class="flex w-1/2 items-start"><span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span>SQFT: {{ item['Total Finished SQFT']?.toLocaleString() }} SQFT</span>
                                     <span class="flex w-1/2 items-start  ml-2"><span style="font-size: 1.25vw;" class="iconfont icon-feature-lot-size mr-2"></span>Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
                                 </p>
@@ -480,25 +480,6 @@ onMounted(async () => {
     document.querySelectorAll('.card').forEach(item => {
         observer.observe(item)
     })
-    ElMessageBox({
-        message: /*html*/`
-            <div style="width: 100%; height: 100%;">
-                <p style="font-size: 1rem; font-weight: bold;line-height: 2;">Spring Madness Sale! $35K Closing Credit Through 04/30/2024! </p>
-                <p style="font-size: 0.8rem; line-height: 1.5;font-family: 'Font1';font-weight: normal;">*Offer valid only on to-be-built properties owned by Anchor Homes. Contract must be fully ratified and full deposit received by 04/30/2024.</p>
-            </div>
-        `,
-        dangerouslyUseHTMLString: true,
-        customStyle: {
-            textAlign: 'center',
-            fontFamily: 'Font3',
-            fontWeight: 'bold',
-            width: '60vw',
-        },
-        title: '',
-        showConfirmButton: false,
-        showCancelButton: false,
-    })
-
 })
 
 

@@ -86,11 +86,11 @@
                 </div>
             </div>
             <div class="col-right w-1/5 sticky top-0 h-fit p-3 ml-2">
-                <p style="font-size: 0.95vw; font-weight: bold;" class="border hover:border-gray-500 p-2 rounded-lg shadow">
+                <!-- <p style="font-size: 0.95vw; font-weight: bold;" class="border hover:border-gray-500 p-2 rounded-lg shadow">
                     Spring Madness Sale! $35K Closing Credit
             Through 04/30/2024! Offer valid only on to-be-built properties owned by Anchor Homes. Contract must be fully
             ratified and full deposit received by 04/30/2024.
-                </p>
+                </p> -->
                 <div style="font-size: 1vw;" class="view-other w-full h-fit flex flex-col justify-center items-center border shadow mt-3 p-2 rounded-lg">
                     <button @click="previewPdf" type="button" class="border w-11/12 mb-2 rounded-lg hover:shadow" style="height: 5vh;" >
                         <span style="font-size: 1.25vw;" class="iconfont icon-Brochure mr-2"></span>
@@ -110,9 +110,9 @@
     </div>
     <!-- <div v-else-if="width <= 1280 && width > 768">平板</div> -->
     <div v-else class="mobile w-full h-full">
-        <p class="w-11/12 text-sm mx-auto font-bold my-2 leading-7" style=" ">
+        <!-- <p class="w-11/12 text-sm mx-auto font-bold my-2 leading-7" style=" ">
             Spring Madness Sale! $35K Closing Credit Through 04/30/2024! Offer valid only on to-be-built properties owned by Anchor Homes. Contract must be fully ratified and full deposit received by 04/30/2024.
-        </p>
+        </p> -->
         <div class="img w-11/12 h-1/3 flex justify-center items-center mx-auto">
             <img :src="picData[0]['Link To File']" class="h-full w-full object-cover rounded" alt="">
         </div>

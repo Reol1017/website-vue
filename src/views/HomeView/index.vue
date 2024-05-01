@@ -1,5 +1,5 @@
 <template>
-    <div v-if="width >= 768" class="home-container w-full h-full relative">
+    <div v-if="width > 1024" class="home-container w-full h-full relative">
         <div style="height: 10%;"class="header sticky w-full flex items-center shadow">
             <input v-model="searchValue" type="text" class=" ml-4 border w-1/5 h-1/2 border-green-700 outline-none rounded rounded-r-none pl-2">
             <button @click="search" class="border-green-600 mr-auto w-1/12 h-1/2 text-green-700 border border-l-0 rounded-r hover:shadow"><i class="fa fa-search"></i></button>
@@ -42,10 +42,11 @@
                     </CustomMarker>
                 </GoogleMap> -->
             <!-- </div> -->
-            <div class="img-container w-1/2 h-full flex justify-center items-center overflow-hidden">
-                <img :src="img_big" class="min-w-full min-h-full object-contain">
+            <div class="img-container w-3/5 h-full flex justify-center items-center overflow-hidden">
+                <!-- <img :src="img_big" class="min-w-full min-h-full object-contain"> -->
+                <img :src="img_big" :class="[ width <= 768 && width > 425 ? ' object-fill' : 'w-full h-full object-cover' ]">
             </div>
-            <div ref="cardContainer" class="card-container bg-gray-100 w-1/2 h-full overflow-x-hidden overflow-y-scroll relative">
+            <div ref="cardContainer" class="card-container bg-gray-100 w-2/5 h-full overflow-x-hidden overflow-y-scroll relative">
                 <div @click="details(item, $event)" v-if="data.filter(item => item['House Status'] === 'For Sale').length" style="width: 98%; height: 38%;" :id="`h${item['Project - Street ID'].trim()}`" class="card mx-auto rounded-lg bg-white mt-2 mb-2 border hover:shadow-lg" v-for="item in data.filter(item => item['House Status'] === 'For Sale')" :key="item['Address in MLS']">
                     <div class="card-header flex justify-between items-center w-full h-1/5 border border-b">
                         <div style="font-size: 1vw;" class="ml-2" >{{ item['Project Address'] }}</div>
@@ -57,17 +58,17 @@
                         </div>
                         <div class="info w-2/3 h-full flex flex-col justify-between">
                             <div style="font-size: 0.9vw;" class=" flex-grow conten w-full flex flex-col">
-                                <p class=" w-full flex leading-7 justify-between ml-2 flex-grow">
-                                    <span class="flex w-1/2 items-center"><span style="font-size: 1.25vw;" class="iconfont icon-dollar mr-2"></span>Price: {{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}</span>
-                                    <span class="flex w-1/2 items-center  ml-2"><span style="font-size: 1.25vw;" class="iconfont icon-bathroom-fill mr-2"></span>Baths: {{ item['Number Of Bathrooms'] }}</span>
+                                <p class=" w-full flex leading-7 justify-between ml-2 mt-2 ">
+                                    <span class="flex w-1/2 items-start"><span style="font-size: 1.25vw;" class="iconfont icon-dollar mr-2"></span>Price: {{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}</span>
+                                    <span class="flex w-1/2 items-start  ml-2"><span style="font-size: 1.25vw;" class="iconfont icon-bathroom-fill mr-2"></span>Baths: {{ item['Number Of Bathrooms'] }}</span>
                                 </p>
-                                <p class=" w-full flex leading-7 justify-between ml-2 flex-grow">
-                                    <span class="flex w-1/2 items-center"><span style="font-size: 1.25vw;" class="iconfont icon-Bed-1 mr-2"></span>Bed: {{ item['Number Of Bedrooms'] }}</span>
-                                    <span class="flex w-1/2 items-center  ml-2"><span style="font-size: 1.25vw;" class="iconfont icon-garage mr-2"></span>Garage: {{ item['Number Of Garage'] }}-Car</span>
+                                <p class=" w-full flex leading-7 justify-between ml-2 mt-2">
+                                    <span class="flex w-1/2 items-start"><span style="font-size: 1.25vw;" class="iconfont icon-Bed-1 mr-2"></span>Bed: {{ item['Number Of Bedrooms'] }}</span>
+                                    <span class="flex w-1/2 items-start  ml-2"><span style="font-size: 1.25vw;" class="iconfont icon-garage mr-2"></span>Garage: {{ item['Number Of Garage'] }}-Car</span>
                                 </p>
-                                <p class=" w-full flex leading-7 ml-2 justify-between flex-grow">
-                                    <span class="flex w-1/2 items-center"><span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span>SQFT: {{ item['Total Finished SQFT']?.toLocaleString() }} SQFT</span>
-                                    <span class="flex w-1/2 items-center  ml-2"><span style="font-size: 1.25vw;" class="iconfont icon-feature-lot-size mr-2"></span>Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
+                                <p class=" w-full flex leading-7 ml-2 justify-between mt-2">
+                                    <span class="flex w-1/2 items-start"><span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span>SQFT: {{ item['Total Finished SQFT']?.toLocaleString() }} SQFT</span>
+                                    <span class="flex w-1/2 items-start  ml-2"><span style="font-size: 1.25vw;" class="iconfont icon-feature-lot-size mr-2"></span>Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
                                 </p>
                             </div>
                             <!-- <p style="font-size: 0.85vw;" class=" m-2 flex justify-end items-center flex-grow">
@@ -129,11 +130,36 @@
     <div v-else class="home-container w-full h-full relative bg-gray-50">
         <div class="mobile-header w-full h-1/10 bg-white justify-between flex items-center shadow">
             <!-- <img src="../../assets/logo.png" class=" w-1/3 ml-2" alt=""> -->
-            <van-search v-model="searchValue" @search="search"  placeholder="Enter City to Search" />
+            <van-search v-model="searchValue" @search="search" @focus="vanFocus($event)" placeholder="Enter City to Search" />
             <el-icon size="25" class="w-1/3 mr-2" @click="mobileDrawer = true"><Menu /></el-icon>
         </div>
-        <div class="body-mobile w-full" style="height: 92%;">
-            <div class="map-mobile w-full h-full bg-white my-1">
+        <div class="body-mobile w-full bg-gray-200 overflow-y-scroll overflow-x-hidden" style="height: 92%;">
+            <div @click="details(item, $event)" style="width: 98%; font-size: 0.65rem;" class=" h-1/4 mx-auto my-2 rounded bg-white" v-for="item in data.filter(item => item['House Status'] === 'For Sale')" :key="item['Address in MLS']">
+                <div class="mobile-card-header w-full h-1/4 border-b flex justify-between items-center">
+                    <span class="ml-1">{{ item['Project Address'] }}</span>
+                    <span class="text-green-700 mr-1 border-green-700 border p-1 rounded">{{ item['House Status'] }}</span>
+                </div>
+                <div class="mobile-card-body w-full h-3/4 py-2 flex" >
+                    <div class="mobile-img-container w-1/3 h-full">
+                        <img @click="mobileImgPreview(item['Profile Pic Link'], $event)" :src="item['Profile Pic Link']" class="h-full w-full object-contain" />
+                    </div>
+                    <div class="mobile-content w-2/3 h-full flex flex-col" style="font-size: 0.55rem;">
+                        <p class=" w-full flex leading-7 justify-between ml-2 h-1/3">
+                            <span class="flex w-1/2 items-start"><span class="iconfont icon-dollar mr-2"></span>Price: {{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}</span>
+                            <span class="flex w-1/2 items-start  ml-2"><span class="iconfont icon-bathroom-fill mr-2"></span>Baths: {{ item['Number Of Bathrooms'] }}</span>
+                        </p>
+                        <p class=" w-full flex leading-7 justify-between ml-2 h-1/3">
+                            <span class="flex w-1/2 items-start"><span class="iconfont icon-Bed-1 mr-2"></span>Bed: {{ item['Number Of Bedrooms'] }}</span>
+                            <span class="flex w-1/2 items-start  ml-2"><span class="iconfont icon-garage mr-2"></span>Garage: {{ item['Number Of Garage'] }}-Car</span>
+                        </p>
+                        <p class=" w-full flex leading-7 ml-2 justify-between h-1/3">
+                            <span class="flex w-1/2 items-start"><span class="iconfont icon-sqft mr-2"></span>SQFT: {{ item['Total Finished SQFT']?.toLocaleString() }} SQFT</span>
+                            <span class="flex w-1/2 items-start  ml-2"><span class="iconfont icon-feature-lot-size mr-2"></span>Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="map-mobile w-full h-full bg-white my-1">
                 <GoogleMap ref="mapMobileRef" api-key="AIzaSyDag9MI2Ss2T52lYGcWI2-uKXDlIpco3fY" style="width: 100%; height: 100%"
                     :center="center" :zoom="13.5">
                     <Marker ref="markerRef" @click="clickMobileMarker(item)" v-for="item in data" :key="item['Address in MLS']"
@@ -160,14 +186,14 @@
                                     </div>
                                 </div>
                         </InfoWindow>
-                    </Marker>
+                    </Marker> -->
                     <!-- <CustomMarker @click="clickMobileMarker(item, $event)" v-for="item in data" :key="item['Address in MLS']" :options="{ position: { lat: Number(item['Google Map Location Code'].split(',')[0]), lng: Number(item['Google Map Location Code'].split(',')[1]), label: item['Project Address'], title: item['Project Address'], anchorPoint: 'BOTTOM_CENTER' } }">
                         <div class=" w-8 h-8">
                             <i ref="markerRef"  :class="`m${item['Project - Street ID']} fa fa-map-marker w-full h-full text-2xl text-red-700`"></i>
                         </div>
                     </CustomMarker> -->
-                </GoogleMap>
-            </div>
+                <!-- </GoogleMap>
+            </div> -->
         </div>
         <!-- 抽屉 -->
         <el-drawer v-model="mobileDrawer" size="100%" title="Filter" direction="ttb">
@@ -181,6 +207,7 @@
             </p>
             <el-radio-group v-model="status">
                 <el-radio value="For Sale" size="large">For Sale</el-radio>
+                <el-radio value="Pending" size="large">Pending</el-radio>
                 <el-radio value="Sold" size="large">Sold</el-radio>
             </el-radio-group>
             <hr>
@@ -456,8 +483,8 @@ onMounted(async () => {
     ElMessageBox({
         message: /*html*/`
             <div style="width: 100%; height: 100%;">
-                <p style="font-size: 1.5vw; font-weight: bold;line-height: 2;">Spring Madness Sale! $35K Closing Credit Through 04/30/2024! </p>
-                <p style="font-size: 0.8vw; line-height: 1.5;font-family: 'Font1';font-weight: normal;">*Offer valid only on to-be-built properties owned by Anchor Homes. Contract must be fully ratified and full deposit received by 04/30/2024.</p>
+                <p style="font-size: 1rem; font-weight: bold;line-height: 2;">Spring Madness Sale! $35K Closing Credit Through 04/30/2024! </p>
+                <p style="font-size: 0.8rem; line-height: 1.5;font-family: 'Font1';font-weight: normal;">*Offer valid only on to-be-built properties owned by Anchor Homes. Contract must be fully ratified and full deposit received by 04/30/2024.</p>
             </div>
         `,
         dangerouslyUseHTMLString: true,
@@ -465,7 +492,7 @@ onMounted(async () => {
             textAlign: 'center',
             fontFamily: 'Font3',
             fontWeight: 'bold',
-            width: '40vw',
+            width: '60vw',
         },
         title: '',
         showConfirmButton: false,
@@ -487,6 +514,11 @@ const InfoWindowVisible = computed(() => {
         }
     })
 })
+
+function mobileImgPreview(url, e){
+    e.stopPropagation()
+    showImagePreview([url])
+}
 function clickMobileMarker(item, event){
     sid.value = item['Project - Street ID']
 

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="width >= 768" class="pc w-full h-full pb-4">
+    <div v-if="width > 1024" class="pc w-full h-full pb-4">
         <div class="container w-full mx-auto h-full flex justify-center overflow-y-scroll  pt-3 relative">
             <div class="col-left w-4/5">
                 <p class="my-2 text-center" style="font-size: 1.2vw;">{{ detail['Project Address'] }}</p>
@@ -116,44 +116,38 @@
         <div class="img w-11/12 h-1/3 flex justify-center items-center mx-auto">
             <img :src="picData[0]['Link To File']" class="h-full w-full object-cover rounded" alt="">
         </div>
-        <div class="card mx-auto my-4 w-11/12 h-2/3 flex flex-col p-2 rounded shadow-md hover:shadow-lg">
-                    <p class="title w-full font-bold text-center text-xs flex-grow"
-                        style="">{{ detail['Project Address'] }}
+        <div class="card mx-auto my-4 w-11/12 h-fit flex flex-col p-2 rounded shadow-md hover:shadow-lg">
+                    <p class="title w-full font-bold my-2 text-center text-xs"
+                        style="font-size: 0.8rem;">{{ detail['Project Address'] }}
                     </p>
-                    <p class="w-11/12 justify-between leading-6 flex mx-auto text-xs items-center flex-grow"
-                        style="">
-                        <span class="flex items-center flex-grow"><img class="mr-1"style="width: 0.65rem; height: 0.65rem;" src="../../assets/dollar.svg" alt=""> Price: {{ detail['List Price'].toLocaleString('en-US', {style:'currency', currency: 'USD'}) }}</span>
-                        <span class="flex items-center justify-end flex-grow"><img class="mr-1"style="width: 0.65rem; height: 0.65rem;" src="../../assets/bath.svg" alt=""> Baths: {{ detail['Number Of Bathrooms'] }}</span>
+                    <p class="w-full flex justify-around border-b p-2 my-2" style="font-size: 0.65rem;">
+                        <span class="flex items-center w-1/2"><span class="iconfont icon-dollar mr-2"></span>Price: {{ detail['List Price']?.toLocaleString('en-US', {style:'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0}) }}</span>
+                        <span class="flex items-center w-1/2"><span class="iconfont icon-bathroom-fill mr-2"></span>Baths: {{ detail['Number Of Bathrooms'] }}</span>
                     </p>
-                    <p class="w-11/12 text-xs justify-between mx-auto leading-6 flex flex-grow"
-                        style="">
-                        <span class="flex items-center flex-grow"><img class="mr-1"style="width: 0.65rem; height: 0.65rem;" src="../../assets/bed.svg" alt=""> Beds: {{ detail['Number Of Bedrooms'] }}</span>
-                        <span class="flex items-center justify-end flex-grow"><img class="mr-1"style="width: 0.65rem; height: 0.65rem;" src="../../assets/car.svg" alt=""> Garage: {{ detail['Number Of Garage'] }}</span>
+                    <p class="w-full flex justify-around border-b p-2 my-2" style="font-size: 0.65rem;">
+                        <span class="flex items-center w-1/2"><span class="iconfont icon-Bed-1 mr-2"></span>Beds: {{ detail['Number Of Bedrooms'] }}</span>
+                        <span class="flex items-center w-1/2"><span class="iconfont icon-garage mr-2"></span>Garage: {{ detail['Number Of Garage'] }}</span>
                     </p>
-                    <p class="w-11/12 text-xs justify-between mx-auto leading-6 flex flex-grow"
-                        style="">
-                        <span class="flex items-center flex-grow"><img class="mr-1"style="width: 0.65rem; height: 0.65rem;" src="../../assets/SQFT.svg" alt=""> SQFT: {{ detail['Total Finished SQFT'].toLocaleString() }}SQFT</span>
-                        <span class="flex items-center justify-end flex-grow"><img class="mr-1"style="width: 0.65rem; height: 0.65rem;" src="../../assets/ruler.svg" alt=""> Lot Size: {{ detail['Lot Size Acres'] }} Acres</span>
+                    <p class="w-full flex justify-around border-b p-2 my-2" style="font-size: 0.65rem;">
+                        <span class="flex items-center w-1/2"><span class="iconfont icon-sqft mr-2"></span>SQFT: {{ detail['Total Finished SQFT']?.toLocaleString() }}</span>
+                        <span class="flex items-center w-1/2"><span class="iconfont icon-feature-lot-size mr-2"></span>Lot Size: {{ detail['Lot Size Acres'] }}</span>
                     </p>
-                    <p class="w-11/12 text-xs justify-between mx-auto leading-6 flex flex-grow"
-                        style="">
-                        <span class="flex items-center flex-grow"><img class="mr-1"style="width: 0.75rem; height: 0.75rem;" src="../../assets/bed.svg" alt=""> Main Level Beds: {{ detail['Main Level Bedroom'] }}</span>
-                        <span class="flex items-center justify-end flex-grow"><img class="mr-1"style="width: 0.75rem; height: 0.75rem;" src="../../assets/bath.svg" alt=""> Main Level Baths: {{ detail['Main Level Bathroom'] }}</span>
+                    <p class="w-full flex justify-around border-b p-2 my-2" style="font-size: 0.65rem;">
+                        <span class="flex items-center w-1/2"><span class="iconfont icon-Bed-1 mr-2"></span>Main Level Bedrooms: {{ detail['Main Level Bedroom'] }}</span>
+                        <span class="flex items-center w-1/2"><span class="iconfont icon-bathroom-fill mr-2"></span>Main Level Bathrooms: {{ detail['Main Level Bathroom'] }}</span>
                     </p>
-                    <p class="w-11/12 text-xs justify-between mx-auto leading-6 flex flex-grow"
-                        style="">
-                        <span class="flex items-center flex-grow"><img class="mr-1"style="width: 0.75rem; height: 0.75rem;" src="../../assets/bed.svg" alt=""> Upper Level Beds: {{ detail['Upper Level Bedroom'] }}</span>
-                        <span class="flex items-center justify-end flex-grow"><img class="mr-1"style="width: 0.75rem; height: 0.75rem;" src="../../assets/bath.svg" alt=""> Upper Level Baths: {{ detail['Upper Level Bathroom'] }}</span>
+                    <p class="w-full flex justify-around border-b p-2 my-2" style="font-size: 0.65rem;">
+                        <span class="flex items-center w-1/2"><span class="iconfont icon-Bed-1 mr-2"></span>Upper Level Bedrooms: {{ detail['Upper Level Bedroom'] }}</span>
+                        <span class="flex items-center w-1/2"><span class="iconfont icon-bathroom-fill mr-2"></span>Upper Level Bathrooms: {{ detail['Upper Level Bathroom'] }}</span>
                     </p>
-                    <p class="w-11/12 text-xs justify-between mx-auto leading-6 flex flex-grow"
-                        style="">
-                        <span class="flex items-center flex-grow"><img class="mr-1"style="width: 0.75rem; height: 0.75rem;" src="../../assets/bed.svg" alt=""> Lower Level Beds: {{ detail['Lower Level Bedroom'] }}</span>
-                        <span class="flex items-center justify-end flex-grow"><img class="mr-1"style="width: 0.75rem; height: 0.75rem;" src="../../assets/bath.svg" alt=""> Lower Level Baths: {{ detail['Lower Level Bathroom'] }}</span>
+                    <p class="w-full flex justify-around border-b p-2 my-2" style="font-size: 0.65rem;">
+                        <span class="flex items-center w-1/2"><span class="iconfont icon-Bed-1 mr-2"></span>Lower Level Bedrooms: {{ detail['Upper Level Bedroom'] }}</span>
+                        <span class="flex items-center w-1/2"><span class="iconfont icon-bathroom-fill mr-2"></span>Lower Level Bathrooms: {{ detail['Lower Level Bathroom'] }}</span>
                     </p>
-                    <p class="btn-line w-full flex flex-grow">
+                    <p class="btn-line w-full flex" style="height: 6vh;">
                         <button type="button"
                             class="border w-1/3 rounded border-gray-300 text-xs flex items-center justify-center mx-auto hover:shadow-lg hover:bg-gray-100"><img class="mr-1"style="width: 0.75rem; height: 0.75rem;" src="../../assets/book.svg" alt=""><span
-                                style="">BROCHURE</span></button>
+                                style="" @click="previewPdf">BROCHURE</span></button>
                         <button @click="locationToggle('https://www.myanchorhomes.com/remote-home-tour')" type="button"
                             class="border w-1/3 rounded border-gray-300 text-xs flex items-center justify-center mx-auto hover:shadow-lg hover:bg-gray-100"><img class="mr-1"style="width: 0.75rem; height: 0.75rem;" src="../../assets/video.svg" alt=""><span
                                 style="">VIDEO
@@ -210,7 +204,7 @@
                         detail['Description'] }}</p>
                 </div>
                 <hr class="w-11/12 mx-auto my-4">
-                <div class="w-11/12 mx-auto my-4 h-1/2 rounded-lg shadow-md hover:shadow-xl pb-2">
+                <!-- <div class="w-11/12 mx-auto my-4 h-1/2 rounded-lg shadow-md hover:shadow-xl pb-2">
                     <p class="w-full text-center mb-2 text-sm" style="">
                     Direction</p>
                     <GoogleMap api-key="AIzaSyDag9MI2Ss2T52lYGcWI2-uKXDlIpco3fY" style="width: 100%; height: 100%"
@@ -220,6 +214,13 @@
                             :options="{ position: { lat: Number(detail['Google Map Location Code'].split(',')[0]), lng: Number(detail['Google Map Location Code'].split(',')[1]), label: detail['Project Address'], title: detail['Project Address'] } }">
                         </Marker>
                     </GoogleMap>
+                </div> -->
+                <div class="map-container w-11/12 h-full border mx-auto">
+                    <iframe v-if="detail['Google Map Link']" :src="detail['Google Map Link']" width="100%" height="100%" frameborder="0"></iframe>
+                    <div style="font-size: 1vw;" v-else class="w-full h-full flex flex-col justify-center items-center">
+                        <CircleClose style="height: 20vh; width: 10vw;" ></CircleClose>
+                        This map is not available!
+                    </div>
                 </div>
     </div>
 </template>
@@ -331,7 +332,15 @@ async function previewPdf(){
 
         // 创建一个 URL 对象，并设置给 window.open() 方法
         const url = URL.createObjectURL(blob);
-        window.open(url, '_blank');
+        if(width.value < 1024 ){
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${detail.value['Project Address']}.pdf`;
+            a.click();
+            a.remove()
+        } else {
+            window.open(url, '_blank');
+        }
     } else {
         ElMessage({
             type: 'error',

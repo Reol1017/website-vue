@@ -1,0 +1,75 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 4509751 */
+  src: url('iconfont.woff2?t=1713250124099') format('woff2'),
+       url('iconfont.woff?t=1713250124099') format('woff'),
+       url('iconfont.ttf?t=1713250124099') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-video_fill:before {
+  content: "\e73c";
+}
+
+.icon-virtual-reality:before {
+  content: "\e622";
+}
+
+.icon-bg-model:before {
+  content: "\e647";
+}
+
+.icon-high-school-1:before {
+  content: "\e66b";
+}
+
+.icon-Brochure:before {
+  content: "\e6b5";
+}
+
+.icon-_huabanfuben:before {
+  content: "\e808";
+}
+
+.icon-elementary-school-4:before {
+  content: "\e665";
+}
+
+.icon-high_school:before {
+  content: "\e94d";
+}
+
+.icon-builder-model-subType:before {
+  content: "\e7ac";
+}
+
+.icon-garage:before {
+  content: "\e60e";
+}
+
+.icon-dollar:before {
+  content: "\e7a1";
+}
+
+.icon-sqft:before {
+  content: "\e6a8";
+}
+
+.icon-bathroom-fill:before {
+  content: "\e659";
+}
+
+.icon-Bed-1:before {
+  content: "\e61f";
+}
+
+.icon-feature-lot-size:before {
+  content: "\e630";
+}
+

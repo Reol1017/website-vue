@@ -29,14 +29,14 @@
             <button @click="resetOut($event)" type="button" style="font-size: 0.9vw;" class=" mr-4 outline-none text-black rounded border border-black ml-5 h-1/2 w-1/12 hover:shadow">Reset</button>
         </div>
         <div style="height: 90%;" class="body overflow-y-scroll w-full flex flex-wrap relative">
-            <div @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" class="card rounded bg-white my-1" style="height: 65%; width: 50%;">
-                <div class="card-header flex justify-between items-center border mx-auto rounded" style="height: 6%; width: 99%;">
+            <div @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" class="card rounded bg-white my-1" style="height: 75%; width: 50%;">
+                <div class="card-header flex justify-between items-center border mx-auto rounded-t" style="height: 6%; width: 99%;">
                     <div class="w-3/4 text-center">{{ item['Project Address'] }}</div>
                     <div class="w-1/4 text-center border-l">{{ item['House Status'] }}</div>
                 </div>
                 <div class="card-body w-full flex justify-center relative rounded" style="height: 94%;">
                     <img style="width: 99%;" class="h-full object-cover rounded-b" :src="item['Profile Pic Link']" />
-                    <div style="width: 99%;" class="text-white flex flex-col absolute h-full opacity-0 hover:opacity-70 cursor-pointer justify-center bg-black transition duration-75">
+                    <div style="width: 99%;" class="text-white flex flex-col absolute h-full rounded opacity-0 hover:opacity-70 cursor-pointer justify-center bg-black transition duration-75">
                         <div class="w-full h-1/2 flex flex-col">
                             <p class=" w-full flex leading-7 justify-between flex-grow items-center">
                                 <span class="flex w-1/2 justify-start pl-20"><span style="font-size: 1.25vw;" class="iconfont icon-dollar mr-2"></span>Price: {{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}</span>
@@ -106,31 +106,32 @@
             <el-icon size="25" class="w-1/3 mr-2" @click="mobileDrawer = true"><Menu /></el-icon>
         </div>
         <div class="body-mobile w-full bg-gray-200 overflow-y-scroll overflow-x-hidden" style="height: 92%;">
-            <div @click="details(item, $event)" style="width: 98%; font-size: 0.65rem;" class=" h-1/4 mx-auto my-2 rounded bg-white" v-for="item in data.filter(item => item['House Status'] === 'For Sale')" :key="item['Address in MLS']">
-                <div class="mobile-card-header w-full h-1/4 border-b flex justify-between items-center">
+            <div @click="details(item, $event)" style="width: 98%; font-size: 0.75rem; height: 45%" class=" mx-auto my-2 rounded bg-white" v-for="(item, index) in data.filter(item => item['House Status'] !== 'Sold')" :key="item['Address in MLS']">
+                <div class=" mobile-card-header w-full h-1/5 border-b flex justify-between items-center">
                     <span class="ml-1">{{ item['Project Address'] }}</span>
-                    <span class="text-green-700 mr-1 border-green-700 border p-1 rounded">{{ item['House Status'] }}</span>
+                    <span class="mr-1 border p-1 rounded" :class="[item['House Status'] === 'For Sale' ? 'border-green-700 text-green-700' : '', item['House Status'] === 'Pending' ? 'border-yellow-700 text-yellow-700' : '', item['House Status'] === 'Sold' ? 'border-red-700 text-red-700' : '']">{{ item['House Status'] }}</span>
                 </div>
-                <div class="mobile-card-body w-full h-3/4 py-2 flex" >
-                    <div class="mobile-img-container w-1/3 h-full">
-                        <img @click="mobileImgPreview(item['Profile Pic Link'], $event)" :src="item['Profile Pic Link']" class="h-full w-full object-contain" />
-                    </div>
-                    <div class="mobile-content w-2/3 h-full flex flex-col" style="font-size: 0.55rem;">
-                        <p class=" w-full flex leading-7 justify-between ml-2 h-1/3">
-                            <span class="flex w-1/2 items-start"><span class="iconfont icon-dollar mr-2"></span>Price: {{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}</span>
-                            <span class="flex w-1/2 items-start  ml-2"><span class="iconfont icon-bathroom-fill mr-2"></span>Baths: {{ item['Number Of Bathrooms'] }}</span>
-                        </p>
-                        <p class=" w-full flex leading-7 justify-between ml-2 h-1/3">
-                            <span class="flex w-1/2 items-start"><span class="iconfont icon-Bed-1 mr-2"></span>Bed: {{ item['Number Of Bedrooms'] }}</span>
-                            <span class="flex w-1/2 items-start  ml-2"><span class="iconfont icon-garage mr-2"></span>Garage: {{ item['Number Of Garage'] }}-Car</span>
-                        </p>
-                        <p class=" w-full flex leading-7 ml-2 justify-between h-1/3">
-                            <span class="flex w-1/2 items-start"><span class="iconfont icon-sqft mr-2"></span>SQFT: {{ item['Total Finished SQFT']?.toLocaleString() }} SQFT</span>
-                            <span class="flex w-1/2 items-start  ml-2"><span class="iconfont icon-feature-lot-size mr-2"></span>Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
-                        </p>
+                <div class="mobile-card-body w-full h-4/5 relative" >
+                    <img @touchstart="mobileImgIndex = index" :src="item['Profile Pic Link']" class="w-full h-full" />
+                    <div v-show="mobileImgIndex === index" style="width: 100%;" class="text-white flex flex-col absolute h-full rounded opacity-70 top-0 justify-center bg-black transition duration-75">
+                        <div class="w-full h-1/2 flex flex-col">
+                            <p class=" w-full flex leading-7 justify-between flex-grow items-center">
+                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-dollar mr-2"></span>Price: {{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}</span>
+                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-bathroom-fill mr-2"></span>Baths: {{ item['Number Of Bathrooms'] }}</span>
+                            </p>
+                            <p class=" w-full flex leading-7 justify-between flex-grow items-center">
+                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-Bed-1 mr-2"></span>Bed: {{ item['Number Of Bedrooms'] }}</span>
+                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-garage mr-2"></span>Garage: {{ item['Number Of Garage'] }}-Car</span>
+                            </p>
+                            <p class=" w-full flex leading-7 justify-between flex-grow items-center">
+                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-sqft mr-2"></span>SQFT: {{ item['Total Finished SQFT']?.toLocaleString() }} SQFT</span>
+                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-feature-lot-size mr-2"></span>Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
+            <iframe style="width: 100%; height: 75%;" src="https://www-myanchorhomes-com.filesusr.com/html/d7263e_8c3695e6dc63abfe88941479ce2f32ce.html"></iframe>
         </div>
         <!-- 抽屉 -->
         <el-drawer v-model="mobileDrawer" size="100%" title="Filter" direction="ttb">
@@ -190,6 +191,7 @@ const filedNum = []
 for (let i = 11; i < 46; i++) {
     filedNum.push(i)
 }
+const mobileImgIndex = ref(-1);
 const markerRef = ref()
 const cardContainer = ref()
 const hrRef = ref()

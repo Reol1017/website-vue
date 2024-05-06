@@ -3,7 +3,7 @@
         <div class="container w-full mx-auto h-full flex justify-center overflow-y-scroll  pt-3 relative">
             <div class="col-left w-11/12">
                 <p class="my-2 text-center" style="font-size: 1.6vw;">{{ detail['Project Address'] }}</p>
-                <div class="img hover:border hover:border-gray-300 p-1 rounded-lg w-11/12 mx-auto h-3/4 flex flex-col">
+                <div v-if="picData.length > 0" class="img hover:border hover:border-gray-300 p-1 rounded-lg w-11/12 mx-auto h-3/4 flex flex-col">
                     <div class="carsouel w-full h-4/5">
                         <el-carousel type="card" @change="changeImage" ref=swiperRef style="height: 100%; width: 100%;" indicator-position="none" arrow="always" :autoplay="false">
                           <el-carousel-item v-for="(img, index) in picData" :key="index">
@@ -16,6 +16,10 @@
                             <img :src="img['Link To File']" class="object-contain w-4/5 h-full"  alt="">
                         </div>
                     </div>
+                </div>
+                <div v-else style="font-size: 1.5vw;" class="img hover:border hover:border-gray-300 p-1 rounded-lg w-11/12 mx-auto h-3/4 flex items-center justify-center flex-col">
+                    <CircleClose style="height: 20vh; width: 10vw;" ></CircleClose>
+                    There is no gallery for this project at the moment.
                 </div>
                 <div class="tab-container hover:shadow-lg w-11/12 h-fit my-4 mx-auto shadow">
                     <el-tabs @tab-click="tabClick" v-model="detailName" type="border-card" style="width: 100%; font-size: 1.1vw;" tab-position="top">

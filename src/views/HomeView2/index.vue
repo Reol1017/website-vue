@@ -29,7 +29,7 @@
             <button @click="resetOut($event)" type="button" style="font-size: 0.9vw;" class=" mr-4 outline-none text-black rounded border border-black ml-5 h-1/2 w-1/12 hover:shadow">Reset</button>
         </div>
         <div style="height: 90%;" class="body overflow-y-scroll w-full flex flex-wrap relative">
-            <div @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] == 'For Sale')" class="card rounded bg-white my-1" style="height: 65%; width: 50%;">
+            <div @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" class="card rounded bg-white my-1" style="height: 65%; width: 50%;">
                 <div class="card-header flex justify-between items-center border mx-auto rounded" style="height: 6%; width: 99%;">
                     <div class="w-3/4 text-center">{{ item['Project Address'] }}</div>
                     <div class="w-1/4 text-center border-l">{{ item['House Status'] }}</div>

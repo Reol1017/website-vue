@@ -17,21 +17,17 @@
                     </div>
                 </template>
             </a-popover>
-            <a-popover style="width: 20%;"title="Garage Filter" trigger="click">
-                <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded border text-black border-black ml-5 h-1/2 w-1/12 hover:shadow">Garage</button>
+            <a-popover style="width: 20%;"title="City Filter" trigger="click">
+                <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded border text-black border-black ml-5 h-1/2 w-1/12 hover:shadow">City</button>
                 <template #content>
-                    <div class="w-full flex items-center">
-                        <span class="mr-4">
-                            {{ garageNumberArr[0] }}
-                        </span>
-                        <el-slider style="width: 50%;" @change="changeGarageOut" v-model="garageNumberArr" show-stops  :min="0" range :max="5" :step="1"></el-slider>
-                        <span class="ml-4">
-                            {{ garageNumberArr[1] }}
-                        </span>
+                    <div class="w-full flex items-center justify-center">
+                        <el-select v-model="cityValue2" @change="cityChangeOut" placeholder="please select city">
+                            <el-option v-for="item in city" :label="item" :value="item" :key="item"></el-option>
+                        </el-select>
                     </div>
                 </template>
             </a-popover>
-            <a-popover title="School District Filter" trigger="click">
+            <a-popover style="width: 20%;" title="School District Filter" trigger="click">
                 <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded border text-black border-black ml-5 h-1/2 w-1/12 hover:shadow">School District</button>
                 <template #content>
                     <el-select @change="schoolChange" v-model="schoolDistrictSelectedValue" placeholder="">
@@ -43,44 +39,50 @@
             <button @click="resetOut($event)" type="button" style="font-size: 0.9vw;" class=" mr-4 outline-none text-black rounded border border-black ml-5 h-1/2 w-1/12 hover:shadow">Reset</button>
         </div>
         <div style="height: 90%;" class="body overflow-y-scroll w-full flex flex-wrap relative">
-            <div @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" class="card rounded bg-white my-1 relative" style="height: 75%; width: 50%;">
-                <div class="card-header flex justify-between items-center border mx-auto rounded-t" style="height: 6%; width: 99%;">
-                    <div class="w-3/4 text-center">{{ item['Project Address'] }}</div>
-                    <div class="w-1/4 font-bold text-center border-l" :class="[ item['House Status'] === 'For Sale' ? 'text-green-700' : '',  item['House Status'] === 'Pending' ? 'text-red-700' : '' ]">{{ item['House Status'] }}</div>
-                </div>
-                <div class="card-body w-full flex justify-center relative rounded " style="height: 94%;">
-                    <img style="width: 99%;" class="h-full  object-cover rounded-b" :src="item['Profile Pic Link']" />
-                </div>
-                <div style="width: 99%;" class="text-white overflow-hidden flex flex-col top-0 left-1/2 -translate-x-1/2 absolute opacity-0 hover:opacity-100 bg-c-black-hover h-full rounded cursor-pointer justify-center transition duration-300">
-                    <div class="w-full h-1/2 flex flex-col">
-                        <p class="w-full text-center h-1/3 font-bold" style="font-size: 1.5rem;">{{ item['Project Address'] }}</p>
-                        <p class=" w-full flex leading-7 justify-between flex-grow items-center">
-                            <span class="flex w-1/2 items-center flex-grow justify-start" style="padding-left: 20%;">
-                                <span style="font-size: 1.25vw;" class="iconfont icon-dollar mr-2"></span>Price: {{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
-                            </span>
-                            <span class="flex w-1/2 items-center flex-grow justify-start" style="padding-left: 10%">
-                                <span style="font-size: 1.25vw;" class="iconfont icon-bathroom-fill mr-2"></span>Baths: {{ item['Number Of Bathrooms'] }}
-                            </span>
-                        </p>
-                        <p class=" w-full flex leading-7 justify-between flex-grow items-center">
-                            <span class="flex w-1/2 items-center flex-grow justify-start" style="padding-left: 20%;">
-                                <span style="font-size: 1.25vw;" class="iconfont icon-Bed-1 mr-2"></span>Bed: {{ item['Number Of Bedrooms'] }}
-                            </span>
-                            <span class="flex w-1/2 items-center flex-grow justify-start" style="padding-left: 10%">
-                                <span style="font-size: 1.25vw;" class="iconfont icon-garage mr-2"></span>Garage: {{ item['Number Of Garage'] }}-Car
-                            </span>
-                        </p>
-                        <p class=" w-full flex leading-7 justify-between flex-grow items-center">
-                            <span class="flex w-1/2 flex-grow items-center justify-start" style="padding-left: 20%;">
-                                <span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span>SQFT: {{ item['Total Finished SQFT']?.toLocaleString() }} SQFT
-                            </span>
-                            <span class="flex w-1/2 flex-grow items-center justify-start" style="padding-left: 10%">
-                                <span style="font-size: 1.25vw;" class="iconfont icon-feature-lot-size mr-2"></span>Lot Size: {{ item['Lot Size Acres'] }} Acres
-                            </span>
-                        </p>
+            <template v-if="data.filter((item) => item['House Status'] !== 'Sold').length > 0">
+                <div @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" class="card rounded bg-white my-1 relative" style="height: 75%; width: 50%;">
+                    <div class="card-header flex justify-between items-center border mx-auto rounded-t" style="height: 6%; width: 99%;">
+                        <div class="w-3/4 text-center">{{ item['Project Address'] }}</div>
+                        <div class="w-1/4 font-bold text-center border-l" :class="[ item['House Status'] === 'For Sale' ? 'text-green-700' : '',  item['House Status'] === 'Pending' ? 'text-red-700' : '' ]">{{ item['House Status'] }}</div>
                     </div>
-                    <div class="absolute w-1/4 flex items-center justify-center " style="top: 0;right: 0;height: 6%;" :class="[ item['House Status'] === 'For Sale' ? 'bg-green-700' : '',  item['House Status'] === 'Pending' ? 'bg-red-700' : '' ]">{{ item['House Status'] }}</div>
+                    <div class="card-body w-full flex justify-center relative rounded " style="height: 94%;">
+                        <img style="width: 99%;" class="h-full  object-cover rounded-b" :src="item['Profile Pic Link']" />
+                    </div>
+                    <div style="width: 99%;" class="text-white overflow-hidden flex flex-col top-0 left-1/2 -translate-x-1/2 absolute opacity-0 hover:opacity-100 bg-c-black-hover h-full rounded cursor-pointer justify-center transition duration-300">
+                        <div class="w-full h-1/2 flex flex-col">
+                            <p class="w-full text-center h-1/3 font-bold" style="font-size: 1.5rem;">{{ item['Project Address'] }}</p>
+                            <p class=" w-full flex leading-7 justify-between flex-grow items-center">
+                                <span class="flex w-1/2 items-center flex-grow justify-start" style="padding-left: 20%;">
+                                    <span style="font-size: 1.25vw;" class="iconfont icon-dollar mr-2"></span>Price: {{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                                </span>
+                                <span class="flex w-1/2 items-center flex-grow justify-start" style="padding-left: 10%">
+                                    <span style="font-size: 1.25vw;" class="iconfont icon-bathroom-fill mr-2"></span>Baths: {{ item['Number Of Bathrooms'] }}
+                                </span>
+                            </p>
+                            <p class=" w-full flex leading-7 justify-between flex-grow items-center">
+                                <span class="flex w-1/2 items-center flex-grow justify-start" style="padding-left: 20%;">
+                                    <span style="font-size: 1.25vw;" class="iconfont icon-Bed-1 mr-2"></span>Bed: {{ item['Number Of Bedrooms'] }}
+                                </span>
+                                <span class="flex w-1/2 items-center flex-grow justify-start" style="padding-left: 10%">
+                                    <span style="font-size: 1.25vw;" class="iconfont icon-garage mr-2"></span>Garage: {{ item['Number Of Garage'] }}-Car
+                                </span>
+                            </p>
+                            <p class=" w-full flex leading-7 justify-between flex-grow items-center">
+                                <span class="flex w-1/2 flex-grow items-center justify-start" style="padding-left: 20%;">
+                                    <span style="font-size: 1.25vw;" class="iconfont icon-sqft mr-2"></span>SQFT: {{ item['Total Finished SQFT']?.toLocaleString() }} SQFT
+                                </span>
+                                <span class="flex w-1/2 flex-grow items-center justify-start" style="padding-left: 10%">
+                                    <span style="font-size: 1.25vw;" class="iconfont icon-feature-lot-size mr-2"></span>Lot Size: {{ item['Lot Size Acres'] }} Acres
+                                </span>
+                            </p>
+                        </div>
+                        <div class="absolute w-1/4 flex items-center justify-center " style="top: 0;right: 0;height: 6%;" :class="[ item['House Status'] === 'For Sale' ? 'bg-green-700' : '',  item['House Status'] === 'Pending' ? 'bg-red-700' : '' ]">{{ item['House Status'] }}</div>
+                    </div>
                 </div>
+            </template>
+            <div v-else class="w-full h-1/2 flex flex-col items-center my-2">
+                <CircleClose style="width: 15vw; height: 50vh;"></CircleClose>
+                <p style="font-size: 1.5rem;">No Data</p>
             </div>
             <iframe style="width: 100%; height: 100%;" src="https://www-myanchorhomes-com.filesusr.com/html/d7263e_8c3695e6dc63abfe88941479ce2f32ce.html"></iframe>
         </div>
@@ -104,7 +106,7 @@
             <el-slider v-model="baths" range show-stops :max="8" :min="3" />
             <hr class="my-2">
             <p class="font-bold my-2">Garage</p>
-            <el-slider v-model="garageNumberArrIn" show-stops range :max="5" :min="0" :step="1" />
+            <el-slider v-model="garageNumberArrIn" show-stops range :max="5" :min="1" :step="1" />
             <hr class="my-2">
             <p class="font-bold my-2">High School</p>
             <el-select v-model="schoolDistrictSelectedValueIn" placeholder="">
@@ -137,29 +139,31 @@
             <el-icon size="25" class="w-1/3 mr-2" @click="mobileDrawer = true"><Menu /></el-icon>
         </div>
         <div class="body-mobile w-full bg-gray-200 overflow-y-scroll overflow-x-hidden" style="height: 92%;">
-            <div @click="details(item, $event)" style="width: 98%; font-size: 0.75rem; height: 45%" class=" mx-auto my-2 rounded bg-white" v-for="(item, index) in data.filter(item => item['House Status'] !== 'Sold')" :key="item['Address in MLS']">
+            <div @click="details(item, $event)" style="width: 98%; font-size: 0.75rem; height: 45%" class=" mx-auto my-2 rounded bg-white relative" v-for="(item, index) in data.filter(item => item['House Status'] !== 'Sold')" :key="item['Address in MLS']">
                 <div class=" mobile-card-header w-full h-1/5 border-b flex justify-between items-center">
                     <span class="ml-1">{{ item['Project Address'] }}</span>
-                    <span class="mr-1 border p-1 rounded" :class="[item['House Status'] === 'For Sale' ? 'border-green-700 text-green-700' : '', item['House Status'] === 'Pending' ? 'border-yellow-700 text-yellow-700' : '', item['House Status'] === 'Sold' ? 'border-red-700 text-red-700' : '']">{{ item['House Status'] }}</span>
+                    <span class="mr-1 border p-1 rounded" :class="[item['House Status'] === 'For Sale' ? 'border-green-700 text-green-700' : '', item['House Status'] === 'Pending' ? 'border-red-700 text-red-700' : '', item['House Status'] === 'Sold' ? 'border-red-700 text-red-700' : '']">{{ item['House Status'] }}</span>
                 </div>
                 <div class="mobile-card-body w-full h-4/5 relative" >
                     <img @touchstart="mobileImgIndex = index" :src="item['Profile Pic Link']" class="w-full h-full" />
-                    <div v-show="mobileImgIndex === index" style="width: 100%;" class="text-white flex flex-col absolute h-full rounded opacity-70 top-0 justify-center bg-black transition duration-75">
-                        <div class="w-full h-1/2 flex flex-col">
-                            <p class=" w-full flex leading-7 justify-between flex-grow items-center">
-                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-dollar mr-2"></span>Price: {{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}</span>
-                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-bathroom-fill mr-2"></span>Baths: {{ item['Number Of Bathrooms'] }}</span>
-                            </p>
-                            <p class=" w-full flex leading-7 justify-between flex-grow items-center">
-                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-Bed-1 mr-2"></span>Bed: {{ item['Number Of Bedrooms'] }}</span>
-                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-garage mr-2"></span>Garage: {{ item['Number Of Garage'] }}-Car</span>
-                            </p>
-                            <p class=" w-full flex leading-7 justify-between flex-grow items-center">
-                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-sqft mr-2"></span>SQFT: {{ item['Total Finished SQFT']?.toLocaleString() }} SQFT</span>
-                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-feature-lot-size mr-2"></span>Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
-                            </p>
-                        </div>
+                </div>
+                <div v-show="mobileImgIndex === index" style="width: 100%;" class="text-white flex flex-col absolute h-full rounded top-0 justify-center opacity-100 bg-c-black-hover transition duration-75">
+                    <div class="w-full h-1/2 flex flex-col">
+                        <p class="w-full flex items-center justify-center">{{ item['Project Address']  }}</p>
+                        <p class=" w-full flex leading-7 justify-between flex-grow items-center">
+                            <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-dollar mr-2"></span>Price: {{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}</span>
+                            <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-bathroom-fill mr-2"></span>Baths: {{ item['Number Of Bathrooms'] }}</span>
+                        </p>
+                        <p class=" w-full flex leading-7 justify-between flex-grow items-center">
+                            <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-Bed-1 mr-2"></span>Bed: {{ item['Number Of Bedrooms'] }}</span>
+                            <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-garage mr-2"></span>Garage: {{ item['Number Of Garage'] }}-Car</span>
+                        </p>
+                        <p class=" w-full flex leading-7 justify-between flex-grow items-center">
+                            <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-sqft mr-2"></span>SQFT: {{ item['Total Finished SQFT']?.toLocaleString() }} SQFT</span>
+                            <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-feature-lot-size mr-2"></span>Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
+                        </p>
                     </div>
+                    <div class="h-1/5 absolute top-0 right-0 w-full flex justify-center items-center" :class="[ item['House Status'] === 'For Sale' ? 'bg-green-700' : '', item['House Status'] === 'Pending' ? 'bg-red-700' : '']">{{ item['House Status'] }}</div>
                 </div>
             </div>
             <iframe style="width: 100%; height: 75%;" src="https://www-myanchorhomes-com.filesusr.com/html/d7263e_8c3695e6dc63abfe88941479ce2f32ce.html"></iframe>
@@ -184,9 +188,14 @@
             <p class="font-bold my-2">Baths</p>
             <el-slider v-model="baths" range show-stops :max="8" :min="3" />
             <hr class="my-2">
-            <p class="font-bold my-2">Home Type</p>
-            <el-checkbox v-model="house" label="House" />
-            <el-checkbox v-model="townhouse" label="Townhouse" />
+            <p class="font-bold my-2">Garage</p>
+            <el-slider v-model="garageNumberArrIn" show-stops range :max="5" :min="1" :step="1" />
+            <hr class="my-2">
+            <p class="font-bold my-2">High School</p>
+            <el-select v-model="schoolDistrictSelectedValueIn" placeholder="">
+                <el-option v-for="item in schoolDistrict" :key="item" :label="item" :value="item"></el-option>
+            </el-select>
+            <hr class="my-2">
             <hr class="my-2">
             <p class="font-bold my-2">SQFT</p>
             <p class="my-4">
@@ -239,7 +248,7 @@ const mapRef = ref()
 const data = ref([])
 const data2 = ref([])
 const img_big = ref('https://static.wixstatic.com/media/d7263e_553e79a1d02d4c2da0d526214ab9890b~mv2.jpg/v1/fill/w_1356,h_1000,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/26-1002_Photo%20-%2010.jpg')
-const city = ref(['McLean', 'Falls Church', 'Vienna', 'Arlington'])
+const city = ref([])
 async function initData() {
     const res = await httpObj.sendPost('/records/query', {
         from: 'btwxxiycs',
@@ -247,13 +256,12 @@ async function initData() {
     })
     data.value = processData(res.data.data, res.data.fields)
     schoolDistrict.value = [...new Set(data.value.map(item => item['High School']))]
+    city.value = [...new Set(data.value.map(item => item['Project Address'].split(', ')[1]))]
     data.value = data.value.sort((a, b) => {
-        const cityA = city.value.indexOf(a['Project Address'].split(', ')[1])
-		const cityB = city.value.indexOf(b['Project Address'].split(', ')[1])
-		return cityA - cityB
+		return b['Project Address'].split(', ')[1].charCodeAt(0) - a['Project Address'].split(', ')[1].charCodeAt(0)
     })
     data.value = data.value.filter(item => item['Display'])
-    data.value = data.value.toSorted((a, b) => a['House Status'].charCodeAt(0) - b['House Status'].charCodeAt(0))
+    data.value = data.value.sort((a, b) => a['House Status'].charCodeAt(0) - b['House Status'].charCodeAt(0))
     // data2.value = processData(res.data.data, res.data.fields)
     // data2.value = data.value.sort((a, b) => {
     //     const cityA = city.value.indexOf(a['Project Address'].split(', ')[1])
@@ -344,7 +352,7 @@ async function resetOut(e){
     bath2.value = [3,8];
     priceFilter.value = [2000000, 5000000]
     schoolDistrictSelectedValue.value = ''
-    garageNumberArr.value = [0, 5];
+    cityValue2.value = '';
 }
 
 const searchValue = ref('')
@@ -358,16 +366,10 @@ async function schoolChange(){
     await initData()
     data.value = data.value.filter(item => item['High School'] === schoolDistrictSelectedValue.value)
 }
-const garageNumberArr = ref([0, 5]);
-const changeGarageOut = async (value) => {
+const cityValue2 = ref('');
+const cityChangeOut = async (value) => {
     await initData();
-    data.value = data.value.filter(item => {
-        if(value[0] === value[1]){
-            return item['Number Of Garage'] === value[0]
-        } else {
-            return item['Number Of Garage'] >= value[0] && item['Number Of Bedrooms'] <= value[1]
-        }
-    })
+    data.value = data.value.filter(item => item['Project Address'].includes(value))
 }
 // 抽屉
 const drawer = ref(false);
@@ -381,7 +383,7 @@ const minSqft = ref(0);
 const maxSqft = ref(0);
 const cityValue = ref('');
 const schoolDistrictSelectedValueIn = ref('');
-const garageNumberArrIn = ref([0, 5]);
+const garageNumberArrIn = ref([1, 5]);
 const resetIn = async () => {
     drawer.value = false;
     mobileDrawer.value = false;
@@ -395,7 +397,7 @@ const resetIn = async () => {
     maxSqft.value = 0;
     cityValue.value = '';
     schoolDistrictSelectedValueIn.value = '';
-    garageNumberArrIn.value = [0, 5];
+    garageNumberArrIn.value = [1, 5];
     await initData();
 }
 const filterIn = async () => {
@@ -435,6 +437,8 @@ const filterIn = async () => {
         }
     })
     // console.log(data.value)
+    data.value = data.value.filter(item => item['High School'] === schoolDistrictSelectedValueIn.value)
+    // console.log(data.value)
     data.value = data.value.filter(item => {
         if(!maxSqft.value && minSqft.value){
             return Number(item['Total Finished SQFT']) >= Number(minSqft.value)
@@ -460,8 +464,12 @@ const filterIn = async () => {
     maxSqft.value = 0;
     cityValue.value = '';
     schoolDistrictSelectedValueIn.value = '';
-    garageNumberArrIn.value = [0, 5];
+    garageNumberArrIn.value = [1, 5];
     drawer.value = false;
+    if(width.value < 1024 && data.value.length === 0){
+        showToast('There is no data!');
+        resetIn();
+    }
 }
 const cardContainerTop = ref();
 const cardContainerBottom = ref();

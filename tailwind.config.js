@@ -21,11 +21,16 @@ export default {
           '50%': {
             transform: 'scale(1.1)'
           }
+        },
+        'btt': {
+          '0%': { transform: 'translateY(100%)', opacity: 0 },
+          '100%': { transform: 'translateY(0)', opacity: 1 }
         }
       },
       animation:{
         'a-ttb': 'ttb .1s ease-in-out',
-        'a-c-scale': 'c-scale .5s ease-in-out'
+        'a-c-scale': 'c-scale .5s ease-in-out',
+        'a-btt': 'btt .1s ease-in-out'
       }
     },
   },

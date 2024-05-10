@@ -1,9 +1,9 @@
 <template>
     <div v-if="width > 1024" class="home-container w-full h-full relative overflow-y-scroll">
         <div style="height: 7%;"class="header sticky w-full flex items-center">
-            <div class="h-full flex mx-auto flex-wrap items-center" style="width: 36.75%;">
+            <div class="h-full flex mx-auto flex-wrap items-center justify-center" style="width: 36.75%;">
                 <a-popover style="width: 30%; font-family: 'Font1'" title="Price Filter" trigger="click">
-                    <button type="button" style="font-size: 0.9vw;" class="outline-none rounded h-full text-cgray hover:text-black hover:font-bold w-1/4">Price</button>
+                    <a  style="font-size: 0.9vw;" class=" text-black  cursor-pointer inline-flex mx-7">Price</a>
                     <template #content>
                         <div class="w-full flex items-center">
                             <span class="mr-4">
@@ -17,7 +17,7 @@
                     </template>
                 </a-popover>
                 <a-popover style="width: 20%;"title="City Filter" trigger="click">
-                    <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded text-cgray hover:text-black hover:font-bold  h-full w-1/4">City</button>
+                    <a style="font-size: 0.9vw;" class=" text-black cursor-pointer inline-flex mx-7">City</a>
                     <template #content>
                         <div class="w-full flex items-center justify-center">
                             <el-select v-model="cityValue2" @change="cityChangeOut" placeholder="please select city">
@@ -27,7 +27,7 @@
                     </template>
                 </a-popover>
                 <a-popover style="width: 20%;" title="School District Filter" trigger="click">
-                    <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded text-cgray hover:text-black hover:font-bold  h-full w-1/4">School District</button>
+                    <a style="font-size: 0.9vw;" class=" text-black cursor-pointer inline-flex mx-7">School District</a>
                     <template #content>
                         <el-select @change="schoolChange" v-model="schoolDistrictSelectedValue" placeholder="">
                           <el-option v-for="item in schoolDistrict" :key="item" :label="item" :value="item"></el-option>
@@ -35,27 +35,27 @@
                     </template>
                 </a-popover>
                 <!-- <button @click="drawer = true" type="button" style="font-size: 0.9vw;" class=" outline-none rounded  w-1/4 h-full hover:shadow"><i class="fa fa-filter"></i>All Filters</button> -->
-                <button @click="drawer = true" type="button" style="font-size: 0.9vw;" class=" outline-none text-cgray hover:text-black hover:font-bold rounded  w-1/4 h-full">All Filters</button>
+                <a @click="drawer = true" style="font-size: 0.9vw;" class="text-black  cursor-pointer inline-flex mx-7">All Filters</a>
             </div>
             <!-- <button @click="resetOut($event)" type="button" style="font-size: 0.9vw;" class=" outline-none rounded w-1/12 h-full mx-2 hover:shadow">Reset</button> -->
             <div class="h-full mx-auto flex justify-end" style="width: 61.25%;">
                 <div class="w-1/2 h-full relative">
                     <input v-model="searchValue" type="text" placeholder="enter number, city or keyword to search" style="font-size: 0.75rem;" class="  rounded-full border transition-all duration-300 focus:shadow relative w-full h-full pl-2" :class="[ inputWidth ? ' translate-x-0 inline-block outline-1 outline-sky-400' : 'translate-x-full hidden outline-none' ]">
-                    <button @click="search" class="h-full aspect-square text-cgray rounded-full right-0 absolute hover:text-black " :class="[ inputWidth ? 'border-r' : 'border' ]"><i class="fa fa-search"></i></button>
+                    <button @click="search" class="h-full aspect-square cursor-pointer rounded-full right-0 absolute text-black "><i class="fa fa-search" style="font-size: 1.5rem;"></i></button>
                 </div>
             </div>
         </div>
         <div style="height: 93%;" class="body  w-full flex flex-wrap relative">
             <template v-if="data.filter((item) => item['House Status'] !== 'Sold').length > 0">
                 <div @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" class="card group rounded cursor-pointer my-3 mx-auto bg-white relative" style="height: 75%; width: 49%;">
-                    <div  class="card-header flex justify-between items-center border mx-auto rounded-t" style="height: 8%; width: 100%;font-size: 1.1rem;">
+                    <div  class="card-header flex justify-between items-center border mx-auto rounded-t" style="height: 7%; width: 100%;font-size: 1.1rem;">
                         <div  class="w-3/4 h-full flex items-center justify-around">{{ item['Project Address'] }}</div>
                         <div class="w-1/4 h-full flex items-center font-bold justify-center border-l" :class="[ item['House Status'] === 'For Sale' ? 'text-green-700' : '',  item['House Status'] === 'Pending' ? 'text-red-700' : '' ]">{{ item['House Status'] }}</div>
                     </div>
-                    <div class="card-body w-full flex justify-center relative rounded " style="height: 92%;">
+                    <div class="card-body w-full flex justify-center relative rounded " style="height: 93%;">
                         <img style="width: 100%;" class="h-full  object-cover rounded-b" :src="item['Profile Pic Link']" />
                     </div>
-                    <div style="width: 100%;" class="text-white overflow-hidden flex flex-col translate-y-0 opacity-0 group-hover:opacity-100 group-hover:-translate-y-full absolute bg-c-black-hover h-1/3 rounded  justify-center transition duration-300">
+                    <div style="width: 100%;" class="text-white overflow-hidden flex flex-col translate-y-0 opacity-0 group-hover:opacity-100 group-hover:-translate-y-full absolute bg-c-black-hover h-1/4 rounded  justify-center transition duration-300">
                         <div class="w-full h-full flex flex-col flex-wrap font-medium">
                             <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
                                 <span class="iconfont flex justify-end w-1/3 icon-dollar mr-2"></span>

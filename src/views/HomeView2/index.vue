@@ -1,9 +1,9 @@
 <template>
     <div v-if="width > 1024" class="home-container w-full h-full relative overflow-y-scroll">
         <div style="height: 7%;"class="header sticky w-full flex items-center">
-            <div class="h-full flex mx-auto flex-wrap items-center justify-center" style="width: 36.75%;">
+            <div class="h-full flex flex-wrap items-center justify-start mx-auto" style="width: 49%;font-size: 1.1rem;">
                 <a-popover style="width: 30%; font-family: 'Font1'" title="Price Filter" trigger="click">
-                    <a  style="font-size: 1.1rem;" class=" text-black  cursor-pointer inline-flex mx-7">Price</a>
+                    <a class=" text-black  cursor-pointer inline-flex ml-20 mr-7">Price</a>
                     <template #content>
                         <div class="w-full flex items-center">
                             <span class="mr-4">
@@ -17,7 +17,7 @@
                     </template>
                 </a-popover>
                 <a-popover style="width: 20%;"title="City Filter" trigger="click">
-                    <a style="font-size: 0.9vw;" class=" text-black cursor-pointer inline-flex mx-7">City</a>
+                    <a class=" text-black cursor-pointer inline-flex mx-7">City</a>
                     <template #content>
                         <div class="w-full flex items-center justify-center">
                             <el-select v-model="cityValue2" @change="cityChangeOut" placeholder="please select city">
@@ -27,7 +27,7 @@
                     </template>
                 </a-popover>
                 <a-popover style="width: 20%;" title="School District Filter" trigger="click">
-                    <a style="font-size: 0.9vw;" class=" text-black cursor-pointer inline-flex mx-7">School District</a>
+                    <a class=" text-black cursor-pointer inline-flex mx-7">School District</a>
                     <template #content>
                         <el-select @change="schoolChange" v-model="schoolDistrictSelectedValue" placeholder="">
                           <el-option v-for="item in schoolDistrict" :key="item" :label="item" :value="item"></el-option>
@@ -35,12 +35,12 @@
                     </template>
                 </a-popover>
                 <!-- <button @click="drawer = true" type="button" style="font-size: 0.9vw;" class=" outline-none rounded  w-1/4 h-full hover:shadow"><i class="fa fa-filter"></i>All Filters</button> -->
-                <a @click="drawer = true" style="font-size: 0.9vw;" class="text-black  cursor-pointer inline-flex mx-7">All Filters</a>
+                <a @click="drawer = true" class="text-black  cursor-pointer inline-flex mx-7">All Filters</a>
             </div>
             <!-- <button @click="resetOut($event)" type="button" style="font-size: 0.9vw;" class=" outline-none rounded w-1/12 h-full mx-2 hover:shadow">Reset</button> -->
-            <div class="h-full mx-auto flex justify-end" style="width: 61.25%;">
-                <div class="w-1/2 h-full relative">
-                    <input v-model="searchValue" type="text" placeholder="enter number, city or keyword to search" style="font-size: 0.75rem;" class="  rounded-full border transition-all duration-300 focus:shadow relative w-full h-full pl-2" :class="[ inputWidth ? ' translate-x-0 inline-block outline-1 outline-sky-400' : 'translate-x-full hidden outline-none' ]">
+            <div class="h-full mx-auto flex justify-end" style="width: 49%;">
+                <div class="w-3/5 h-full relative">
+                    <input v-model="searchValue" type="text" placeholder="enter number, city or keyword to search" style="font-size: 0.9rem;" class="  rounded-full border transition-all duration-300 focus:shadow relative w-full h-full pl-2" :class="[ inputWidth ? ' translate-x-0 inline-block outline-1 outline-sky-400' : 'translate-x-full hidden outline-none' ]">
                     <button @click="search" class="h-full aspect-square cursor-pointer rounded-full right-0 absolute text-black "><i class="fa fa-search" style="font-size: 1.5rem;"></i></button>
                 </div>
             </div>

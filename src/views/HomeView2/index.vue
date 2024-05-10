@@ -49,7 +49,7 @@
             <template v-if="data.filter((item) => item['House Status'] !== 'Sold').length > 0">
                 <div @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" class="card group rounded cursor-pointer my-3 mx-auto bg-white relative" style="height: 75%; width: 49%;">
                     <div  class="card-header flex justify-between items-center border mx-auto rounded-t" style="height: 7%; width: 100%;font-size: 1.1rem;">
-                        <div  class="w-3/4 h-full flex items-center justify-start ml-2">{{ item['Project Address'] }}</div>
+                        <div  class="w-3/4 h-full flex items-center justify-start ml-4">{{ item['Project Address'] }}</div>
                         <div class="w-1/4 h-full flex items-center font-bold justify-center border-l" :class="[ item['House Status'] === 'For Sale' ? 'text-green-700' : '',  item['House Status'] === 'Pending' ? 'text-red-700' : '' ]">{{ item['House Status'] }}</div>
                     </div>
                     <div class="card-body w-full flex justify-center relative rounded " style="height: 93%;">

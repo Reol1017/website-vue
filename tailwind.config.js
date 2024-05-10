@@ -7,7 +7,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        'c-black-hover': 'rgba(0, 0, 0, 0.2)'
+        'c-black-hover': 'rgba(0, 0, 0, 0.4)',
+        'c-black2-hover': 'rgba(0, 0, 1, 0.6)',
+        'cgray': '#808080'
       },
       keyframes: {
         'ttb': {
@@ -25,12 +27,17 @@ export default {
         'btt': {
           '0%': { transform: 'translateY(100%)', opacity: 0 },
           '100%': { transform: 'translateY(0)', opacity: 1 }
+        },
+        'searchVisible': {
+          '0%': { width: '0%', opacity: 0 },
+          '100%': { width: '100%', opacity: 1 }
         }
       },
       animation:{
         'a-ttb': 'ttb .1s ease-in-out',
         'a-c-scale': 'c-scale .5s ease-in-out',
-        'a-btt': 'btt .1s ease-in-out'
+        'a-btt': 'btt .1s ease-in-out',
+        'a-searchVisible': 'searchVisible .5s ease-in-out'
       }
     },
   },

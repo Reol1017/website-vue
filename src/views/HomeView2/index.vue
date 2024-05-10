@@ -1,79 +1,87 @@
 <template>
-    <div v-if="width > 1024" class="home-container w-full h-full relative">
-        <div style="height: 8%;"class="header sticky w-full flex items-center">
-            <a-popover style="width: 30%; font-family: 'Font1'" title="Price Filter" trigger="click">
-                <button type="button" style="font-size: 0.9vw;" class="ml-auto outline-none rounded text-black h-1/2 w-1/12 hover:shadow">Price</button>
-                <template #content>
-                    <div class="w-full flex items-center">
-                        <span class="mr-4">
-                            {{ priceFilter[0].toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
-                        </span>
-                        <el-slider style="width: 50%;" :format-tooltip="(value) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })" @change="filterPrice" v-model="priceFilter" show-stops  :min="2000000" range :max="5000000" :step="100000"></el-slider>
-                        <span class="ml-4">
-                            {{ priceFilter[1].toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
-                        </span>
-                    </div>
-                </template>
-            </a-popover>
-            <a-popover style="width: 20%;"title="City Filter" trigger="click">
-                <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded text-black ml-2 h-1/2 w-1/12 hover:shadow">City</button>
-                <template #content>
-                    <div class="w-full flex items-center justify-center">
-                        <el-select v-model="cityValue2" @change="cityChangeOut" placeholder="please select city">
-                            <el-option v-for="item in city" :label="item" :value="item" :key="item"></el-option>
+    <div v-if="width > 1024" class="home-container w-full h-full relative overflow-y-scroll">
+        <div style="height: 7%;"class="header sticky w-full flex items-center">
+            <div class="h-full flex mx-auto flex-wrap items-center" style="width: 36.75%;">
+                <a-popover style="width: 30%; font-family: 'Font1'" title="Price Filter" trigger="click">
+                    <button type="button" style="font-size: 0.9vw;" class="outline-none rounded h-full text-cgray hover:text-black hover:font-bold w-1/4">Price</button>
+                    <template #content>
+                        <div class="w-full flex items-center">
+                            <span class="mr-4">
+                                {{ priceFilter[0].toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                            </span>
+                            <el-slider style="width: 50%;" :format-tooltip="(value) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })" @change="filterPrice" v-model="priceFilter" show-stops  :min="2000000" range :max="5000000" :step="100000"></el-slider>
+                            <span class="ml-4">
+                                {{ priceFilter[1].toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}
+                            </span>
+                        </div>
+                    </template>
+                </a-popover>
+                <a-popover style="width: 20%;"title="City Filter" trigger="click">
+                    <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded text-cgray hover:text-black hover:font-bold  h-full w-1/4">City</button>
+                    <template #content>
+                        <div class="w-full flex items-center justify-center">
+                            <el-select v-model="cityValue2" @change="cityChangeOut" placeholder="please select city">
+                                <el-option v-for="item in city" :label="item" :value="item" :key="item"></el-option>
+                            </el-select>
+                        </div>
+                    </template>
+                </a-popover>
+                <a-popover style="width: 20%;" title="School District Filter" trigger="click">
+                    <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded text-cgray hover:text-black hover:font-bold  h-full w-1/4">School District</button>
+                    <template #content>
+                        <el-select @change="schoolChange" v-model="schoolDistrictSelectedValue" placeholder="">
+                          <el-option v-for="item in schoolDistrict" :key="item" :label="item" :value="item"></el-option>
                         </el-select>
-                    </div>
-                </template>
-            </a-popover>
-            <a-popover style="width: 20%;" title="School District Filter" trigger="click">
-                <button type="button" style="font-size: 0.9vw;" class=" outline-none rounded text-black ml-2 h-1/2 w-1/12 hover:shadow">School District</button>
-                <template #content>
-                    <el-select @change="schoolChange" v-model="schoolDistrictSelectedValue" placeholder="">
-                      <el-option v-for="item in schoolDistrict" :key="item" :label="item" :value="item"></el-option>
-                    </el-select>
-                </template>
-            </a-popover>
-            <button @click="drawer = true" type="button" style="font-size: 0.9vw;" class=" outline-none rounded w-1/12 h-1/2 ml-2 hover:border hover:shadow"><i class="fa fa-filter"></i>All Filters</button>
-            <button @click="resetOut($event)" type="button" style="font-size: 0.9vw;" class=" outline-none rounded w-1/12 h-1/2 mx-2 hover:shadow">Reset</button>
-            <input v-model="searchValue" type="text" placeholder="enter number, city or keyword to search" style="font-size: 0.75rem;" class=" outline-none rounded rounded-r-none  transition duration-300 focus:shadow" :class="[ inputWidth ? 'w-1/5 pl-2 ml-4 h-1/2 border-b' : 'w-0' ]">
-            <button @click="search" class="w-1/12 h-1/2 rounded hover:shadow"><i class="fa fa-search"></i></button>
+                    </template>
+                </a-popover>
+                <!-- <button @click="drawer = true" type="button" style="font-size: 0.9vw;" class=" outline-none rounded  w-1/4 h-full hover:shadow"><i class="fa fa-filter"></i>All Filters</button> -->
+                <button @click="drawer = true" type="button" style="font-size: 0.9vw;" class=" outline-none text-cgray hover:text-black hover:font-bold rounded  w-1/4 h-full">All Filters</button>
+            </div>
+            <!-- <button @click="resetOut($event)" type="button" style="font-size: 0.9vw;" class=" outline-none rounded w-1/12 h-full mx-2 hover:shadow">Reset</button> -->
+            <div class="h-full mx-auto flex justify-end" style="width: 61.25%;">
+                <div class="w-1/2 h-full relative">
+                    <input v-model="searchValue" type="text" placeholder="enter number, city or keyword to search" style="font-size: 0.75rem;" class="  rounded-full border transition-all duration-300 focus:shadow relative w-full h-full pl-2" :class="[ inputWidth ? ' translate-x-0 inline-block outline-1 outline-sky-400' : 'translate-x-full hidden outline-none' ]">
+                    <button @click="search" class="h-full aspect-square text-cgray rounded-full right-0 absolute hover:text-black " :class="[ inputWidth ? 'border-r' : 'border' ]"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
         </div>
-        <div style="height: 92%;" class="body overflow-y-scroll w-full flex flex-wrap relative">
+        <div style="height: 93%;" class="body  w-full flex flex-wrap relative">
             <template v-if="data.filter((item) => item['House Status'] !== 'Sold').length > 0">
                 <div @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" class="card group rounded cursor-pointer my-3 mx-auto bg-white relative" style="height: 75%; width: 49%;">
-                    <div  class="card-header flex justify-between items-center border mx-auto rounded-t" style="height: 6%; width: 100%;font-size: 1.2rem;">
-                        <div  class="w-3/4 h-full flex justify-around">{{ item['Project Address'] }}</div>
-                        <div class="w-1/4 h-full flex items-center font-bold text-white justify-center border-l" :class="[ item['House Status'] === 'For Sale' ? 'bg-green-700' : '',  item['House Status'] === 'Pending' ? 'bg-red-700' : '' ]">{{ item['House Status'] }}</div>
+                    <div  class="card-header flex justify-between items-center border mx-auto rounded-t" style="height: 8%; width: 100%;font-size: 1.1rem;">
+                        <div  class="w-3/4 h-full flex items-center justify-around">{{ item['Project Address'] }}</div>
+                        <div class="w-1/4 h-full flex items-center font-bold justify-center border-l" :class="[ item['House Status'] === 'For Sale' ? 'text-green-700' : '',  item['House Status'] === 'Pending' ? 'text-red-700' : '' ]">{{ item['House Status'] }}</div>
                     </div>
-                    <div class="card-body w-full flex justify-center relative rounded " style="height: 94%;">
+                    <div class="card-body w-full flex justify-center relative rounded " style="height: 92%;">
                         <img style="width: 100%;" class="h-full  object-cover rounded-b" :src="item['Profile Pic Link']" />
                     </div>
                     <div style="width: 100%;" class="text-white overflow-hidden flex flex-col translate-y-0 opacity-0 group-hover:opacity-100 group-hover:-translate-y-full absolute bg-c-black-hover h-1/3 rounded  justify-center transition duration-300">
-                        <div class="w-full h-full flex flex-wrap font-medium">
-                            <div class="w-1/3 flex items-center justify-start p-1/2">
+                        <div class="w-full h-full flex flex-col flex-wrap font-medium">
+                            <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
                                 <span class="iconfont flex justify-end w-1/3 icon-dollar mr-2"></span>
                                 <span class="w-2/3">{{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}</span>
                             </div>
-                            <div class="w-1/3 flex items-center justify-start p-1/2">
+                            <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
                                 <span class="iconfont flex justify-end w-1/3 icon-bathroom-fill mr-2"></span>
                                 <span class="w-2/3">Baths: {{ item['Number Of Bathrooms'] }}</span>
                             </div>
-                            <div class="w-1/3 flex items-center justify-start p-1/2">
+                            <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
                                 <span class="iconfont flex justify-end w-1/3 icon-Bed-1 mr-2"></span>
                                 <span class="w-2/3">Beds: {{ item['Number Of Bedrooms'] }}</span>
                             </div>
-                            <div class="w-1/3 flex items-center justify-start p-1/2">
+                            <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
                                 <span class="iconfont flex justify-end w-1/3 icon-garage mr-2"></span>
-                                <span class="w-2/3">Garages: {{ item['Number Of Garage'] }}</span>
+                                <span class="w-2/3">Garage: {{ item['Number Of Garage'] }}</span>
                             </div>
-                            <div class="w-1/3 flex items-center justify-start p-1/2">
+                            <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
                                 <span class="iconfont flex justify-end w-1/3 icon-sqft mr-2"></span>
                                 <span class="w-2/3">SQFT: {{ item['Total Finished SQFT']?.toLocaleString() }}</span>
                             </div>
-                            <div class="w-1/3 flex items-center justify-start p-1/2">
+                            <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
                                 <span class="iconfont flex justify-end w-1/3 icon-feature-lot-size mr-2"></span>
                                 <span class="w-2/3">Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
                             </div>
+                            <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2"></div>
                         </div>
                     </div>
                 </div>
@@ -409,7 +417,7 @@ const resetIn = async () => {
 const filterIn = async () => {
     await initData();
     data.value = data.value.filter(item => item['House Status'] === status.value)
-    // console.log(data.value);
+    // console.log(data.value, 'status');
     data.value = data.value.filter(item => {
         if(priceFilter2.value[0] === priceFilter2.value[1]){
             return item['List Price'] === priceFilter2.value[0]
@@ -417,7 +425,7 @@ const filterIn = async () => {
             return item['List Price'] >= priceFilter2.value[0] && item['List Price'] <= priceFilter2.value[1]
         }
     })
-    // console.log(data.value)
+    // console.log(data.value, 'price')
     data.value = data.value.filter(item => {
         if(baths.value[0] === baths.value[1]){
             return item['Number Of Bedrooms'] === beds.value[0]
@@ -425,7 +433,7 @@ const filterIn = async () => {
             return item['Number Of Bedrooms'] >= beds.value[0] && item['Number Of Bedrooms'] <= beds.value[1]
         }
     })
-    // console.log(data.value)
+    // console.log(data.value, 'beds')
     data.value = data.value.filter(item => {
         if(baths.value[0] === baths.value[1]){
             return item['Number Of Bathrooms'] === baths.value[0]
@@ -433,7 +441,7 @@ const filterIn = async () => {
             return item['Number Of Bathrooms'] >= baths.value[0] && item['Number Of Bathrooms'] <= baths.value[1]
         }
     })
-    // console.log(data.value)
+    // console.log(data.value, 'baths')
     // console.log(data.value, priceFilter2.value)
     data.value = data.value.filter(item => {
         if(garageNumberArrIn.value[0] === garageNumberArrIn.value[1]){
@@ -442,9 +450,15 @@ const filterIn = async () => {
             return item['Number Of Garage'] >= garageNumberArrIn.value[0] && item['Number Of Garage'] <= garageNumberArrIn.value[1]
         }
     })
-    // console.log(data.value)
-    data.value = data.value.filter(item => item['High School'] === schoolDistrictSelectedValueIn.value)
-    // console.log(data.value)
+    // console.log(data.value, 'garage')
+    data.value = data.value.filter(item => {
+        if(schoolDistrictSelectedValueIn.value){
+            return item['High School'] === schoolDistrictSelectedValueIn.value
+        } else {
+            return item
+        }
+    })
+    // console.log(data.value, 'school')
     data.value = data.value.filter(item => {
         if(!maxSqft.value && minSqft.value){
             return Number(item['Total Finished SQFT']) >= Number(minSqft.value)
@@ -456,9 +470,15 @@ const filterIn = async () => {
             return item
         }
     })
-    // console.log(data.value)
-    data.value = data.value.filter(item => item['Project Address'].includes(cityValue.value))
-    // console.log(data.value);
+    // console.log(data.value, 'sqft')
+    data.value = data.value.filter(item => {
+        if(cityValue.value){
+            return item['Project Address'].includes(cityValue.value)
+        } else {
+            return item
+        }
+    })
+    // console.log(data.value, 'city');
     mobileDrawer.value = false;
     priceFilter2.value = [2000000, 5000000]
     status.value = 'For Sale';

@@ -3,7 +3,7 @@
         <div style="height: 7%;"class="header sticky w-full flex items-center">
             <div class="h-full flex mx-auto flex-wrap items-center justify-center" style="width: 36.75%;">
                 <a-popover style="width: 30%; font-family: 'Font1'" title="Price Filter" trigger="click">
-                    <a  style="font-size: 0.9vw;" class=" text-black  cursor-pointer inline-flex mx-7">Price</a>
+                    <a  style="font-size: 1.1rem;" class=" text-black  cursor-pointer inline-flex mx-7">Price</a>
                     <template #content>
                         <div class="w-full flex items-center">
                             <span class="mr-4">

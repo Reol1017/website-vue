@@ -1,7 +1,7 @@
 <template>
     <div v-if="width > 1024" class="home-container w-full h-full relative overflow-y-scroll">
         <div style="height: 7%;"class="header sticky w-full flex items-center">
-            <div class="h-full flex flex-wrap items-center justify-start mx-auto" style="width: 49%;font-size: 1.2vw;">
+            <div class="h-full flex flex-wrap items-center justify-start mx-auto" style="width: 49%;font-size: 1vw;">
                 <a-popover style="width: 30%; font-family: 'Font1'" title="Price Filter" trigger="click">
                     <a class=" text-black  cursor-pointer inline-flex ml-20 mr-6">Price</a>
                     <template #content>
@@ -40,15 +40,15 @@
             <!-- <button @click="resetOut($event)" type="button" style="font-size: 0.9vw;" class=" outline-none rounded w-1/12 h-full mx-2 hover:shadow">Reset</button> -->
             <div class="h-full mx-auto flex justify-end" style="width: 49%;">
                 <div class="w-3/5 h-full relative">
-                    <input v-model="searchValue" type="text" placeholder="enter number, city or keyword to search" style="font-size: 0.9rem;" class="  rounded-full border transition-all duration-300 focus:shadow relative w-full h-full pl-2" :class="[ inputWidth ? ' translate-x-0 inline-block outline-1 outline-sky-400' : 'translate-x-full hidden outline-none' ]">
-                    <button @click="search" class="h-full aspect-square cursor-pointer rounded-full right-0 absolute text-black "><i class="fa fa-search" style="font-size: 1.5rem;"></i></button>
+                    <input v-model="searchValue" type="text" placeholder="enter number, city or keyword to search" style="font-size: 0.9vw;" class="rounded-lg focus:shadow absolute h-full transition-all duration-500 right-0" :class="[ inputWidth ? ' w-full border pl-2 ' : 'w-0' ]">
+                    <button @click="search" class="h-full aspect-square cursor-pointer rounded-full right-0 absolute text-black "><i class="fa fa-search" style="font-size: 1.3vw;"></i></button>
                 </div>
             </div>
         </div>
         <div style="height: 93%;" class="body  w-full flex flex-wrap relative">
             <template v-if="data.filter((item) => item['House Status'] !== 'Sold').length > 0">
                 <div @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" class="card group rounded cursor-pointer my-3 mx-auto bg-white relative" style="height: 75%; width: 49%;">
-                    <div  class="card-header flex justify-between items-center border mx-auto rounded-t" style="height: 7%; width: 100%;font-size: 1.2vw;">
+                    <div  class="card-header flex justify-between items-center border mx-auto rounded-t" style="height: 7%; width: 100%;font-size: 1vw;">
                         <div  class="w-3/4 h-full flex items-center justify-start ml-20">{{ item['Project Address'] }}</div>
                         <div class="w-1/4 h-full flex items-center font-bold justify-center border-l" :class="[ item['House Status'] === 'For Sale' ? 'text-green-700' : '',  item['House Status'] === 'Pending' ? 'text-red-700' : '' ]">{{ item['House Status'] }}</div>
                     </div>
@@ -85,7 +85,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="" style="height: 75%; width: 49%;" v-if=" !data.filter((item) => item['House Status'] !== 'Sold').length % 2 === 0"></div>
+                <div class="" style="height: 75%; width: 49%;" v-if="!(data.filter((item) => item['House Status'] !== 'Sold').length % 2 === 0)"></div>
             </template>
             <div v-else class="w-full h-1/2 flex flex-col items-center my-2">
                 <CircleClose style="width: 15vw; height: 50vh;"></CircleClose>

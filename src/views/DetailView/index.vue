@@ -1,8 +1,8 @@
 <template>
-    <div v-if="width > 1024" class="pc w-full h-full pb-4 overflow-y-scroll">
+    <div v-if="width > 1024" class="pc w-full h-full pb-4">
         <div class="c-container w-full h-full flex flex-col justify-center pt-3 relative">
-            <div class="col-left w-full">
-                <p class="my-2 text-center" style="font-size: 1.6vw;">{{ detail['Project Address'] }}</p>
+            <div class="col-left w-full overflow-y-scroll">
+                <p class="my-4 text-center" style="font-size: 1.6vw;">{{ detail['Project Address'] }}</p>
                 <div v-if="picData.length > 0" class="img hover:border hover:border-gray-300 p-1 rounded-lg w-11/12 mx-auto h-3/4 flex flex-col">
                     <div class="carsouel w-full h-4/5">
                         <el-carousel type="card" @change="changeImage" ref=swiperRef style="height: 100%; width: 100%;" indicator-position="none" arrow="always" :autoplay="false">

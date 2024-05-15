@@ -55,30 +55,30 @@
                     <div class="card-body w-full flex justify-center relative rounded " style="height: 93%;">
                         <img style="width: 100%;" class="h-full  object-cover rounded-b" :src="item['Profile Pic Link']" />
                     </div>
-                    <div style="width: 100%;" class="text-white overflow-hidden flex flex-col translate-y-0 opacity-0 group-hover:opacity-100 group-hover:-translate-y-full absolute bg-c-black-hover h-1/4 rounded  justify-center transition duration-300">
+                    <div style="width: 100%;font-size: 1vw;" class="text-white overflow-hidden flex flex-col translate-y-0 opacity-0 group-hover:opacity-100 group-hover:-translate-y-full absolute bg-c-black-hover h-1/4 rounded  justify-center transition duration-300">
                         <div class="w-full h-full flex flex-col flex-wrap font-medium">
                             <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
-                                <span class="iconfont flex justify-end w-1/3 icon-dollar mr-2"></span>
+                                <span style="font-size: 1vw;" class="iconfont flex justify-end w-1/3 icon-dollar mr-2"></span>
                                 <span class="w-2/3">{{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}</span>
                             </div>
                             <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
-                                <span class="iconfont flex justify-end w-1/3 icon-bathroom-fill mr-2"></span>
+                                <span style="font-size: 1vw;" class="iconfont flex justify-end w-1/3 icon-bathroom-fill mr-2"></span>
                                 <span class="w-2/3">Baths: {{ item['Number Of Bathrooms'] }}</span>
                             </div>
                             <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
-                                <span class="iconfont flex justify-end w-1/3 icon-Bed-1 mr-2"></span>
+                                <span style="font-size: 1vw;" class="iconfont flex justify-end w-1/3 icon-Bed-1 mr-2"></span>
                                 <span class="w-2/3">Beds: {{ item['Number Of Bedrooms'] }}</span>
                             </div>
                             <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
-                                <span class="iconfont flex justify-end w-1/3 icon-garage mr-2"></span>
+                                <span style="font-size: 1vw;" class="iconfont flex justify-end w-1/3 icon-garage mr-2"></span>
                                 <span class="w-2/3">Garage: {{ item['Number Of Garage'] }}</span>
                             </div>
                             <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
-                                <span class="iconfont flex justify-end w-1/3 icon-sqft mr-2"></span>
+                                <span style="font-size: 1vw;" class="iconfont flex justify-end w-1/3 icon-sqft mr-2"></span>
                                 <span class="w-2/3">SQFT: {{ item['Total Finished SQFT']?.toLocaleString() }}</span>
                             </div>
                             <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
-                                <span class="iconfont flex justify-end w-1/3 icon-feature-lot-size mr-2"></span>
+                                <span style="font-size: 1vw;" class="iconfont flex justify-end w-1/3 icon-feature-lot-size mr-2"></span>
                                 <span class="w-2/3">Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
                             </div>
                             <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2"></div>

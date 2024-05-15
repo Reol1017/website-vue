@@ -1,7 +1,7 @@
 <template>
-    <div v-if="width > 1024" class="pc w-full h-full pb-4">
-        <div class="container w-full mx-auto h-full flex justify-center overflow-y-scroll  pt-3 relative">
-            <div class="col-left w-11/12">
+    <div v-if="width > 1024" class="pc w-full h-full pb-4 overflow-y-scroll">
+        <div class="c-container w-full h-full flex flex-col justify-center pt-3 relative">
+            <div class="col-left w-full">
                 <p class="my-2 text-center" style="font-size: 1.6vw;">{{ detail['Project Address'] }}</p>
                 <div v-if="picData.length > 0" class="img hover:border hover:border-gray-300 p-1 rounded-lg w-11/12 mx-auto h-3/4 flex flex-col">
                     <div class="carsouel w-full h-4/5">
@@ -107,7 +107,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
     <!-- <div v-else-if="width <= 1280 && width > 768">平板</div> -->
@@ -370,6 +369,9 @@ function mobilePicPreview(image) {
 <style scoped>
 :deep(.el-carousel__container) {
     height: 100% !important;
+}
+:deep(.el-tabs__item){
+    font-size: 1vw !important;
 }
 /* 修改滚动条的样式 */
 ::-webkit-scrollbar {

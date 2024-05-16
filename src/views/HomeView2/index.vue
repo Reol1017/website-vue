@@ -74,7 +74,7 @@
                                 </div>
                                 <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
                                     <span class="iconfont md:text-2xl flex justify-end w-1/4 icon-feature-lot-size mr-2"></span>
-                                    <span class="w-3/4">Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
+                                    <span class="w-3/4">Lot Size: {{ item['Lot Size Acres'] }}Acres</span>
                                 </div>
                             </div>
                         </div>

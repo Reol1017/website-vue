@@ -1,9 +1,9 @@
 <template>
-    <div v-if="width > 1024" class="home-container w-full h-full relative overflow-y-scroll">
-        <div style="height: 7%;"class="header sticky w-full flex items-center">
-            <div class="h-full flex flex-wrap items-center justify-start mx-auto" style="width: 49%;font-size: 1vw;">
-                <a-popover style="width: 30%; font-family: 'Font1'" title="Price Filter" trigger="click">
-                    <a class=" text-black  cursor-pointer inline-flex ml-20 mr-6">Price</a>
+    <div class="content-container w-full h-full text-xs md:text-sm lg:text-base overflow-y-scroll">
+        <div class="header h-7/100 w-full">
+            <div class="hidden md:flex lg:flex justify-end w-full h-full md:relative">
+                <a-popover style="width: 25%; font-family: 'Font1'" title="Price Filter" trigger="click">
+                    <a class=" text-black  cursor-pointer flex items-center mx-2  rounded-lg px-2">Price</a>
                     <template #content>
                         <div class="w-full flex items-center">
                             <span class="mr-4">
@@ -17,7 +17,7 @@
                     </template>
                 </a-popover>
                 <a-popover style="width: 20%;"title="City Filter" trigger="click">
-                    <a class=" text-black cursor-pointer inline-flex mx-6">City</a>
+                    <a class=" text-black cursor-pointer flex items-center mx-2  rounded-lg px-2">City</a>
                     <template #content>
                         <div class="w-full flex items-center justify-center">
                             <el-select v-model="cityValue2" @change="cityChangeOut" placeholder="please select city">
@@ -27,73 +27,97 @@
                     </template>
                 </a-popover>
                 <a-popover style="width: 20%;" title="School District Filter" trigger="click">
-                    <a class=" text-black cursor-pointer inline-flex mx-6">School District</a>
+                    <a class=" text-black cursor-pointer flex items-center mx-2  rounded-lg px-2">School District</a>
                     <template #content>
                         <el-select @change="schoolChange" v-model="schoolDistrictSelectedValue" placeholder="">
                           <el-option v-for="item in schoolDistrict" :key="item" :label="item" :value="item"></el-option>
                         </el-select>
                     </template>
                 </a-popover>
-                <!-- <button @click="drawer = true" type="button" style="font-size: 0.9vw;" class=" outline-none rounded  w-1/4 h-full hover:shadow"><i class="fa fa-filter"></i>All Filters</button> -->
-                <a @click="drawer = true" class="text-black  cursor-pointer inline-flex mx-6">All Filters</a>
+                <a @click="drawer = true" class="text-black  cursor-pointer flex items-center mx-2  rounded-lg px-2">All Filters</a>
+                <input  @focus="focusInput($event)" v-model="searchValue" type="text" placeholder="enter number, city or keyword to search" class=" rounded-lg placeholder:text-sm h-full transition-all duration-500" :class="[ inputWidth ? ' w-1/3 border pl-2 ' : 'w-0' ]">
+                <button @click="search" class="h-full aspect-square cursor-pointer "><i class="fa fa-search text-lg"></i></button>
             </div>
-            <!-- <button @click="resetOut($event)" type="button" style="font-size: 0.9vw;" class=" outline-none rounded w-1/12 h-full mx-2 hover:shadow">Reset</button> -->
-            <div class="h-full mx-auto flex justify-end" style="width: 49%;">
-                <div class="w-3/5 h-full relative">
-                    <input v-model="searchValue" type="text" placeholder="enter number, city or keyword to search" style="font-size: 0.9vw;" class="rounded-lg focus:shadow absolute h-full transition-all duration-500 right-0" :class="[ inputWidth ? ' w-full border pl-2 ' : 'w-0' ]">
-                    <button @click="search" class="h-full aspect-square cursor-pointer rounded-full right-0 absolute text-black "><i class="fa fa-search" style="font-size: 1.3vw;"></i></button>
-                </div>
+            <div class="flex md:hidden lg:hidden w-full h-full items-center justify-between">
+                <van-search v-model="searchValue" @search="search" @focus="vanFocus($event)" style="width: 60%;" placeholder="enter number, city or keyword to search" />
+                <el-icon size="25" class="w-1/3 mr-2" @click="mobileDrawer = true"><Menu /></el-icon>
             </div>
         </div>
-        <div style="height: 93%;" class="body  w-full flex flex-wrap relative">
+        <div class="body w-full h-93/100 md:flex md:flex-wrap md:items-start" >
             <template v-if="data.filter((item) => item['House Status'] !== 'Sold').length > 0">
-                <div @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" class="card group rounded cursor-pointer my-3 mx-auto bg-white relative" style="height: 75%; width: 49%;">
-                    <div  class="card-header flex justify-between items-center border mx-auto rounded-t" style="height: 7%; width: 100%;font-size: 1vw;">
-                        <div  class="w-3/4 h-full flex items-center justify-start ml-20">{{ item['Project Address'] }}</div>
-                        <div class="w-1/4 h-full flex items-center font-bold justify-center border-l" :class="[ item['House Status'] === 'For Sale' ? 'text-green-700' : '',  item['House Status'] === 'Pending' ? 'text-red-700' : '' ]">{{ item['House Status'] }}</div>
+                <div @touchstart="mobileImgIndex = index" @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" class="card  relative mx-auto my-2 w-49/50 md:w-49/100 h-auto aspect-video md:aspect-video border group">
+                    <img class="h-full w-full object-cover" :src="item['Profile Pic Link']" />
+                    <p class="absolute text-base md:text-lg text-white top-0">{{ item['Project Address'] }}</p>
+                    <div class="absolute w-full h-1/6 top-0 flex justify-end pr-2" :class="[item['House Status'] === 'For Sale' ? 'text-green-700' : '', item['House Status'] === 'Pending' ? 'text-red-700' : '']">{{ item['House Status'] }}</div>
+                    <div v-show="width > 768" class="data absolute bottom-0 text-white bg-c-black-hover w-full h-1/4 opacity-0 transition-all duration-200 md:group-hover:opacity-100">
+                        <div class="w-full h-full flex justify-center">
+                            <div class="w-4/5 h-full flex justify-center items-center flex-wrap">
+                                <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
+                                    <span class="iconfont md:text-2xl flex items-center justify-end w-1/4 icon-dollar mr-2"></span>
+                                    <span class="w-3/4">{{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}</span>
+                                </div>
+                                <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
+                                    <span class="iconfont md:text-2xl flex justify-end w-1/4 icon-bathroom-fill mr-2"></span>
+                                    <span class="w-3/4">Baths: {{ item['Number Of Bathrooms'] }}</span>
+                                </div>
+                                <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
+                                    <span class="iconfont md:text-2xl flex justify-end w-1/4 icon-Bed-1 mr-2"></span>
+                                    <span class="w-3/4">Beds: {{ item['Number Of Bedrooms'] }}</span>
+                                </div>
+                                <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
+                                    <span class="iconfont md:text-2xl flex justify-end w-1/4 icon-garage mr-2"></span>
+                                    <span class="w-3/4">Garage: {{ item['Number Of Garage'] }}</span>
+                                </div>
+                                <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
+                                    <span class="iconfont md:text-2xl flex justify-end w-1/4 icon-sqft mr-2"></span>
+                                    <span class="w-3/4">SQFT: {{ item['Total Finished SQFT']?.toLocaleString() }}</span>
+                                </div>
+                                <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
+                                    <span class="iconfont md:text-2xl flex justify-end w-1/4 icon-feature-lot-size mr-2"></span>
+                                    <span class="w-3/4">Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body w-full flex justify-center relative rounded " style="height: 93%;">
-                        <img style="width: 100%;" class="h-full  object-cover rounded-b" :src="item['Profile Pic Link']" />
-                    </div>
-                    <div style="width: 100%;font-size: 1vw;" class="text-white overflow-hidden flex flex-col translate-y-0 opacity-0 group-hover:opacity-100 group-hover:-translate-y-full absolute bg-c-black-hover h-1/4 rounded  justify-center transition duration-300">
-                        <div class="w-full h-full flex flex-col flex-wrap font-medium">
+                    <div v-show="width < 768 && mobileImgIndex === index" class="data absolute bottom-0 text-white bg-c-black-hover w-full h-1/3">
+                        <div class="w-full h-full flex justify-center items-center flex-wrap">
                             <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
-                                <span style="font-size: 1vw;" class="iconfont flex justify-end w-1/3 icon-dollar mr-2"></span>
-                                <span class="w-2/3">{{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}</span>
+                                <span style="" class="iconfont text-xl flex justify-end w-1/4 icon-dollar mr-2"></span>
+                                <span class="w-3/4">{{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}</span>
                             </div>
                             <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
-                                <span style="font-size: 1vw;" class="iconfont flex justify-end w-1/3 icon-bathroom-fill mr-2"></span>
-                                <span class="w-2/3">Baths: {{ item['Number Of Bathrooms'] }}</span>
+                                <span style="" class="iconfont text-xl flex justify-end w-1/4 icon-bathroom-fill mr-2"></span>
+                                <span class="w-3/4">Baths: {{ item['Number Of Bathrooms'] }}</span>
                             </div>
                             <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
-                                <span style="font-size: 1vw;" class="iconfont flex justify-end w-1/3 icon-Bed-1 mr-2"></span>
-                                <span class="w-2/3">Beds: {{ item['Number Of Bedrooms'] }}</span>
+                                <span style="" class="iconfont text-xl flex justify-end w-1/4 icon-Bed-1 mr-2"></span>
+                                <span class="w-3/4">Beds: {{ item['Number Of Bedrooms'] }}</span>
                             </div>
                             <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
-                                <span style="font-size: 1vw;" class="iconfont flex justify-end w-1/3 icon-garage mr-2"></span>
-                                <span class="w-2/3">Garage: {{ item['Number Of Garage'] }}</span>
+                                <span style="" class="iconfont text-xl flex justify-end w-1/4 icon-garage mr-2"></span>
+                                <span class="w-3/4">Garage: {{ item['Number Of Garage'] }}</span>
                             </div>
                             <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
-                                <span style="font-size: 1vw;" class="iconfont flex justify-end w-1/3 icon-sqft mr-2"></span>
-                                <span class="w-2/3">SQFT: {{ item['Total Finished SQFT']?.toLocaleString() }}</span>
+                                <span style="" class="iconfont text-xl flex justify-end w-1/4 icon-sqft mr-2"></span>
+                                <span class="w-3/4">SQFT: {{ item['Total Finished SQFT']?.toLocaleString() }}</span>
                             </div>
                             <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
-                                <span style="font-size: 1vw;" class="iconfont flex justify-end w-1/3 icon-feature-lot-size mr-2"></span>
-                                <span class="w-2/3">Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
+                                <span style="" class="iconfont text-xl flex justify-end w-1/4 icon-feature-lot-size mr-2"></span>
+                                <span class="w-3/4">Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
                             </div>
-                            <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2"></div>
                         </div>
                     </div>
                 </div>
-                <div class="" style="height: 75%; width: 49%;" v-if="!(data.filter((item) => item['House Status'] !== 'Sold').length % 2 === 0)"></div>
+                <div class="card hidden md:block md:mx-auto md:my-2 md:w-49/100 md:aspect-video" v-if="!(data.filter((item) => item['House Status'] !== 'Sold').length % 2 === 0)"></div>
             </template>
             <div v-else class="w-full h-1/2 flex flex-col items-center my-2">
                 <CircleClose style="width: 15vw; height: 50vh;"></CircleClose>
                 <p style="font-size: 1.5rem;">No Data</p>
             </div>
-            <iframe style="width: 100%; height: 100%;" src="https://www-myanchorhomes-com.filesusr.com/html/d7263e_8c3695e6dc63abfe88941479ce2f32ce.html"></iframe>
+            <!-- <iframe class="w-full h-full mx-auto" src="https://www-myanchorhomes-com.filesusr.com/html/d7263e_8c3695e6dc63abfe88941479ce2f32ce.html"></iframe> -->
         </div>
-        <el-drawer v-model="drawer" title="Filters" size="40%">
+    </div>
+    <el-drawer v-model="drawer" title="Filters" size="40%">
             <p class="font-bold">Price Range:</p>
             <p class="my-4">
                 <el-slider :format-tooltip="(value) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })" v-model="priceFilter2" show-stops  :min="2000000" range :max="5000000" :step="100000"></el-slider>
@@ -137,43 +161,6 @@
                 <el-button type="primary" @click="filterIn">Confirm</el-button>
             </p>
         </el-drawer>
-    </div>
-    <!-- <div v-else-if="width < 1280 && width >= 960" class="home-container w-full h-full relative">平板</div> -->
-    <div v-else class="home-container w-full h-full relative bg-gray-50">
-        <div class="mobile-header w-full h-1/10 bg-white justify-between flex items-center shadow">
-            <!-- <img src="../../assets/logo.png" class=" w-1/3 ml-2" alt=""> -->
-            <van-search v-model="searchValue" @search="search" @focus="vanFocus($event)" placeholder="Enter City to Search" />
-            <el-icon size="25" class="w-1/3 mr-2" @click="mobileDrawer = true"><Menu /></el-icon>
-        </div>
-        <div class="body-mobile w-full bg-gray-200 overflow-y-scroll overflow-x-hidden" style="height: 92%;">
-            <div @click="details(item, $event)" style="width: 98%; font-size: 0.75rem; height: 45%" class=" mx-auto my-2 rounded bg-white relative" v-for="(item, index) in data.filter(item => item['House Status'] !== 'Sold')" :key="item['Address in MLS']">
-                <div class=" mobile-card-header w-full h-1/5 border-b flex justify-between items-center">
-                    <span class="ml-1">{{ item['Project Address'] }}</span>
-                    <span class="mr-1 border p-1 rounded" :class="[item['House Status'] === 'For Sale' ? 'border-green-700 text-green-700' : '', item['House Status'] === 'Pending' ? 'border-red-700 text-red-700' : '', item['House Status'] === 'Sold' ? 'border-red-700 text-red-700' : '']">{{ item['House Status'] }}</span>
-                </div>
-                <div class="mobile-card-body w-full h-4/5 relative" >
-                    <img @touchstart="mobileImgIndex = index" :src="item['Profile Pic Link']" class="w-full h-full" />
-                    <div v-show="mobileImgIndex === index" style="width: 100%;" class="text-white flex flex-col absolute h-1/3 rounded bottom-0 justify-center opacity-100 bg-c-black-hover transition duration-75">
-                        <div class="w-full h-1/2 flex flex-col">
-                            <p class=" w-full flex leading-7 justify-between flex-grow items-center">
-                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-dollar mr-2"></span>Price: {{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}</span>
-                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-bathroom-fill mr-2"></span>Baths: {{ item['Number Of Bathrooms'] }}</span>
-                            </p>
-                            <p class=" w-full flex leading-7 justify-between flex-grow items-center">
-                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-Bed-1 mr-2"></span>Bed: {{ item['Number Of Bedrooms'] }}</span>
-                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-garage mr-2"></span>Garage: {{ item['Number Of Garage'] }}-Car</span>
-                            </p>
-                            <p class=" w-full flex leading-7 justify-between flex-grow items-center">
-                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-sqft mr-2"></span>SQFT: {{ item['Total Finished SQFT']?.toLocaleString() }} SQFT</span>
-                                <span class="flex w-1/2 pl-5"><span style="font-size: 0.8rem;" class="iconfont icon-feature-lot-size mr-2"></span>Lot Size: {{ item['Lot Size Acres'] }} Acres</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <iframe style="width: 100%; height: 75%;" src="https://www-myanchorhomes-com.filesusr.com/html/d7263e_8c3695e6dc63abfe88941479ce2f32ce.html"></iframe>
-        </div>
-        <!-- 抽屉 -->
         <el-drawer v-model="mobileDrawer" size="100%" title="Filter" direction="ttb">
             <p class="font-bold">Price Range:</p>
             <p class="my-4">
@@ -201,7 +188,6 @@
                 <el-option v-for="item in schoolDistrict" :key="item" :label="item" :value="item"></el-option>
             </el-select>
             <hr class="my-2">
-            <hr class="my-2">
             <p class="font-bold my-2">SQFT</p>
             <p class="my-4">
                 <el-input v-model="minSqft"style="width: 40%;" placeholder="please input min sqft"></el-input>
@@ -219,12 +205,10 @@
                 <el-button type="primary" @click="filterIn">Confirm</el-button>
             </p>
         </el-drawer>
-    </div>
 </template>
 
 <script setup>
 import { Menu, CircleClose } from '@element-plus/icons-vue'
-import { GoogleMap, Marker, CustomMarker, InfoWindow } from 'vue3-google-map'
 import { processData } from '../../hooks/index'
 import { computed, onMounted, ref, watch, onUnmounted, nextTick } from 'vue';
 import httpObj from '../../api/api';
@@ -240,6 +224,10 @@ const markerRef = ref()
 const cardContainer = ref()
 const hrRef = ref()
 const mapRef = ref()
+
+function focusInput(e){
+    e.preventDefault();
+}
 // console.log(mapRef.value);
 // watch([() => mapRef.value?.ready, center], ([ready, center]) => {
 //     if(!ready){

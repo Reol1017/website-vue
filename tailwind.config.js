@@ -38,6 +38,21 @@ export default {
         'a-c-scale': 'c-scale .5s ease-in-out',
         'a-btt': 'btt .1s ease-in-out',
         'a-searchVisible': 'searchVisible .5s ease-in-out'
+      },
+      height: {
+        '7/100': '7%',
+        '93/100': '93%'
+      },
+      width:{
+        '49/100': '49%',
+        '49/50': '98%',
+        '2f': '200%',
+        '3f': '300%',
+      },
+      fontSize:{
+        xs: '0.7rem',
+        sm: '0.8rem',
+        base: '0.9rem;'
       }
     },
   },

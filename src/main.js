@@ -6,7 +6,6 @@ import { createPinia } from 'pinia'
 import router from './router'
 import _ from 'lodash';
 
-window.addEventListener('resize', _.throttle((e) => {
-    location.reload()
-}, 5000))
+
+
 createApp(App).use(router).use(createPinia()).mount('#app')

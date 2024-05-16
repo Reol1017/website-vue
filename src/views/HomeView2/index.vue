@@ -35,8 +35,8 @@
                     </template>
                 </a-popover>
                 <a @click="drawer = true" class="text-black  cursor-pointer flex items-center mx-2  rounded-lg px-2">All Filters</a>
-                <input  @focus="focusInput($event)" v-model="searchValue" type="text" placeholder="enter number, city or keyword to search" class=" rounded-lg placeholder:text-sm h-full transition-all duration-500" :class="[ inputWidth ? ' w-1/3 border pl-2 ' : 'w-0' ]">
-                <button @click="search" class="h-full aspect-square cursor-pointer "><i class="fa fa-search text-lg"></i></button>
+                <input  @focus="focusInput($event)" v-model="searchValue" type="text" placeholder="enter number, city or keyword to search" class=" rounded-lg placeholder:text-sm h-full transition-all duration-1000" :class="[ inputWidth ? ' w-1/3 border pl-2 ' : ' w-0' ]">
+                <button @click="search" class="h-full aspect-square cursor-pointer hover:bg-gray-50 rounded-full"><i class="fa fa-search text-lg"></i></button>
             </div>
             <div class="flex md:hidden lg:hidden w-full h-full items-center justify-between">
                 <van-search v-model="searchValue" @search="search" @focus="vanFocus($event)" style="width: 60%;" placeholder="enter number, city or keyword to search" />
@@ -47,11 +47,13 @@
             <template v-if="data.filter((item) => item['House Status'] !== 'Sold').length > 0">
                 <div @touchstart="mobileImgIndex = index" @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" class="card  relative mx-auto my-2 w-49/50 md:w-49/100 h-auto aspect-video md:aspect-video border group">
                     <img class="h-full w-full object-cover" :src="item['Profile Pic Link']" />
-                    <p class="absolute text-base md:text-lg text-white top-0">{{ item['Project Address'] }}</p>
-                    <div class="absolute w-full h-1/6 top-0 flex justify-end pr-2" :class="[item['House Status'] === 'For Sale' ? 'text-green-700' : '', item['House Status'] === 'Pending' ? 'text-red-700' : '']">{{ item['House Status'] }}</div>
+                    <p class="absolute text-xs h-[8%] md:text-base bg-c-black-hover flex items-center justify-center text-white top-0 w-5/6">{{ item['Project Address'] }}</p>
+                    <div class="absolute h-[8%] text-xs md:text-base w-1/6 top-0 right-0 flex justify-center items-center text-white bg-c-black-hover">
+                        <div class="w-full border-l flex justify-center items-center h-[75%] ">{{ item['House Status'] }}</div>
+                    </div>
                     <div v-show="width > 768" class="data absolute bottom-0 text-white bg-c-black-hover w-full h-1/4 opacity-0 transition-all duration-200 md:group-hover:opacity-100">
                         <div class="w-full h-full flex justify-center">
-                            <div class="w-4/5 h-full flex justify-center items-center flex-wrap">
+                            <div class="w-4/5 h-full flex justify-center items-center flex-wrap text-xs md:text-base">
                                 <div class="h-1/3 w-1/3 flex items-center justify-center p-1/2">
                                     <span class="iconfont md:text-2xl flex items-center justify-end w-1/4 icon-dollar mr-2"></span>
                                     <span class="w-3/4">{{ item['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 }) }}</span>
@@ -114,7 +116,7 @@
                 <CircleClose style="width: 15vw; height: 50vh;"></CircleClose>
                 <p style="font-size: 1.5rem;">No Data</p>
             </div>
-            <!-- <iframe class="w-full h-full mx-auto" src="https://www-myanchorhomes-com.filesusr.com/html/d7263e_8c3695e6dc63abfe88941479ce2f32ce.html"></iframe> -->
+            <iframe class="w-full h-full mx-auto" src="https://www-myanchorhomes-com.filesusr.com/html/d7263e_8c3695e6dc63abfe88941479ce2f32ce.html"></iframe>
         </div>
     </div>
     <el-drawer v-model="drawer" title="Filters" size="40%">

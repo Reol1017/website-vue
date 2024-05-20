@@ -48,7 +48,7 @@
                 <div @touchstart="mobileImgIndex = index" @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" class="card  relative mx-auto my-2 w-49/50 md:w-49/100 h-auto aspect-video md:aspect-video border group">
                     <img class="h-full w-full object-cover" :src="item['Profile Pic Link']" />
                     <p class="absolute text-xs h-[8%] md:text-sm bg-c-black-hover flex items-center justify-center text-white top-0 w-5/6">{{ item['Project Address'] }}</p>
-                    <div class="absolute h-[8%] text-xs md:text-base w-1/6 top-0 right-0 flex justify-center items-center text-white bg-c-black-hover">
+                    <div class="absolute h-[8%] text-xs md:text-sm w-1/6 top-0 right-0 flex justify-center items-center text-white bg-c-black-hover">
                         <div class="w-full border-l flex justify-center items-center h-[75%] ">{{ item['House Status'] }}</div>
                     </div>
                     <div v-show="width > 768" class="data absolute bottom-0 text-white bg-c-black-hover w-full h-1/4 opacity-0 transition-all duration-200 md:group-hover:opacity-100">

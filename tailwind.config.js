@@ -52,7 +52,7 @@ export default {
       fontSize:{
         xs: '0.7rem',
         sm: '0.8rem',
-        base: '0.9rem;'
+        base: '0.9rem'
       }
     },
   },

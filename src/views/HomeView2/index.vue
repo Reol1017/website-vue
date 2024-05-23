@@ -45,7 +45,7 @@
         </div>
         <div class="body w-full h-93/100 md:flex md:flex-wrap md:items-start" >
             <template v-if="data.filter((item) => item['House Status'] !== 'Sold').length > 0">
-                <div @touchstart="mobileImgIndex = index" @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" class="card  relative mx-auto my-2 w-49/50 md:w-49/100 h-auto aspect-video md:aspect-video border group">
+                <div @touchstart="mobileImgIndex = index" @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" class="card  relative mx-auto my-2 w-49/50 md:w-49/100 h-auto aspect-video md:aspect-video border group" :class="[ (index ===  (data.filter((item) => item['House Status'] !== 'Sold').length - 1) && data.filter((item) => item['House Status'] !== 'Sold').length % 2 !== 0) ? 'hidden' : '']">
                     <img class="h-full w-full object-cover" :src="item['Profile Pic Link']" />
                     <p class="absolute text-xs h-[8%] md:text-sm bg-c-black-hover flex items-center justify-center text-white top-0 w-5/6">{{ item['Project Address'] }}</p>
                     <div class="absolute h-[8%] text-xs md:text-sm w-1/6 top-0 right-0 flex justify-center items-center text-white bg-c-black-hover">
@@ -110,13 +110,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="card hidden md:block md:mx-auto md:my-2 md:w-49/100 md:aspect-video" v-if="!(data.filter((item) => item['House Status'] !== 'Sold').length % 2 === 0)"></div>
             </template>
             <div v-else class="w-full h-1/2 flex flex-col items-center my-2">
                 <CircleClose style="width: 15vw; height: 50vh;"></CircleClose>
                 <p style="font-size: 1.5rem;">No Data</p>
             </div>
-            <iframe class="w-full h-full mx-auto" src="https://www-myanchorhomes-com.filesusr.com/html/d7263e_8c3695e6dc63abfe88941479ce2f32ce.html"></iframe>
+            <div ref="cMapRef" class="c-map w-[99%] h-[800px] mx-auto">123</div>
+            <iframe  class="w-full h-[800px] mx-auto" src="https://www-myanchorhomes-com.filesusr.com/html/d7263e_8c3695e6dc63abfe88941479ce2f32ce.html"></iframe>
         </div>
     </div>
     <el-drawer v-model="drawer" title="Filters" size="40%">
@@ -226,7 +226,6 @@ const markerRef = ref()
 const cardContainer = ref()
 const hrRef = ref()
 const mapRef = ref()
-
 function focusInput(e){
     e.preventDefault();
 }
@@ -265,37 +264,64 @@ async function initData() {
     // })
     // console.log(data.value);
 }
-function clickMarker(item, event) {
-    if(item['House Status'] === 'For Sale'){
-        document.querySelectorAll('.card').forEach(item => {
-            item.style.border = 'none'
-        })
-        markerRef.value.forEach(item => {
-            item.classList.remove('text-5xl')
-        })
-        event.target.classList.toggle('text-5xl')
-        document.querySelector(`#h${item['Project - Street ID'].trim()}`).scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
-        })
-        document.querySelector(`#h${item['Project - Street ID'].trim()}`).style.border = '2px solid green'
-    } else {
-        ElMessage.warning(`The House Status is ${item['House Status']}!`);
-    }
+async function initMap(data) {
+    const { Map } = await google.maps.importLibrary("maps");
+    const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary(
+        "marker",
+    );
+    map = new Map(cMapRef.value, {
+        center: center.value,
+        zoom: 13,
+        mapId: '12aac7818bd4a829'
+    })
+    data.filter((item) => item['House Status'] !== 'Sold').forEach(item => {
+        const div = document.createElement('div');
+        div.classList.add('text-lg')
+        if(item['House Status'] === 'For Sale'){
+            div.classList.add('text-red-700');
+        }else{
+            div.classList.add('text-green-700');
+        }
+        div.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8"><path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" /></svg>`;
+        const markerView = new google.maps.marker.AdvancedMarkerElement({
+            map,
+            position: { lat: Number(item['Google Map Location Code'].split(', ')[0]), lng: Number(item['Google Map Location Code'].split(', ')[1]) },
+            title: item['Project Address'],
+            content: div
+        });
+    })
 }
-function clickCard(item){
-    document.querySelectorAll('.card').forEach(item => {
-        item.style.border = 'none'
-    })
-    markerRef.value.forEach(item => {
-        item.classList.remove('text-5xl')
-    })
-    center.value.lat = Number(item['Google Map Location Code'].split(',')[0])
-    center.value.lng = Number(item['Google Map Location Code'].split(',')[1])
+// function clickMarker(item, event) {
+//     if(item['House Status'] === 'For Sale'){
+//         document.querySelectorAll('.card').forEach(item => {
+//             item.style.border = 'none'
+//         })
+//         markerRef.value.forEach(item => {
+//             item.classList.remove('text-5xl')
+//         })
+//         event.target.classList.toggle('text-5xl')
+//         document.querySelector(`#h${item['Project - Street ID'].trim()}`).scrollIntoView({
+//             behavior: 'smooth',
+//             block: 'center'
+//         })
+//         document.querySelector(`#h${item['Project - Street ID'].trim()}`).style.border = '2px solid green'
+//     } else {
+//         ElMessage.warning(`The House Status is ${item['House Status']}!`);
+//     }
+// }
+// function clickCard(item){
+//     document.querySelectorAll('.card').forEach(item => {
+//         item.style.border = 'none'
+//     })
+//     markerRef.value.forEach(item => {
+//         item.classList.remove('text-5xl')
+//     })
+//     center.value.lat = Number(item['Google Map Location Code'].split(',')[0])
+//     center.value.lng = Number(item['Google Map Location Code'].split(',')[1])
 
-    document.querySelector(`.m${item['Project - Street ID'].trim()}`).classList.add('text-5xl')
-    document.querySelector(`#h${item['Project - Street ID'].trim()}`).style.border = '2px solid green'
-}
+//     document.querySelector(`.m${item['Project - Street ID'].trim()}`).classList.add('text-5xl')
+//     document.querySelector(`#h${item['Project - Street ID'].trim()}`).style.border = '2px solid green'
+// }
 function details(item, e){
     console.log(item)
     e.stopPropagation();
@@ -317,6 +343,7 @@ async function filterPrice(){
             return item['List Price'] >= priceFilter.value[0] && item['List Price'] <= priceFilter.value[1]
         }
     })
+    await initMap(data.value)
 }
 const beds2 = ref([3,8]);
 const bath2 = ref([3,8]);
@@ -358,6 +385,7 @@ async function search(){
     if(searchValue.value){
         await initData()
         data.value = data.value.filter(item => item['Project Address'].includes(searchValue.value))
+        await initMap(data.value)
     } else {
         inputWidth.value = !inputWidth.value
     }
@@ -367,11 +395,13 @@ const schoolDistrictSelectedValue = ref('')
 async function schoolChange(){
     await initData()
     data.value = data.value.filter(item => item['High School'] === schoolDistrictSelectedValue.value)
+    await initMap(data.value)
 }
 const cityValue2 = ref('');
 const cityChangeOut = async (value) => {
     await initData();
     data.value = data.value.filter(item => item['Project Address'].includes(value))
+    await initMap(data.value)
 }
 // 抽屉
 const drawer = ref(false);
@@ -401,6 +431,7 @@ const resetIn = async () => {
     schoolDistrictSelectedValueIn.value = '';
     garageNumberArrIn.value = [1, 5];
     await initData();
+    await initMap(data.value)
 }
 const filterIn = async () => {
     await initData();
@@ -484,13 +515,18 @@ const filterIn = async () => {
         showToast('There is no data!');
         resetIn();
     }
+    await initMap(data.value)
 }
 const cardContainerTop = ref();
 const cardContainerBottom = ref();
 let observer = null;
 let observer2 = null;
+
+const cMapRef = ref();
+let map = null;
 onMounted(async () => {
     await initData()
+    await initMap(data.value);
     // observer = new IntersectionObserver(entries => {
     //     entries.forEach(entry => {
     //         if(entry.isIntersecting){
@@ -563,33 +599,6 @@ const mobileDrawer = ref(false);
 <style scoped>
 ::deep(.arco-card-size-medium .arco-card-header-title) {
     font-size: 1.3vw !important;
-}
-
-
-/* 修改滚动条的样式 */
-::-webkit-scrollbar {
-  width: 4px;
-  /* 设置滚动条的宽度 */
-}
-
-/* 滚动条轨道 */
-::-webkit-scrollbar-track {
-  background: transparent;
-  /* 设置轨道的背景颜色 */
-}
-
-/* 滚动条滑块 */
-::-webkit-scrollbar-thumb {
-  background: #888;
-  /* 设置滑块的背景颜色 */
-  border-radius: 6px;
-  /* 设置滑块的圆角 */
-}
-
-/* 滚动条滑块悬停时的样式 */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-  /* 设置滑块悬停时的背景颜色 */
 }
 .three{
     border: 1px solid green;

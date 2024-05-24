@@ -1,5 +1,6 @@
 <template>
-    <div class="content-container w-full h-full text-xs md:text-sm lg:text-base overflow-y-scroll">
+    <el-skeleton v-if="skeletonVisible" :animated="true" :rows="10" />
+    <div v-else class="content-container w-full h-full text-xs md:text-sm lg:text-base overflow-y-scroll">
         <div class="header h-7/100 w-full">
             <div class="hidden md:flex lg:flex justify-end w-full h-full md:relative">
                 <a-popover style="width: 25%; font-family: 'Font1'" title="Price Filter" trigger="click">
@@ -35,7 +36,7 @@
                     </template>
                 </a-popover>
                 <a @click="drawer = true" class="text-black  cursor-pointer flex items-center mx-2  rounded-lg px-2">All Filters</a>
-                <input  @focus="focusInput($event)" v-model="searchValue" type="text" placeholder="enter number, city or keyword to search" class=" rounded-lg placeholder:text-sm h-full transition-all duration-1000" :class="[ inputWidth ? ' w-1/3 border pl-2 ' : ' w-0' ]">
+                <input  @focus="focusInput($event)" v-model="searchValue" type="text" placeholder="enter number, city or keyword to search" class=" rounded-lg my-auto placeholder:text-sm h-2/3 transition-all duration-1000" :class="[ inputWidth ? ' w-1/3 border pl-2 ' : ' w-0' ]">
                 <button @click="search" class="h-full aspect-square cursor-pointer hover:bg-gray-50 rounded-full"><i class="fa fa-search text-lg"></i></button>
             </div>
             <div class="flex md:hidden lg:hidden w-full h-full items-center justify-between">
@@ -116,7 +117,7 @@
                 <p style="font-size: 1.5rem;">No Data</p>
             </div>
             <div ref="cMapRef" class="c-map w-[99%] h-[800px] mx-auto">123</div>
-            <iframe  class="w-full h-[800px] mx-auto" src="https://www-myanchorhomes-com.filesusr.com/html/d7263e_8c3695e6dc63abfe88941479ce2f32ce.html"></iframe>
+            <!-- <iframe  class="w-full h-[800px] mx-auto" src="https://www-myanchorhomes-com.filesusr.com/html/d7263e_8c3695e6dc63abfe88941479ce2f32ce.html"></iframe> -->
         </div>
     </div>
     <el-drawer v-model="drawer" title="Filters" size="40%">
@@ -226,6 +227,7 @@ const markerRef = ref()
 const cardContainer = ref()
 const hrRef = ref()
 const mapRef = ref()
+const skeletonVisible = ref(true);
 function focusInput(e){
     e.preventDefault();
 }
@@ -244,6 +246,7 @@ const data2 = ref([])
 const img_big = ref('https://static.wixstatic.com/media/d7263e_553e79a1d02d4c2da0d526214ab9890b~mv2.jpg/v1/fill/w_1356,h_1000,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/26-1002_Photo%20-%2010.jpg')
 const city = ref([])
 async function initData() {
+    skeletonVisible.value = true;
     const res = await httpObj.sendPost('/records/query', {
         from: 'btwxxiycs',
         select: [6,7,8,...filedNum]
@@ -256,6 +259,7 @@ async function initData() {
     })
     data.value = data.value.filter(item => item['Display'])
     data.value = data.value.sort((a, b) => a['House Status'].charCodeAt(0) - b['House Status'].charCodeAt(0))
+    skeletonVisible.value = false;
     // data2.value = processData(res.data.data, res.data.fields)
     // data2.value = data.value.sort((a, b) => {
     //     const cityA = city.value.indexOf(a['Project Address'].split(', ')[1])
@@ -266,29 +270,53 @@ async function initData() {
 }
 async function initMap(data) {
     const { Map } = await google.maps.importLibrary("maps");
-    const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary(
+    const { AdvancedMarkerElement, PinElement, InfoWindow } = await google.maps.importLibrary(
         "marker",
     );
+    const infoWindow = new google.maps.InfoWindow();
     map = new Map(cMapRef.value, {
         center: center.value,
         zoom: 13,
-        mapId: '12aac7818bd4a829'
+        mapId: '12aac7818bd4a829',
+        gestureHandling: "cooperative",
     })
-    data.filter((item) => item['House Status'] !== 'Sold').forEach(item => {
-        const div = document.createElement('div');
-        div.classList.add('text-lg')
-        if(item['House Status'] === 'For Sale'){
-            div.classList.add('text-red-700');
-        }else{
-            div.classList.add('text-green-700');
-        }
-        div.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8"><path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" /></svg>`;
+    data.filter((item) => item['House Status'] !== 'Sold').forEach((item, index) => {
+        // const div = document.createElement('div');
+        // div.classList.add('text-lg')
+        // if(item['House Status'] === 'For Sale'){
+        //     div.classList.add('text-red-700');
+        // }else{
+        //     div.classList.add('text-green-700');
+        // }
+        // div.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8"><path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" /></svg>`;
+        const div = document.createElement('div')
+        div.innerText = `${index + 1}`
+        div.classList.add('font-bold');
+        div.classList.add('rounded-full')
+        div.classList.add('bg-white')
+        div.classList.add('w-full')
+        div.classList.add('h-full')
+        div.classList.add('flex')
+        div.classList.add('items-center')
+        div.classList.add('justify-center')
+        const pin = new google.maps.marker.PinElement({
+            background: item['House Status'] === 'For Sale' ? 'red' : 'green',
+            borderColor: item['House Status'] === 'For Sale' ? 'red' : 'green',
+            glyph: div,
+            glyphColor: '#000',
+            scale: 1.2
+        })
         const markerView = new google.maps.marker.AdvancedMarkerElement({
             map,
             position: { lat: Number(item['Google Map Location Code'].split(', ')[0]), lng: Number(item['Google Map Location Code'].split(', ')[1]) },
             title: item['Project Address'],
-            content: div
+            content: pin.element
         });
+        markerView.addListener('click', (e) => {
+            infoWindow.close();
+            infoWindow.setContent(markerView.title);
+            infoWindow.open(markerView.map, markerView);
+        })
     })
 }
 // function clickMarker(item, event) {

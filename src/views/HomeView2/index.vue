@@ -458,6 +458,10 @@ const resetIn = async () => {
     cityValue.value = '';
     schoolDistrictSelectedValueIn.value = '';
     garageNumberArrIn.value = [1, 5];
+    cityValue2.value = '';
+    schoolDistrictSelectedValue.value = '';
+    searchValue.value = '';
+    priceFilter.value = [2000000, 5000000]
     await initData();
     await initMap(data.value)
 }

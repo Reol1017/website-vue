@@ -1,9 +1,9 @@
 <template>
     <el-skeleton v-if="skeletonVisible" :animated="true" :rows="10" />
-    <div v-else class="content-container relative w-full h-full text-xs px-2 pb-4 md:text-sm lg:text-base overflow-y-scroll">
-        <div class="pic-container hidden md:block w-[100%] aspect-[5/2]">
-            <el-carousel arrow="always" pause-on-hover :autoplay="false" style="width: 100%; height: 100%;">
-                <el-carousel-item v-for="(item, index) in Math.ceil(picData?.length / 6)" :key="item">
+    <div v-else class="content-container relative font-c-t w-full h-full text-xs px-2 pb-4 md:text-sm lg:text-base overflow-y-scroll">
+        <div class="pic-container swiper hidden md:block w-[100%] aspect-[5/2]">
+            <a-carousel animation-name="fade" indicator-type="line" show-arrow="always" arrow-class="text-black" :auto-play="false" style="width: 100%; height: 100%;">
+                <a-carousel-item v-for="(item, index) in Math.ceil(picData?.length / 6)" :key="item">
                     <div class="item-son w-full h-full grid grid-cols-3 grid-rows-2 gap-2">
                         <div v-for="(item2, index2) in 6" class="">
                             <img @click="previewImg(picData[index * 6 + index2]?.['Link To File'])"
@@ -11,8 +11,8 @@
                                 alt="">
                         </div>
                     </div>
-                </el-carousel-item>
-            </el-carousel>
+                </a-carousel-item>
+            </a-carousel>
         </div>
         <!-- 移动轮播 -->
         <div class="md:hidden w-full h-[30%] mt-2">
@@ -22,118 +22,41 @@
                 </van-swipe-item>
             </van-swipe>
         </div>
-        <p class="md:text-xl text-base font-bold md:h-[15%] flex items-center justify-center mb-2 mx-auto w-[100%]">{{ detail['Project Address'] }}</p>
-        <div class="md:w-[90%] h-[70%] md:flex mx-auto">
-            <div class="pc-col-left h-full block md:w-[85%] w-full">
-                <p class="md:text-lg text-sm font-bold md:w-[85%] w-full my-1 h-[5%]">Details</p>
-                <div class="details md:w-[85%] w-full h-[40%] grid md:grid-cols-4 md:grid-rows-3 grid-cols-2 grid-rows-6">
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-dollar mr-2"></span>
-                            Price: {{detail['List Price']?.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0}) }}</span>
-                    </div>
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-bathroom-fill mr-2"></span>
-                            Baths: {{detail['Number Of Bathrooms'] }}</span>
-                    </div>
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-Bed-1 mr-2"></span>
-                            Beds: {{detail['Number Of Bedrooms'] }}</span>
-                    </div>
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-garage mr-2"></span>
-                            Garages: {{detail['Number Of Garage'] }}</span>
-                    </div>
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-sqft mr-2"></span>
-                            SQFT: {{detail['Total Finished SQFT']?.toLocaleString() }} SQFT</span>
-                    </div>
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-feature-lot-size mr-2"></span>
-                            Lot Size: {{detail['Lot Size Acres'] }} Acres</span>
-                    </div>
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-Bed-1 mr-2"></span>
-                            Main Level Bedrooms: {{detail['Main Level Bedroom'] }}</span>
-                    </div>
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-bathroom-fill mr-2"></span>
-                            Main Level Bathrooms: {{detail['Main Level Bathroom'] }}</span>
-                    </div>
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-bathroom-fill mr-2"></span>
-                            Upper Level Bathrooms: {{detail['Upper Level Bathroom'] }}</span>
-                    </div>
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-Bed-1 mr-2"></span>
-                            Upper Level Bedrooms: {{detail['Upper Level Bedroom'] }}</span>
-                    </div>
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-Bed-1 mr-2"></span>
-                            Lower Level Bedrooms: {{detail['Lower Level Bedroom'] }}</span>
-                    </div>
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-bathroom-fill mr-2"></span>
-                            Lower Level Bathrooms: {{detail['Lower Level Bathroom'] }}</span>
+        <p style="font-family: 'Font3';" class="md:text-xl text-base font-bold md:h-[15%] flex items-center justify-center mx-auto w-[100%]">{{ detail['Project Address'] }}</p>
+        <div class="md:w-[75%] md:h-[1200px] mx-auto w-full h-[500px] md:flex">
+            <div class="md:w-[85%] h-full w-full">
+                <p class="h-[30px] flex items-center text-base md:text-lg font-bold">Details</p>
+                <div class="details md:text-[14px] w-full h-[200px] mt-1 md:h-[180px] grid md:grid-cols-3 md:grid-rows-4 grid-cols-2 grid-rows-6">
+                    <div class="w-full h-full flex truncate items-center" v-for="item in propertyArr" :key="item.text">
+                        <span :class="[ 'iconfont', `${item.icon}`, 'mx-1' ]"></span>
+                        <span>{{ item.text }}:</span>
+                        <span class="ml-1">{{ (item.label.includes('Price') || item.label.includes('SQFT')) ? detail[item.label]?.toLocaleString() : detail[item.label] }}</span>
                     </div>
                 </div>
-                <p class="md:text-lg text-sm w-full font-bold md:w-[85%] h-[5%] mt-8 mb-1">Other Details</p>
-                <div class="details w-[90%] h-[40%] grid md:grid-cols-3 md:grid-rows-4 grid-cols-1 grid-rows-6">
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-sqft mr-2"></span>
-                            Above Grade Finished SQFT: {{detail['Above Grade Finished SQFT']?.toLocaleString() }}</span>
-                    </div>
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-sqft mr-2"></span>
-                            Below Grade Finished SQFT: {{detail['Below Grade Finished SQFT']?.toLocaleString() }}</span>
-                    </div>
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-elementary-school-4 mr-2"></span>
-                            Elementary School: {{detail['Elementary School'] }}</span>
-                    </div>
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-_huabanfuben mr-2"></span>
-                            Middle Or Junior School: {{detail['Middle Or Junior School'] }}</span>
-                    </div>
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-high-school-1 mr-2"></span>
-                            High School: {{detail['High School'] }}</span>
-                    </div>
-                    <div class="w-full h-full  flex items-center">
-                        <span class="flex items-center ">
-                            <span class="iconfont icon-bg-model mr-2"></span>
-                            Builder Model: {{detail['Builder Model'] }}</span>
+                <p class="h-[30px] flex items-center text-base md:text-lg font-bold mt-2">Others Details</p>
+                <div class="details md:text-[14px] w-full h-[200px] mt-1 md:h-[135px] grid md:grid-cols-2 md:grid-rows-3 grid-cols-1 grid-rows-6">
+                    <div class="w-full h-full flex truncate items-center" v-for="item in propertyArr2" :key="item.text">
+                        <span :class="[ 'iconfont', `${item.icon}`, 'mx-1' ]"></span>
+                        <span>{{ item.text }}:</span>
+                        <span class="ml-1">{{ (item.label.includes('SQFT')) ? detail[item.label]?.toLocaleString() : detail[item.label] }}</span>
                     </div>
                 </div>
+                <p class="h-[30px] hidden md:flex items-center text-base md:text-lg font-bold mt-2">Description</p>
+                <p class="hidden md:block shadow p-1 leading-[2] mt-1 text-[15px]">{{ detail['Description'] }}</p>
+                <iframe :src="detail['Google Map Link']" class="w-full h-[500px] hidden md:block mt-4" frameborder="0"></iframe>
             </div>
-            <div class="col-right hidden md:block sticky top-0 btns-container md:w-[15%] h-[30%] text-white">
-                <div class="btn w-full h-1/3 flex items-center cursor-pointer rounded justify-center bg-neutral-500 hover:bg-neutral-400 border-b">
-                    <span class="iconfont icon-Brochure mr-2"></span>
-                    <span>BROCHURE</span>
+            <div style="font-family: 'Font3';" class="col-right hidden md:flex md:flex-col md:items-end sticky top-0 btns-container md:w-[15%] h-[150px] text-white">
+                <div class="btn group aspect-square h-1/3 relative after:absolute after:right-full transition-all duration-500 flex items-center p-2 cursor-pointer rounded justify-center bg-neutral-500 hover:bg-neutral-400 border-b">
+                    <span class="iconfont icon-Brochure text-[24px]"></span>
+                    <span class="group-hover:flex hidden bg-neutral-500 h-[60%] p-1 aspect-[5/1] border border-gray-400 rounded absolute right-full items-center justify-center mr-1">BROCHURE</span>
                 </div>
-                <div class="btn w-full h-1/3 flex items-center cursor-pointer rounded justify-center bg-neutral-500 hover:bg-neutral-400 border-b">
-                    <span class="iconfont icon-video_fill mr-2"></span>
-                    <span>VIDEO TOUR</span>
+                <div class="btn group aspect-square h-1/3 relative after:absolute after:right-full transition-all duration-500 flex items-center p-2 cursor-pointer rounded justify-center bg-neutral-500 hover:bg-neutral-400 border-b">
+                    <span class="iconfont icon-video_fill text-[24px]"></span>
+                    <span class="group-hover:flex hidden bg-neutral-500 h-[60%] p-1 aspect-[5/1] border border-gray-400 rounded absolute right-full items-center justify-center mr-1">VIDEO TOUR</span>
                 </div>
-                <div class="btn w-full h-1/3 flex items-center cursor-pointer rounded justify-center bg-neutral-500 hover:bg-neutral-400 border-b">
-                    <span class="iconfont icon-virtual-reality mr-2"></span>
-                    <span>VIRTUAL TOUR</span>
+                <div class="btn group aspect-square h-1/3 relative after:absolute after:right-full transition-all duration-500 flex items-center p-2 cursor-pointer rounded justify-center bg-neutral-500 hover:bg-neutral-400 border-b">
+                    <span class="iconfont icon-virtual-reality text-[24px]"></span>
+                    <span class="group-hover:flex hidden bg-neutral-500 h-[60%] p-1 aspect-[5/1] border border-gray-400 rounded absolute right-full items-center justify-center mr-1">VIRTUAL TOUR</span>
                 </div>
             </div>
         </div>
@@ -152,18 +75,13 @@
             </div>
         </div>
         <!-- 描述和地图 -->
-        <div class="map-des-container hidden md:w-[90%] md:h-[80%] h-full w-full gap-4 md:grid md:grid-rows-1 md:grid-cols-2 grid-cols-1 grid-rows-2 mx-auto">
-            <div class="w-full h-full overscroll-hidden text-ellipsis">
-                <div class="md:text-lg text-sm font-bold mb-2 md:w-[85%] w-full h-[5%]">Description</div>
-                <div class="text-base font-sans">{{ detail['Description'] }}</div>
-            </div>
-            <div class="w-full h-full border">
-                <iframe :src="detail['Google Map Link']" class="w-full h-full" frame="0"></iframe>
-            </div>
-        </div>
+        <!-- <div class="map-des-container hidden mx-auto md:w-[90%] md:h-[80%] h-full w-full md:block">
+            <p class="w-[100%] mx-auto md:text-lg text-sm font-bold">Description</p>
+            <p class="w-[100%] mx-auto md:text-base leading-loose text-sm">{{ detail['Description'] }}</p>
+        </div> -->
         <p class="md:hidden font-bold text-sm mb-2">Description</p>
-        <p class="md:hidden mb-2 font-sans">{{ detail['Description'] }}</p>
-        <iframe :src="detail['Google Map Link']" class="w-full h-full mt-2 md:hidden" frameborder="0"></iframe>
+        <p class="md:hidden text-sm mb-6">{{ detail['Description'] }}</p>
+        <iframe :src="detail['Google Map Link']" class="w-full h-full md:hidden" frameborder="0"></iframe>
     </div>
 </template>
 
@@ -187,6 +105,100 @@ const picData = ref([])
 const picIndex = ref(0)
 const swiperRef = ref()
 const previewRef = ref()
+const propertyArr = ref([
+    {
+        label: 'List Price',
+        icon: 'icon-dollar',
+        text: 'Price'
+    },
+    {
+        label: 'Number Of Bathrooms',
+        icon: 'icon-bathroom-fill',
+        text: 'Baths'
+    },
+    {
+        label: 'Number Of Bedrooms',
+        icon: 'icon-Bed-1',
+        text: 'Beds'
+    },
+    {
+        label: 'Number Of Garage',
+        icon: 'icon-garage',
+        text: 'Garages'
+    },
+    {
+        label: 'Total Finished SQFT',
+        icon: 'icon-sqft',
+        text: 'Sq.Ft.'
+    },
+    {
+        label: 'Lot Size Acres',
+        icon: 'icon-feature-lot-size',
+        text: 'Lot Size.'
+    },
+    {
+        label: 'Main Level Bedroom',
+        icon: 'icon-Bed-1',
+        text: 'Main Level Bedrooms'
+    },
+    {
+        label: 'Main Level Bathroom',
+        icon: 'icon-bathroom-fill',
+        text: 'Main Level Bathrooms'
+    },
+    {
+        label: 'Upper Level Bathroom',
+        icon: 'icon-bathroom-fill',
+        text: 'Upper Level Bathrooms'
+    },
+    {
+        label: 'Upper Level Bedroom',
+        icon: 'icon-Bed-1',
+        text: 'Upper Level Bedrooms'
+    },
+    {
+        label: 'Lower Level Bedroom',
+        icon: 'icon-Bed-1',
+        text: 'Lower Level Bedrooms'
+    },
+    {
+        label: 'Lower Level Bathroom',
+        icon: 'icon-bathroom-fill',
+        text: 'Lower Level Bathrooms'
+    },
+])
+const propertyArr2 = ref([
+    {
+        label: 'Above Grade Finished SQFT',
+        icon: 'icon-sqft',
+        text: 'Above Grade Finished SQFT'
+    },
+    {
+        label: 'Below Grade Finished SQFT',
+        icon: 'icon-sqft',
+        text: 'Below Grade Finished SQFT'
+    },
+    {
+        label: 'Elementary School',
+        icon: 'icon-elementary-school-4',
+        text: 'Elementary School'
+    },
+    {
+        label: 'Middle Or Junior School',
+        icon: 'icon-_huabanfuben',
+        text: 'Middle Or Junior School'
+    },
+    {
+        label: 'High School',
+        icon: 'icon-high-school-1',
+        text: 'High School'
+    },
+    {
+        label: 'Builder Model',
+        icon: 'icon-bg-model',
+        text: 'Builder Model'
+    },
+])
 async function initDetail() {
     const res = await httpObj.sendPost('/records/query', {
         from: 'btwxxiycs',
@@ -315,6 +327,7 @@ function previewImg(url) {
 function mobilePicPreview(image) {
     showImagePreview([image['Link To File']]);
 }
+
 </script>
 
 <style scoped>

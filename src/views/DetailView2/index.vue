@@ -1,8 +1,8 @@
 <template>
     <el-skeleton v-if="skeletonVisible" :animated="true" :rows="10" />
     <div v-else class="content-container relative font-c-t w-full h-full text-xs px-2 pb-4 md:text-sm lg:text-base overflow-y-scroll">
-        <div class="pic-container swiper hidden md:block w-[100%] aspect-[5/2]">
-            <a-carousel animation-name="fade" indicator-type="line" show-arrow="always" arrow-class="text-black" :auto-play="false" style="width: 100%; height: 100%;">
+        <div class="pic-container swiper group hidden md:block w-[100%] aspect-[5/2] relative">
+            <a-carousel :current="pcCarouselControl" animation-name="fade" indicator-type="line" show-arrow="never" arrow-class="bg-black" :auto-play="false" style="width: 100%; height: 100%;">
                 <a-carousel-item v-for="(item, index) in Math.ceil(picData?.length / 6)" :key="item">
                     <div class="item-son w-full h-full grid grid-cols-3 grid-rows-2 gap-2">
                         <div v-for="(item2, index2) in 6" class="">
@@ -13,6 +13,12 @@
                     </div>
                 </a-carousel-item>
             </a-carousel>
+            <div @click="prevCarousel()" class="arrow arrow-left cursor-pointer absolute top-1/2 -translate-y-1/2 bg-c-black-hover z-[999] rounded-full left-2 w-16 h-16 text-white hidden group-hover:flex items-center justify-center hover:bg-c-black2-hover">
+                <svg class="w-1/2 h-1/2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" ><path fill="currentColor" d="M609.408 149.376 277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0 30.592 30.592 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.592 30.592 0 0 0 0-42.688 29.12 29.12 0 0 0-41.728 0z"></path></svg>
+            </div>
+            <div @click="nextCarousel()" class="arrow arrow-right cursor-pointer absolute top-1/2 -translate-y-1/2 right-2 z-[999] bg-c-black-hover rounded-full w-16 h-16 text-white hidden group-hover:flex items-center justify-center hover:bg-c-black2-hover">
+                <svg class="w-1/2 h-1/2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" ><path fill="currentColor" d="M340.864 149.312a30.592 30.592 0 0 0 0 42.752L652.736 512 340.864 831.872a30.592 30.592 0 0 0 0 42.752 29.12 29.12 0 0 0 41.728 0L714.24 534.336a32 32 0 0 0 0-44.672L382.592 149.376a29.12 29.12 0 0 0-41.728 0z"></path></svg>
+            </div>
         </div>
         <!-- 移动轮播 -->
         <div class="md:hidden w-full h-[30%] mt-2">
@@ -23,53 +29,53 @@
             </van-swipe>
         </div>
         <p style="font-family: 'Font3';" class="md:text-xl text-base font-bold md:h-[15%] flex items-center justify-center mx-auto w-[100%]">{{ detail['Project Address'] }}</p>
-        <div class="md:w-[75%] md:h-[1200px] mx-auto w-full h-[500px] md:flex">
-            <div class="md:w-[85%] h-full w-full">
-                <p class="h-[30px] flex items-center text-base md:text-lg font-bold">Details</p>
-                <div class="details md:text-[14px] w-full h-[200px] mt-1 md:h-[180px] grid md:grid-cols-3 md:grid-rows-4 grid-cols-2 grid-rows-6">
+        <div class="md:w-[75%] md:h-[1200px] mx-auto w-full h-[500px] md:flex justify-center">
+            <div class="md:w-[85%] h-full w-full ">
+                <p class="h-[30px] md:w-[75%] ml-[25%] flex items-center text-lg md:text-xl font-bold">Details</p>
+                <div class="details md:w-[75%] ml-[25%] md:text-[14px] w-full h-[200px] md:h-[180px] grid md:grid-cols-3 md:grid-rows-4 grid-cols-2 grid-rows-6">
                     <div class="w-full h-full flex truncate items-center" v-for="item in propertyArr" :key="item.text">
                         <span :class="[ 'iconfont', `${item.icon}`, 'mx-1' ]"></span>
                         <span>{{ item.text }}:</span>
                         <span class="ml-1">{{ (item.label.includes('Price') || item.label.includes('SQFT')) ? detail[item.label]?.toLocaleString() : detail[item.label] }}</span>
                     </div>
                 </div>
-                <p class="h-[30px] flex items-center text-base md:text-lg font-bold mt-2">Others Details</p>
-                <div class="details md:text-[14px] w-full h-[200px] mt-1 md:h-[135px] grid md:grid-cols-2 md:grid-rows-3 grid-cols-1 grid-rows-6">
+                <p class="h-[30px] md:w-[75%] ml-[25%] flex items-center text-lg md:text-xl font-bold mt-2">Others Details</p>
+                <div class="details md:w-[75%] ml-[25%] md:text-[14px] w-full h-[200px] md:h-[135px] grid md:grid-cols-2 md:grid-rows-3 grid-cols-1 grid-rows-6">
                     <div class="w-full h-full flex truncate items-center" v-for="item in propertyArr2" :key="item.text">
                         <span :class="[ 'iconfont', `${item.icon}`, 'mx-1' ]"></span>
                         <span>{{ item.text }}:</span>
                         <span class="ml-1">{{ (item.label.includes('SQFT')) ? detail[item.label]?.toLocaleString() : detail[item.label] }}</span>
                     </div>
                 </div>
-                <p class="h-[30px] hidden md:flex items-center text-base md:text-lg font-bold mt-2">Description</p>
-                <p class="hidden md:block shadow p-1 leading-[2] mt-1 text-[15px]">{{ detail['Description'] }}</p>
-                <iframe :src="detail['Google Map Link']" class="w-full h-[500px] hidden md:block mt-4" frameborder="0"></iframe>
+                <p class="h-[30px] md:w-[75%] ml-[25%] hidden md:flex items-center text-lg md:text-xl font-bold mt-20">Description</p>
+                <p class="hidden md:block ml-[25%] shadow md:w-[75%] p-1 leading-[2] mt-1 text-[15px]">{{ detail['Description'] }}</p>
+                <iframe :src="detail['Google Map Link']" class="w-full ml-[25%] md:w-[75%] h-[500px] hidden md:block mt-4" frameborder="0"></iframe>
             </div>
             <div style="font-family: 'Font3';" class="col-right hidden md:flex md:flex-col md:items-end sticky top-0 btns-container md:w-[15%] h-[150px] text-white">
-                <div class="btn group aspect-square h-1/3 relative after:absolute after:right-full transition-all duration-500 flex items-center p-2 cursor-pointer rounded justify-center bg-neutral-500 hover:bg-neutral-400 border-b">
+                <div @click="previewPdf" class="btn group aspect-square h-1/3 relative after:absolute after:right-full transition-all duration-500 flex items-center p-2 cursor-pointer rounded justify-center bg-neutral-500 hover:bg-neutral-400 border-b">
                     <span class="iconfont icon-Brochure text-[24px]"></span>
-                    <span class="group-hover:flex hidden bg-neutral-500 h-[60%] p-1 aspect-[5/1] border border-gray-400 rounded absolute right-full items-center justify-center mr-1">BROCHURE</span>
+                    <span class="group-hover:flex hidden bg-neutral-500 h-[60%] p-1 aspect-[5/1] border border-gray-400 rounded absolute left-full items-center justify-center ml-1">BROCHURE</span>
                 </div>
-                <div class="btn group aspect-square h-1/3 relative after:absolute after:right-full transition-all duration-500 flex items-center p-2 cursor-pointer rounded justify-center bg-neutral-500 hover:bg-neutral-400 border-b">
+                <div @click="locationToggle('https://www.myanchorhomes.com/remote-home-tour')" class="btn group aspect-square h-1/3 relative after:absolute after:right-full transition-all duration-500 flex items-center p-2 cursor-pointer rounded justify-center bg-neutral-500 hover:bg-neutral-400 border-b">
                     <span class="iconfont icon-video_fill text-[24px]"></span>
-                    <span class="group-hover:flex hidden bg-neutral-500 h-[60%] p-1 aspect-[5/1] border border-gray-400 rounded absolute right-full items-center justify-center mr-1">VIDEO TOUR</span>
+                    <span class="group-hover:flex hidden bg-neutral-500 h-[60%] p-1 aspect-[5/1] border border-gray-400 rounded absolute left-full items-center justify-center ml-1">VIDEO TOUR</span>
                 </div>
-                <div class="btn group aspect-square h-1/3 relative after:absolute after:right-full transition-all duration-500 flex items-center p-2 cursor-pointer rounded justify-center bg-neutral-500 hover:bg-neutral-400 border-b">
+                <div @click="locationToggle('https://www.myanchorhomes.com/virtual-tour')" class="btn group aspect-square h-1/3 relative after:absolute after:right-full transition-all duration-500 flex items-center p-2 cursor-pointer rounded justify-center bg-neutral-500 hover:bg-neutral-400 border-b">
                     <span class="iconfont icon-virtual-reality text-[24px]"></span>
-                    <span class="group-hover:flex hidden bg-neutral-500 h-[60%] p-1 aspect-[5/1] border border-gray-400 rounded absolute right-full items-center justify-center mr-1">VIRTUAL TOUR</span>
+                    <span class="group-hover:flex hidden bg-neutral-500 h-[60%] p-1 aspect-[5/1] border border-gray-400 rounded absolute left-full items-center justify-center ml-1">VIRTUAL TOUR</span>
                 </div>
             </div>
         </div>
         <div class="w-full h-[7%] mb-4 md:hidden grid grid-rows-1 grid-cols-3 gap-1">
-            <div class="w-full h-full flex items-center justify-center border rounded">
+            <div @click="previewPdf" class="w-full h-full flex items-center justify-center border rounded">
                 <span class="iconfont icon-Brochure mr-2"></span>
                 <span>BROCHURE</span>
             </div>
-            <div class="w-full h-full flex items-center justify-center border rounded">
+            <div @click="locationToggle('https://www.myanchorhomes.com/remote-home-tour')" class="w-full h-full flex items-center justify-center border rounded">
                 <span class="iconfont icon-video_fill mr-2"></span>
                 <span>VIDEO TOUR</span>
             </div>
-            <div class="w-full h-full flex items-center justify-center border rounded">
+            <div @click="locationToggle('https://www.myanchorhomes.com/virtual-tour')" class="w-full h-full flex items-center justify-center border rounded">
                 <span class="iconfont icon-virtual-reality mr-2"></span>
                 <span>VIRTUAL TOUR</span>
             </div>
@@ -129,12 +135,12 @@ const propertyArr = ref([
     {
         label: 'Total Finished SQFT',
         icon: 'icon-sqft',
-        text: 'Sq.Ft.'
+        text: 'SqFt'
     },
     {
         label: 'Lot Size Acres',
         icon: 'icon-feature-lot-size',
-        text: 'Lot Size.'
+        text: 'Lot Size'
     },
     {
         label: 'Main Level Bedroom',
@@ -199,6 +205,25 @@ const propertyArr2 = ref([
         text: 'Builder Model'
     },
 ])
+
+// pc轮播控制
+const pcCarouselControl = ref(1);
+function prevCarousel(){
+    console.log(pcCarouselControl.value);
+    if(pcCarouselControl.value > 1){
+        pcCarouselControl.value--
+    } else {
+        pcCarouselControl.value = 1
+    }
+}
+function nextCarousel(){
+    console.log(pcCarouselControl.value);
+    if(pcCarouselControl.value < Math.ceil(picData.value.length / 6)){
+        pcCarouselControl.value++
+    } else {
+        pcCarouselControl.value = Math.ceil(picData.value.length / 6)
+    }
+}
 async function initDetail() {
     const res = await httpObj.sendPost('/records/query', {
         from: 'btwxxiycs',

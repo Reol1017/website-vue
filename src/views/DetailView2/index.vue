@@ -31,25 +31,25 @@
         <p style="font-family: 'Font3';" class="md:text-xl text-base font-bold md:h-[15%] flex items-center justify-center mx-auto w-[100%]">{{ detail['Project Address'] }}</p>
         <div class="md:w-[75%] md:h-[1200px] mx-auto w-full h-[500px] md:flex justify-center">
             <div class="md:w-[85%] h-full w-full ">
-                <p class="h-[30px] md:w-[75%] ml-[25%] flex items-center text-lg md:text-xl font-bold">Details</p>
-                <div class="details md:w-[75%] ml-[25%] md:text-[14px] w-full h-[200px] md:h-[180px] grid md:grid-cols-3 md:grid-rows-4 grid-cols-2 grid-rows-6">
+                <p class="h-[30px] md:w-[75%] md:ml-[25%] flex items-center text-lg md:text-xl font-bold">Details</p>
+                <div class="details md:w-[75%] md:ml-[25%] md:text-[14px] w-full h-[200px] md:h-[180px] grid md:grid-cols-3 md:grid-rows-4 grid-cols-2 grid-rows-6">
                     <div class="w-full h-full flex truncate items-center" v-for="item in propertyArr" :key="item.text">
                         <span :class="[ 'iconfont', `${item.icon}`, 'mx-1' ]"></span>
                         <span>{{ item.text }}:</span>
                         <span class="ml-1">{{ (item.label.includes('Price') || item.label.includes('SQFT')) ? detail[item.label]?.toLocaleString() : detail[item.label] }}</span>
                     </div>
                 </div>
-                <p class="h-[30px] md:w-[75%] ml-[25%] flex items-center text-lg md:text-xl font-bold mt-2">Others Details</p>
-                <div class="details md:w-[75%] ml-[25%] md:text-[14px] w-full h-[200px] md:h-[135px] grid md:grid-cols-2 md:grid-rows-3 grid-cols-1 grid-rows-6">
+                <p class="h-[30px] md:w-[75%] md:ml-[25%] flex items-center text-lg md:text-xl font-bold mt-2">Others Details</p>
+                <div class="details md:w-[75%] md:ml-[25%] md:text-[14px] w-full h-[200px] md:h-[135px] grid md:grid-cols-2 md:grid-rows-3 grid-cols-1 grid-rows-6">
                     <div class="w-full h-full flex truncate items-center" v-for="item in propertyArr2" :key="item.text">
                         <span :class="[ 'iconfont', `${item.icon}`, 'mx-1' ]"></span>
                         <span>{{ item.text }}:</span>
                         <span class="ml-1">{{ (item.label.includes('SQFT')) ? detail[item.label]?.toLocaleString() : detail[item.label] }}</span>
                     </div>
                 </div>
-                <p class="h-[30px] md:w-[75%] ml-[25%] hidden md:flex items-center text-lg md:text-xl font-bold mt-20">Description</p>
-                <p class="hidden md:block ml-[25%] shadow md:w-[75%] p-1 leading-[2] mt-1 text-[15px]">{{ detail['Description'] }}</p>
-                <iframe :src="detail['Google Map Link']" class="w-full ml-[25%] md:w-[75%] h-[500px] hidden md:block mt-4" frameborder="0"></iframe>
+                <p class="h-[30px] md:w-[75%] md:ml-[25%] hidden md:flex items-center text-lg md:text-xl font-bold mt-20">Description</p>
+                <p class="hidden md:block md:ml-[25%] shadow md:w-[75%] p-1 leading-[2] mt-1 text-[15px]">{{ detail['Description'] }}</p>
+                <iframe :src="detail['Google Map Link']" class="w-full md:ml-[25%] md:w-[75%] h-[500px] hidden md:block mt-4" frameborder="0"></iframe>
             </div>
             <div style="font-family: 'Font3';" class="col-right hidden md:flex md:flex-col md:items-end sticky top-0 btns-container md:w-[15%] h-[150px] text-white">
                 <div @click="previewPdf" class="btn group aspect-square h-1/3 relative after:absolute after:right-full transition-all duration-500 flex items-center p-2 cursor-pointer rounded justify-center bg-neutral-500 hover:bg-neutral-400 border-b">

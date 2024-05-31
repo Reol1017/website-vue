@@ -39,7 +39,7 @@
                         <span class="ml-1">{{ (item.label.includes('Price') || item.label.includes('SQFT')) ? detail[item.label]?.toLocaleString() : detail[item.label] }}</span>
                     </div>
                 </div>
-                <p class="h-[30px] md:w-[75%] md:ml-[25%] flex items-center text-lg md:text-xl font-bold mt-2">Others Details</p>
+                <p class="h-[30px] md:w-[75%] md:ml-[25%] flex items-center text-lg md:text-xl font-bold md:mt-20 mt-2">Other Details</p>
                 <div class="details md:w-[75%] md:ml-[25%] md:text-[14px] w-full h-[200px] md:h-[135px] grid md:grid-cols-2 md:grid-rows-3 grid-cols-1 grid-rows-6">
                     <div class="w-full h-full flex truncate items-center" v-for="item in propertyArr2" :key="item.text">
                         <span :class="[ 'iconfont', `${item.icon}`, 'mx-1' ]"></span>
@@ -85,7 +85,7 @@
             <p class="w-[100%] mx-auto md:text-lg text-sm font-bold">Description</p>
             <p class="w-[100%] mx-auto md:text-base leading-loose text-sm">{{ detail['Description'] }}</p>
         </div> -->
-        <p class="md:hidden font-bold text-sm mb-2">Description</p>
+        <p class="md:hidden font-bold text-lg h-[30px] mb-2">Description</p>
         <p class="md:hidden text-sm mb-6">{{ detail['Description'] }}</p>
         <iframe :src="detail['Google Map Link']" class="w-full h-full md:hidden" frameborder="0"></iframe>
     </div>

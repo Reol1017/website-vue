@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <p class="h-[30px] md:w-[75%] md:ml-[25%] hidden md:flex items-center text-lg md:text-xl font-bold mt-20">Description</p>
-                <p class="hidden md:block md:ml-[25%] shadow md:w-[75%] p-1 leading-[2] mt-1 text-[15px]">{{ detail['Description'] }}</p>
+                <p class="hidden md:block md:ml-[25%] md:w-[75%] p-1 leading-[2] mt-1 text-[15px]">{{ detail['Description'] }}</p>
                 <iframe :src="detail['Google Map Link']" class="w-full md:ml-[25%] md:w-[75%] h-[500px] hidden md:block mt-4" frameborder="0"></iframe>
             </div>
             <div style="font-family: 'Font3';" class="col-right hidden md:flex md:flex-col md:items-end sticky top-0 btns-container md:w-[15%] h-[150px] text-white">
@@ -86,7 +86,7 @@
             <p class="w-[100%] mx-auto md:text-base leading-loose text-sm">{{ detail['Description'] }}</p>
         </div> -->
         <p class="md:hidden font-bold text-lg h-[30px] mb-2">Description</p>
-        <p class="md:hidden text-sm mb-6">{{ detail['Description'] }}</p>
+        <p class="md:hidden text-sm mb-6 leading-[2]">{{ detail['Description'] }}</p>
         <iframe :src="detail['Google Map Link']" class="w-full h-full md:hidden" frameborder="0"></iframe>
     </div>
 </template>

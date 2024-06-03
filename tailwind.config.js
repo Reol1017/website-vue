@@ -55,7 +55,7 @@ export default {
         base: '0.85rem'
       },
       fontFamily:{
-        'c-t': ['"Times New Roman"']
+        'c-t': ['"Tahoma"']
       }
     },
   },

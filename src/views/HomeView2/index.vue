@@ -36,6 +36,7 @@
                     </template>
                 </a-popover>
                 <a @click="drawer = true" class="text-black  cursor-pointer flex items-center mx-2  rounded-lg px-2">All Filters</a>
+                <a @click="resetOut" class="text-black  cursor-pointer flex items-center mx-2  rounded-lg px-2">Reset</a>
                 <input  @focus="focusInput($event)" v-model="searchValue" type="text" placeholder="enter number, city or keyword to search" class=" rounded-lg my-auto placeholder:text-sm h-2/3 transition-all duration-1000" :class="[ inputWidth ? ' w-1/3 border pl-2 ' : ' w-0' ]">
                 <button @click="search" class="h-full aspect-square cursor-pointer hover:bg-gray-50 rounded-full"><i class="fa fa-search text-lg"></i></button>
             </div>
@@ -116,104 +117,132 @@
                 <CircleClose style="width: 15vw; height: 50vh;"></CircleClose>
                 <p style="font-size: 1.5rem;">No Data</p>
             </div>
-            <div ref="cMapRef" class="c-map w-[99%] h-[800px] mx-auto">123</div>
+            <div ref="cMapRef" class="c-map w-[99%] h-[800px] mx-auto"></div>
             <!-- <iframe  class="w-full h-[800px] mx-auto" src="https://www-myanchorhomes-com.filesusr.com/html/d7263e_8c3695e6dc63abfe88941479ce2f32ce.html"></iframe> -->
         </div>
     </div>
     <el-drawer v-model="drawer" title="Filters" size="40%">
-            <p class="font-bold">Price Range:</p>
-            <p class="my-4">
-                <el-slider :format-tooltip="(value) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })" v-model="priceFilter2" show-stops  :min="2000000" range :max="5000000" :step="100000"></el-slider>
-            </p>
-            <hr>
-            <p class="font-bold my-2">
-                Status:
-            </p>
-            <el-radio-group v-model="status">
-                <el-radio value="For Sale" size="large">For Sale</el-radio>
-                <el-radio value="Pending" size="large">Pending</el-radio>
-            </el-radio-group>
-            <hr>
-            <p class="font-bold my-2">Beds</p>
-            <el-slider v-model="beds" range show-stops :max="8" :min="3" />
-            <p class="font-bold my-2">Baths</p>
-            <el-slider v-model="baths" range show-stops :max="8" :min="3" />
-            <hr class="my-2">
-            <p class="font-bold my-2">Garage</p>
-            <el-slider v-model="garageNumberArrIn" show-stops range :max="5" :min="1" :step="1" />
-            <hr class="my-2">
-            <p class="font-bold my-2">High School</p>
-            <el-select v-model="schoolDistrictSelectedValueIn" placeholder="">
-                <el-option v-for="item in schoolDistrict" :key="item" :label="item" :value="item"></el-option>
-            </el-select>
-            <hr class="my-2">
-            <p class="font-bold my-2">SQFT</p>
-            <p class="my-4">
-                <el-input v-model="minSqft"style="width: 45%;" placeholder="please input min price"></el-input>
-                <span class="mx-4">-</span>
-                <el-input v-model="maxSqft"style="width: 45%;" placeholder="please input max price"></el-input>
-            </p>
-            <hr class="my-2">
-            <p class="font-bold my-2">City</p>
-            <el-select v-model="cityValue" placeholder="please select city">
-              <el-option v-for="item in city" :label="item" :value="item" :key="item"></el-option>
-            </el-select>
-            <hr class="my-2">
-            <p class="text-right">
-                <el-button @click="resetIn">Reset</el-button>
-                <el-button type="primary" @click="filterIn">Confirm</el-button>
-            </p>
-        </el-drawer>
-        <el-drawer v-model="mobileDrawer" size="100%" title="Filter" direction="ttb">
-            <p class="font-bold">Price Range:</p>
-            <p class="my-4">
-                <el-slider :format-tooltip="(value) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })" @change="filterPrice" v-model="priceFilter2" show-stops  :min="2000000" range :max="5000000" :step="100000"></el-slider>
-            </p>
-            <hr>
-            <p class="font-bold my-2">
-                Status:
-            </p>
-            <el-radio-group v-model="status">
-                <el-radio value="For Sale" size="large">For Sale</el-radio>
-                <el-radio value="Pending" size="large">Pending</el-radio>
-            </el-radio-group>
-            <hr>
-            <p class="font-bold my-2">Beds</p>
-            <el-slider v-model="beds" range show-stops :max="8" :min="3" />
-            <p class="font-bold my-2">Baths</p>
-            <el-slider v-model="baths" range show-stops :max="8" :min="3" />
-            <hr class="my-2">
-            <p class="font-bold my-2">Garage</p>
-            <el-slider v-model="garageNumberArrIn" show-stops range :max="5" :min="1" :step="1" />
-            <hr class="my-2">
-            <p class="font-bold my-2">High School</p>
-            <el-select v-model="schoolDistrictSelectedValueIn" placeholder="">
-                <el-option v-for="item in schoolDistrict" :key="item" :label="item" :value="item"></el-option>
-            </el-select>
-            <hr class="my-2">
-            <p class="font-bold my-2">SQFT</p>
-            <p class="my-4">
-                <el-input v-model="minSqft"style="width: 40%;" placeholder="please input min sqft"></el-input>
-                <span class="mx-4">-</span>
-                <el-input v-model="maxSqft"style="width: 40%;" placeholder="please input max sqft"></el-input>
-            </p>
-            <hr class="my-2">
-            <p class="font-bold my-2">City</p>
-            <el-select v-model="cityValue" placeholder="please select city">
-              <el-option v-for="item in city" :label="item" :value="item" :key="item"></el-option>
-            </el-select>
-            <hr class="my-2">
-            <p class="text-right">
-                <el-button @click="resetIn">Reset</el-button>
-                <el-button type="primary" @click="filterIn">Confirm</el-button>
-            </p>
-        </el-drawer>
+        <p class="font-bold">Price Range:</p>
+        <div class="my-4 flex items-center">
+            <div class="w-[15%] flex justify-center">{{ priceFilter2[0].toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}</div>
+            <el-slider style="width: 70%;margin-left: 30px;margin-right: 30px;" :format-tooltip="(value) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })" v-model="priceFilter2" show-stops  :min="2000000" range :max="5000000" :step="100000"></el-slider>
+            <div class="w-[15%] flex justify-center">{{ priceFilter2[1].toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}</div>
+        </div>
+        <hr>
+        <p class="font-bold my-2">
+            Status:
+        </p>
+        <el-radio-group v-model="status">
+            <el-radio value="For Sale" size="large">For Sale</el-radio>
+            <el-radio value="Pending" size="large">Pending</el-radio>
+        </el-radio-group>
+        <hr>
+        <p class="font-bold my-2">Beds</p>
+        <div class="my-4 flex items-center">
+            <div class="w-[10%] flex justify-center">{{ beds[0] }}</div>
+            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="beds" show-stops range :max="8" :min="3" />
+            <div class="w-[10%] flex justify-center">{{ beds[1] }}</div>
+        </div>
+        <p class="font-bold my-2">Baths</p>
+        <div class="my-4 flex items-center">
+            <div class="w-[10%] flex justify-center">{{ baths[0] }}</div>
+            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="baths" show-stops range :max="8" :min="3" />
+            <div class="w-[10%] flex justify-center">{{ baths[1] }}</div>
+        </div>
+        <hr class="my-2">
+        <p class="font-bold my-2">Garage</p>
+        <div class="my-4 flex items-center">
+            <div class="w-[10%] flex justify-center">{{ garageNumberArrIn[0] }}</div>
+            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="garageNumberArrIn" show-stops range :max="5" :min="1" :step="1" />
+            <div class="w-[10%] flex justify-center">{{ garageNumberArrIn[1] }}</div>
+        </div>
+        <hr class="my-2">
+        <p class="font-bold my-2">SQFT</p>
+        <div class="my-4 flex items-center">
+            <div class="w-[10%] flex justify-center">{{ sqftRange[0] }}</div>
+            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="sqftRange" show-stops range :max="10000" :min="3000" :step="1000" />
+            <div class="w-[10%] flex justify-center">{{ sqftRange[1] }}</div>
+        </div>
+        <hr class="my-2">
+        <p class="font-bold my-2">High School</p>
+        <el-select v-model="schoolDistrictSelectedValueIn" placeholder="">
+            <el-option v-for="item in schoolDistrict" :key="item" :label="item" :value="item"></el-option>
+        </el-select>
+        <hr class="my-2">
+        <p class="font-bold my-2">City</p>
+        <el-select v-model="cityValue" placeholder="please select city">
+            <el-option v-for="item in city" :label="item" :value="item" :key="item"></el-option>
+        </el-select>
+        <hr class="my-2">
+        <p class="text-right">
+            <el-button @click="resetIn">Reset</el-button>
+            <el-button type="primary" @click="filterIn">Confirm</el-button>
+        </p>
+    </el-drawer>
+    <el-drawer v-model="mobileDrawer" size="100%" title="Filter" direction="ttb">
+        <p class="font-bold">Price Range:</p>
+        <div class="my-4 flex items-center">
+            <div class="w-[15%] flex justify-center">{{ priceFilter2[0].toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}</div>
+            <el-slider style="width: 70%;margin-left: 30px;margin-right: 30px;" :format-tooltip="(value) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })" v-model="priceFilter2" show-stops  :min="2000000" range :max="5000000" :step="100000"></el-slider>
+            <div class="w-[15%] flex justify-center">{{ priceFilter2[1].toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}</div>
+        </div>
+        <hr>
+        <p class="font-bold my-2">
+            Status:
+        </p>
+        <el-radio-group v-model="status">
+            <el-radio value="For Sale" size="large">For Sale</el-radio>
+            <el-radio value="Pending" size="large">Pending</el-radio>
+        </el-radio-group>
+        <hr>
+        <p class="font-bold my-2">Beds</p>
+        <div class="my-4 flex items-center">
+            <div class="w-[10%] flex justify-center">{{ beds[0] }}</div>
+            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="beds" show-stops range :max="8" :min="3" />
+            <div class="w-[10%] flex justify-center">{{ beds[1] }}</div>
+        </div>
+        <p class="font-bold my-2">Baths</p>
+        <div class="my-4 flex items-center">
+            <div class="w-[10%] flex justify-center">{{ baths[0] }}</div>
+            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="baths" show-stops range :max="8" :min="3" />
+            <div class="w-[10%] flex justify-center">{{ baths[1] }}</div>
+        </div>
+        <hr class="my-2">
+        <p class="font-bold my-2">Garage</p>
+        <div class="my-4 flex items-center">
+            <div class="w-[10%] flex justify-center">{{ garageNumberArrIn[0] }}</div>
+            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="garageNumberArrIn" show-stops range :max="5" :min="1" :step="1" />
+            <div class="w-[10%] flex justify-center">{{ garageNumberArrIn[1] }}</div>
+        </div>
+        <hr class="my-2">
+        <p class="font-bold my-2">SQFT</p>
+        <div class="my-4 flex items-center">
+            <div class="w-[10%] flex justify-center">{{ sqftRange[0] }}</div>
+            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="sqftRange" show-stops range :max="10000" :min="3000" :step="1000" />
+            <div class="w-[10%] flex justify-center">{{ sqftRange[1] }}</div>
+        </div>
+        <hr>
+        <p class="font-bold my-2">High School</p>
+        <el-select v-model="schoolDistrictSelectedValueIn" placeholder="">
+            <el-option v-for="item in schoolDistrict" :key="item" :label="item" :value="item"></el-option>
+        </el-select>
+        <hr class="my-2">
+        <p class="font-bold my-2">City</p>
+        <el-select v-model="cityValue" placeholder="please select city">
+            <el-option v-for="item in city" :label="item" :value="item" :key="item"></el-option>
+        </el-select>
+        <hr class="my-2">
+        <p class="text-right">
+            <el-button @click="resetIn">Reset</el-button>
+            <el-button type="primary" @click="filterIn">Confirm</el-button>
+        </p>
+    </el-drawer>
 </template>
 
 <script setup>
 import { Menu, CircleClose } from '@element-plus/icons-vue'
 import { processData } from '../../hooks/index'
-import { computed, onMounted, ref, watch, onUnmounted, nextTick } from 'vue';
+import { computed, onMounted, ref, watch, onUnmounted, nextTick, defineOptions } from 'vue';
 import httpObj from '../../api/api';
 import { useRouter } from 'vue-router';
 const router = useRouter()
@@ -222,6 +251,9 @@ const filedNum = []
 for (let i = 11; i < 46; i++) {
     filedNum.push(i)
 }
+defineOptions({
+    name: 'home'
+})
 const mobileImgIndex = ref(-1);
 const markerRef = ref()
 const cardContainer = ref()
@@ -281,14 +313,6 @@ async function initMap(data) {
         gestureHandling: "cooperative",
     })
     data.filter((item) => item['House Status'] !== 'Sold').forEach((item, index) => {
-        // const div = document.createElement('div');
-        // div.classList.add('text-lg')
-        // if(item['House Status'] === 'For Sale'){
-        //     div.classList.add('text-red-700');
-        // }else{
-        //     div.classList.add('text-green-700');
-        // }
-        // div.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8"><path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" /></svg>`;
         const div = document.createElement('div')
         div.innerText = `${index + 1}`
         div.classList.add('font-bold');
@@ -300,8 +324,8 @@ async function initMap(data) {
         div.classList.add('items-center')
         div.classList.add('justify-center')
         const pin = new google.maps.marker.PinElement({
-            background: item['House Status'] === 'For Sale' ? 'red' : 'green',
-            borderColor: item['House Status'] === 'For Sale' ? 'red' : 'green',
+            background: item['House Status'] === 'For Sale' ? 'green' : 'red',
+            borderColor: item['House Status'] === 'For Sale' ? 'green' : 'red',
             glyph: div,
             glyphColor: '#000',
             scale: 1.2
@@ -405,6 +429,7 @@ async function resetOut(e){
     cityValue2.value = '';
     inputWidth.value = false
     searchValue.value = ''
+    await initMap(data.value)
 }
 
 const searchValue = ref('')
@@ -412,7 +437,7 @@ const inputWidth = ref(false);
 async function search(){
     if(searchValue.value){
         await initData()
-        data.value = data.value.filter(item => item['Project Address'].includes(searchValue.value))
+        data.value = data.value.filter(item => item['Project Address'].includes(searchValue.value) && item['House Status'] !== 'sold')
         await initMap(data.value)
     } else {
         inputWidth.value = !inputWidth.value
@@ -441,6 +466,7 @@ const house = ref(false)
 const townhouse = ref(false);
 const minSqft = ref(0);
 const maxSqft = ref(0);
+const sqftRange = ref([3000, 10000])
 const cityValue = ref('');
 const schoolDistrictSelectedValueIn = ref('');
 const garageNumberArrIn = ref([1, 5]);
@@ -455,6 +481,7 @@ const resetIn = async () => {
     townhouse.value = false
     minSqft.value = 0;
     maxSqft.value = 0;
+    sqftRange.value = [3000, 10000];
     cityValue.value = '';
     schoolDistrictSelectedValueIn.value = '';
     garageNumberArrIn.value = [1, 5];
@@ -511,15 +538,16 @@ const filterIn = async () => {
     })
     // console.log(data.value, 'school')
     data.value = data.value.filter(item => {
-        if(!maxSqft.value && minSqft.value){
-            return Number(item['Total Finished SQFT']) >= Number(minSqft.value)
-        } else if(!minSqft.value && maxSqft.value){
-            return Number(item['Total Finished SQFT']) <= Number(maxSqft.value)
-        } else if(minSqft.value && maxSqft.value){
-            return Number(item['Total Finished SQFT']) <= Number(maxSqft.value) && item['Total Finished SQFT'] >= Number(minSqft.value)
-        } else{
-            return item
-        }
+        // if(!maxSqft.value && minSqft.value){
+        //     return Number(item['Total Finished SQFT']) >= Number(minSqft.value)
+        // } else if(!minSqft.value && maxSqft.value){
+        //     return Number(item['Total Finished SQFT']) <= Number(maxSqft.value)
+        // } else if(minSqft.value && maxSqft.value){
+        //     return Number(item['Total Finished SQFT']) <= Number(maxSqft.value) && item['Total Finished SQFT'] >= Number(minSqft.value)
+        // } else{
+        //     return item
+        // }
+        return Number(item['Total Finished SQFT']) >= sqftRange.value[0] && Number(item['Total Finished SQFT']) <= sqftRange.value[1]
     })
     // console.log(data.value, 'sqft')
     data.value = data.value.filter(item => {
@@ -539,6 +567,7 @@ const filterIn = async () => {
     townhouse.value = false
     minSqft.value = 0;
     maxSqft.value = 0;
+    sqftRange.value = [3000, 10000];
     cityValue.value = '';
     schoolDistrictSelectedValueIn.value = '';
     garageNumberArrIn.value = [1, 5];

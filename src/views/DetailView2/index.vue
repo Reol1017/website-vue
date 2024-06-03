@@ -64,9 +64,13 @@
                     <span class="iconfont icon-virtual-reality text-[24px]"></span>
                     <span class="group-hover:flex hidden bg-neutral-500 h-[60%] p-1 aspect-[5/1] border border-gray-400 rounded absolute left-full items-center justify-center ml-1">VIRTUAL TOUR</span>
                 </div>
+                <div @click="returnPrevPage()" class="btn group aspect-square h-1/3 relative after:absolute after:right-full transition-all duration-500 flex items-center p-2 cursor-pointer rounded justify-center bg-neutral-500 hover:bg-neutral-400 border-b">
+                    <span class="iconfont icon-return text-[24px]"></span>
+                    <span class="group-hover:flex hidden bg-neutral-500 h-[60%] p-1 aspect-[5/1] border border-gray-400 rounded absolute left-full items-center justify-center ml-1">Back</span>
+                </div>
             </div>
         </div>
-        <div class="w-full h-[7%] mb-4 md:hidden grid grid-rows-1 grid-cols-3 gap-1">
+        <div class="w-full h-[10%] mb-4 md:hidden grid grid-rows-2 grid-cols-2 gap-1">
             <div @click="previewPdf" class="w-full h-full flex items-center justify-center border rounded">
                 <span class="iconfont icon-Brochure mr-2"></span>
                 <span>BROCHURE</span>
@@ -78,6 +82,10 @@
             <div @click="locationToggle('https://www.myanchorhomes.com/virtual-tour')" class="w-full h-full flex items-center justify-center border rounded">
                 <span class="iconfont icon-virtual-reality mr-2"></span>
                 <span>VIRTUAL TOUR</span>
+            </div>
+            <div @click="returnPrevPage()" class="w-full h-full flex items-center justify-center border rounded">
+                <span class="iconfont icon-return mr-2"></span>
+                <span>Back</span>
             </div>
         </div>
         <!-- 描述和地图 -->
@@ -94,17 +102,21 @@
 <script setup>
 import { CircleClose } from '@element-plus/icons-vue'
 import { GoogleMap, Marker, CustomMarker } from 'vue3-google-map'
-import { useRoute } from 'vue-router';
-import { ref, onMounted, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router';
+import { ref, onMounted, computed, defineOptions } from 'vue'
 import httpObj from '../../api/api';
 import { processData } from '../../hooks';
 import { ElMessage } from 'element-plus';
 const route = useRoute()
+const router = useRouter()
 const skeletonVisible = ref(true)
 const filedNum = []
 for (let i = 11; i < 48; i++) {
     filedNum.push(i)
 }
+defineOptions({
+    name: 'detail'
+})
 const detailName = ref('first')
 const detail = ref({})
 const picData = ref([])
@@ -205,6 +217,9 @@ const propertyArr2 = ref([
         text: 'Builder Model'
     },
 ])
+function returnPrevPage(){
+    router.go(-1);
+}
 
 // pc轮播控制
 const pcCarouselControl = ref(1);

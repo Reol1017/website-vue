@@ -181,10 +181,13 @@
     </el-drawer>
     <el-drawer v-model="mobileDrawer" size="100%" title="Filter" direction="ttb">
         <p class="font-bold">Price Range:</p>
-        <div class="my-4 flex items-center">
-            <div class="w-[15%] flex justify-center">{{ priceFilter2[0].toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}</div>
-            <el-slider style="width: 70%;margin-left: 30px;margin-right: 30px;" :format-tooltip="(value) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })" v-model="priceFilter2" show-stops  :min="2000000" range :max="5000000" :step="100000"></el-slider>
-            <div class="w-[15%] flex justify-center">{{ priceFilter2[1].toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}</div>
+        <div class="my-4 flex flex-col items-center">
+            <div class="w-[100%] flex">
+                <div class="flex-grow">{{ priceFilter2[0].toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}</div>
+                <div class="flex-grow">-</div>
+                <div class="flex-grow">{{ priceFilter2[1].toLocaleString('en-US', { style: 'currency', currency: 'USD' }) }}</div>
+            </div>
+            <el-slider :format-tooltip="(value) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })" v-model="priceFilter2" show-stops  :min="2000000" range :max="5000000" :step="100000"></el-slider>
         </div>
         <hr>
         <p class="font-bold my-2">

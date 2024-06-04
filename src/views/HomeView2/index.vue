@@ -37,7 +37,7 @@
                 </a-popover>
                 <a @click="drawer = true" class="text-black  cursor-pointer flex items-center mx-2  rounded-lg px-2">All Filters</a>
                 <a @click="resetOut" class="text-black  cursor-pointer flex items-center mx-2  rounded-lg px-2">Reset</a>
-                <input  @focus="focusInput($event)" v-model="searchValue" type="text" placeholder="enter number, city or keyword to search" class=" rounded-lg my-auto placeholder:text-sm h-2/3 transition-all duration-1000" :class="[ inputWidth ? ' w-1/3 border pl-2 ' : ' w-0' ]">
+                <input @keydown.enter="search"  @focus="focusInput($event)" v-model="searchValue" type="text" placeholder="enter number, city or keyword to search" class=" rounded-lg my-auto placeholder:text-sm h-2/3 transition-all duration-1000" :class="[ inputWidth ? ' w-1/3 border pl-2 ' : ' w-0' ]">
                 <button @click="search" class="h-full aspect-square cursor-pointer hover:bg-gray-50 rounded-full"><i class="fa fa-search text-lg"></i></button>
             </div>
             <div class="flex md:hidden lg:hidden w-full h-full items-center justify-between">
@@ -47,7 +47,7 @@
         </div>
         <div class="body w-full h-93/100 md:flex md:flex-wrap md:items-start" >
             <template v-if="data.filter((item) => item['House Status'] !== 'Sold').length > 0">
-                <div @touchstart="mobileImgIndex = index" @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" class="card  relative mx-auto my-2 w-49/50 md:w-49/100 h-auto aspect-video md:aspect-video border group" :class="[ (index ===  (data.filter((item) => item['House Status'] !== 'Sold').length - 1) && data.filter((item) => item['House Status'] !== 'Sold').length % 2 !== 0) ? 'hidden' : '']">
+                <div @touchstart="mobileImgIndex = index" @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" :class="[data.length % 2 === 0 ? 'mx-auto' : 'mx-2']" class="card  relative my-2 w-[99%] md:w-[49%] h-auto  aspect-video md:aspect-video border group">
                     <img class="h-full w-full object-cover" :src="item['Profile Pic Link']" />
                     <p class="absolute text-xs h-[8%] md:text-sm bg-c-black-hover flex items-center justify-center text-white top-0 w-5/6">{{ item['Project Address'] }}</p>
                     <div class="absolute h-[8%] text-xs md:text-sm w-1/6 top-0 right-0 flex justify-center items-center text-white bg-c-black-hover">
@@ -132,10 +132,13 @@
         <p class="font-bold my-2">
             Status:
         </p>
-        <el-radio-group v-model="status">
+        <el-checkbox-group v-model="statusArr" size="large">
+            <el-checkbox v-for="(item, index) in allStatus" :key="item" :label="item" :value="item"></el-checkbox>
+        </el-checkbox-group>
+        <!-- <el-radio-group v-model="status">
             <el-radio value="For Sale" size="large">For Sale</el-radio>
             <el-radio value="Pending" size="large">Pending</el-radio>
-        </el-radio-group>
+        </el-radio-group> -->
         <hr>
         <p class="font-bold my-2">Beds</p>
         <div class="my-4 flex items-center">
@@ -248,6 +251,7 @@ import { processData } from '../../hooks/index'
 import { computed, onMounted, ref, watch, onUnmounted, nextTick, defineOptions } from 'vue';
 import httpObj from '../../api/api';
 import { useRouter } from 'vue-router';
+import _ from 'lodash'
 const router = useRouter()
 const center = ref({ lat: 38.922856383502776, lng: -77.18227289214244 })
 const filedNum = []
@@ -258,10 +262,10 @@ defineOptions({
     name: 'home'
 })
 const mobileImgIndex = ref(-1);
-const markerRef = ref()
-const cardContainer = ref()
-const hrRef = ref()
-const mapRef = ref()
+// const markerRef = ref()
+// const cardContainer = ref()
+// const hrRef = ref()
+// const mapRef = ref()
 const skeletonVisible = ref(true);
 function focusInput(e){
     e.preventDefault();
@@ -277,10 +281,10 @@ function focusInput(e){
 //     deep: true
 // })
 const data = ref([])
-const data2 = ref([])
-const img_big = ref('https://static.wixstatic.com/media/d7263e_553e79a1d02d4c2da0d526214ab9890b~mv2.jpg/v1/fill/w_1356,h_1000,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/26-1002_Photo%20-%2010.jpg')
+// const data2 = ref([])
+// const img_big = ref('https://static.wixstatic.com/media/d7263e_553e79a1d02d4c2da0d526214ab9890b~mv2.jpg/v1/fill/w_1356,h_1000,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/26-1002_Photo%20-%2010.jpg')
 const city = ref([])
-async function initData() {
+async function initData(isFilter = false) {
     skeletonVisible.value = true;
     const res = await httpObj.sendPost('/records/query', {
         from: 'btwxxiycs',
@@ -294,6 +298,10 @@ async function initData() {
     })
     data.value = data.value.filter(item => item['Display'])
     data.value = data.value.sort((a, b) => a['House Status'].charCodeAt(0) - b['House Status'].charCodeAt(0))
+    data.value = data.value.filter(item => item['House Status'] !== 'Sold')
+    if(!isFilter && data.value.length % 2 !== 0){
+        data.value = _.slice(data.value, 0, data.value.length - 1)
+    }
     skeletonVisible.value = false;
     // data2.value = processData(res.data.data, res.data.fields)
     // data2.value = data.value.sort((a, b) => {
@@ -390,7 +398,7 @@ function details(item, e){
 const priceFilter = ref([2000000, 5000000])
 // 外部价格过滤
 async function filterPrice(){
-    await initData()
+    await initData(true)
     data.value = data.value.filter(item => {
         if(priceFilter.value[0] === priceFilter.value[1]){
             return item['List Price'] === priceFilter.value[0]
@@ -439,7 +447,7 @@ const searchValue = ref('')
 const inputWidth = ref(false);
 async function search(){
     if(searchValue.value){
-        await initData()
+        await initData(true)
         data.value = data.value.filter(item => item['Project Address'].includes(searchValue.value) && item['House Status'] !== 'sold')
         await initMap(data.value)
     } else {
@@ -449,13 +457,13 @@ async function search(){
 const schoolDistrict = ref([])
 const schoolDistrictSelectedValue = ref('')
 async function schoolChange(){
-    await initData()
+    await initData(true)
     data.value = data.value.filter(item => item['High School'] === schoolDistrictSelectedValue.value)
     await initMap(data.value)
 }
 const cityValue2 = ref('');
 const cityChangeOut = async (value) => {
-    await initData();
+    await initData(true);
     data.value = data.value.filter(item => item['Project Address'].includes(value))
     await initMap(data.value)
 }
@@ -463,6 +471,8 @@ const cityChangeOut = async (value) => {
 const drawer = ref(false);
 const priceFilter2 = ref([2000000, 5000000])
 const status = ref('For Sale')
+const statusArr = ref(['For Sale', 'Pending'])
+const allStatus = ref(['For Sale', 'Pending'])
 const beds = ref([3, 8])
 const baths = ref([3, 8])
 const house = ref(false)
@@ -492,12 +502,19 @@ const resetIn = async () => {
     schoolDistrictSelectedValue.value = '';
     searchValue.value = '';
     priceFilter.value = [2000000, 5000000]
+    statusArr.value = ['For Sale', 'Pending'];
     await initData();
     await initMap(data.value)
 }
 const filterIn = async () => {
-    await initData();
-    data.value = data.value.filter(item => item['House Status'] === status.value)
+    await initData(true);
+    data.value = data.value.filter(item => {
+        if(statusArr.value.length > 0){
+            return item['House Status'] === statusArr.value[0]
+        } else {
+            return item
+        }
+    })
     // console.log(data.value, 'status');
     data.value = data.value.filter(item => {
         if(priceFilter2.value[0] === priceFilter2.value[1]){

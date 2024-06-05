@@ -290,12 +290,12 @@ async function initData(isFilter = false) {
         select: [6,7,8,...filedNum]
     })
     data.value = processData(res.data.data, res.data.fields)
-    schoolDistrict.value = [...new Set(data.value.filter(item => item['House Status'] !== 'Sold').map(item => item['High School']))].toSorted((a, b) => {
+    schoolDistrict.value = [...new Set(data.value.filter(item => item['House Status'] !== 'Sold').map(item => item['High School']))].sort((a, b) => {
         return a.charCodeAt(0) - b.charCodeAt(0)
     })
     city.value = [...new Set(data.value.filter(item => item['House Status'] !== 'Sold').map(item => item['Project Address'].split(', ')[1]))]
     data.value = data.value.sort((a, b) => {
-		return b['Project Address'].split(', ')[1].charCodeAt(0) - a['Project Address'].split(', ')[1].charCodeAt(0)
+        return b['Project Address'].split(', ')[1].charCodeAt(0) - a['Project Address'].split(', ')[1].charCodeAt(0)
     })
     data.value = data.value.filter(item => item['Display'])
     data.value = data.value.sort((a, b) => a['House Status'].charCodeAt(0) - b['House Status'].charCodeAt(0))

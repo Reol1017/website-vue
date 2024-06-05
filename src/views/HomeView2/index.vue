@@ -47,7 +47,7 @@
         </div>
         <div class="body w-full h-93/100 md:flex md:flex-wrap md:items-start" >
             <template v-if="data.filter((item) => item['House Status'] !== 'Sold').length > 0">
-                <div @touchstart="mobileImgIndex = index" @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" :class="[data.length % 2 === 0 ? 'mx-auto' : 'mx-2']" class="card  relative my-2 w-[99%] md:w-[49%] h-auto  aspect-video md:aspect-video border group">
+                <div @touchstart="mobileImgIndex = index" @click="details(item, $event)" v-for="(item, index) in data.filter((item) => item['House Status'] !== 'Sold')" :class="[data.length  !== 1 ? 'mx-auto' : 'mx-2']" class="card  relative my-2 w-[99%] md:w-[49%] h-auto  aspect-video md:aspect-video border group">
                     <img class="h-full w-full object-cover" :src="item['Profile Pic Link']" />
                     <p class="absolute text-xs h-[8%] md:text-sm bg-c-black-hover flex items-center justify-center text-white top-0 w-5/6">{{ item['Project Address'] }}</p>
                     <div class="absolute h-[8%] text-xs md:text-sm w-1/6 top-0 right-0 flex justify-center items-center text-white bg-c-black-hover">
@@ -143,27 +143,27 @@
         <p class="font-bold my-2">Beds</p>
         <div class="my-4 flex items-center">
             <div class="w-[10%] flex justify-center">{{ beds[0] }}</div>
-            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="beds" show-stops range :max="8" :min="3" />
+            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="beds" show-stops range :max="10" :min="3" />
             <div class="w-[10%] flex justify-center">{{ beds[1] }}</div>
         </div>
         <p class="font-bold my-2">Baths</p>
         <div class="my-4 flex items-center">
             <div class="w-[10%] flex justify-center">{{ baths[0] }}</div>
-            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="baths" show-stops range :max="8" :min="3" />
+            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="baths" show-stops range :max="10" :min="3" />
             <div class="w-[10%] flex justify-center">{{ baths[1] }}</div>
         </div>
         <hr class="my-2">
         <p class="font-bold my-2">Garage</p>
         <div class="my-4 flex items-center">
             <div class="w-[10%] flex justify-center">{{ garageNumberArrIn[0] }}</div>
-            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="garageNumberArrIn" show-stops range :max="5" :min="1" :step="1" />
+            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="garageNumberArrIn" show-stops range :max="10" :min="1" :step="1" />
             <div class="w-[10%] flex justify-center">{{ garageNumberArrIn[1] }}</div>
         </div>
         <hr class="my-2">
         <p class="font-bold my-2">SQFT</p>
         <div class="my-4 flex items-center">
             <div class="w-[10%] flex justify-center">{{ sqftRange[0] }}</div>
-            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="sqftRange" show-stops range :max="10000" :min="3000" :step="1000" />
+            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="sqftRange" show-stops range :max="12000" :min="3000" :step="1000" />
             <div class="w-[10%] flex justify-center">{{ sqftRange[1] }}</div>
         </div>
         <hr class="my-2">
@@ -204,27 +204,27 @@
         <p class="font-bold my-2">Beds</p>
         <div class="my-4 flex items-center">
             <div class="w-[10%] flex justify-center">{{ beds[0] }}</div>
-            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="beds" show-stops range :max="8" :min="3" />
+            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="beds" show-stops range :max="10" :min="3" />
             <div class="w-[10%] flex justify-center">{{ beds[1] }}</div>
         </div>
         <p class="font-bold my-2">Baths</p>
         <div class="my-4 flex items-center">
             <div class="w-[10%] flex justify-center">{{ baths[0] }}</div>
-            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="baths" show-stops range :max="8" :min="3" />
+            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="baths" show-stops range :max="10" :min="3" />
             <div class="w-[10%] flex justify-center">{{ baths[1] }}</div>
         </div>
         <hr class="my-2">
         <p class="font-bold my-2">Garage</p>
         <div class="my-4 flex items-center">
             <div class="w-[10%] flex justify-center">{{ garageNumberArrIn[0] }}</div>
-            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="garageNumberArrIn" show-stops range :max="5" :min="1" :step="1" />
+            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="garageNumberArrIn" show-stops range :max="10" :min="1" :step="1" />
             <div class="w-[10%] flex justify-center">{{ garageNumberArrIn[1] }}</div>
         </div>
         <hr class="my-2">
         <p class="font-bold my-2">SQFT</p>
         <div class="my-4 flex items-center">
             <div class="w-[10%] flex justify-center">{{ sqftRange[0] }}</div>
-            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="sqftRange" show-stops range :max="10000" :min="3000" :step="1000" />
+            <el-slider style="width: 80%;margin-left: 20px;margin-right: 20px;" v-model="sqftRange" show-stops range :max="12000" :min="3000" :step="1000" />
             <div class="w-[10%] flex justify-center">{{ sqftRange[1] }}</div>
         </div>
         <hr>
@@ -291,7 +291,9 @@ async function initData(isFilter = false) {
         select: [6,7,8,...filedNum]
     })
     data.value = processData(res.data.data, res.data.fields)
-    schoolDistrict.value = [...new Set(data.value.filter(item => item['House Status'] !== 'Sold').map(item => item['High School']))]
+    schoolDistrict.value = [...new Set(data.value.filter(item => item['House Status'] !== 'Sold').map(item => item['High School']))].toSorted((a, b) => {
+        return a.charCodeAt(0) - b.charCodeAt(0)
+    })
     city.value = [...new Set(data.value.filter(item => item['House Status'] !== 'Sold').map(item => item['Project Address'].split(', ')[1]))]
     data.value = data.value.sort((a, b) => {
 		return b['Project Address'].split(', ')[1].charCodeAt(0) - a['Project Address'].split(', ')[1].charCodeAt(0)
@@ -471,49 +473,51 @@ const cityChangeOut = async (value) => {
 const drawer = ref(false);
 const priceFilter2 = ref([2000000, 5000000])
 const status = ref('For Sale')
-const statusArr = ref(['For Sale', 'Pending'])
-const allStatus = ref(['For Sale', 'Pending'])
-const beds = ref([3, 8])
-const baths = ref([3, 8])
+const statusArr = ref(['For Sale', 'Pending', 'Quick move-in'])
+const allStatus = ref(['For Sale', 'Pending', 'Quick move-in'])
+const beds = ref([3, 10])
+const baths = ref([3, 10])
 const house = ref(false)
 const townhouse = ref(false);
 const minSqft = ref(0);
 const maxSqft = ref(0);
-const sqftRange = ref([3000, 10000])
+const sqftRange = ref([3000, 12000])
 const cityValue = ref('');
 const schoolDistrictSelectedValueIn = ref('');
-const garageNumberArrIn = ref([1, 5]);
+const garageNumberArrIn = ref([1, 10]);
 const resetIn = async () => {
     drawer.value = false;
     mobileDrawer.value = false;
     priceFilter2.value = [2000000, 5000000]
     status.value = 'For Sale';
-    beds.value = [3, 8];
-    baths.value = [3, 8];
+    beds.value = [3, 10];
+    baths.value = [3, 10];
     house.value = false
     townhouse.value = false
     minSqft.value = 0;
     maxSqft.value = 0;
-    sqftRange.value = [3000, 10000];
+    sqftRange.value = [3000, 12000];
     cityValue.value = '';
     schoolDistrictSelectedValueIn.value = '';
-    garageNumberArrIn.value = [1, 5];
+    garageNumberArrIn.value = [1, 10];
     cityValue2.value = '';
     schoolDistrictSelectedValue.value = '';
     searchValue.value = '';
     priceFilter.value = [2000000, 5000000]
-    statusArr.value = ['For Sale', 'Pending'];
+    statusArr.value = ['For Sale', 'Pending', 'Quick move-in'];
     await initData();
     await initMap(data.value)
 }
 const filterIn = async () => {
     await initData(true);
     data.value = data.value.filter(item => {
-        if(statusArr.value.length > 0){
-            return item['House Status'] === statusArr.value[0]
-        } else {
-            return item
+        if(statusArr.value.length === allStatus.value.length){
+            return true;
         }
+        if(statusArr.value.length > 0){
+            return statusArr.value.includes(item['House Status'])
+        }
+        return true;
     })
     // console.log(data.value, 'status');
     data.value = data.value.filter(item => {
@@ -581,16 +585,16 @@ const filterIn = async () => {
     mobileDrawer.value = false;
     priceFilter2.value = [2000000, 5000000]
     status.value = 'For Sale';
-    beds.value = [3, 8];
-    baths.value = [3, 8];
+    beds.value = [3, 10];
+    baths.value = [3, 10];
     house.value = false
     townhouse.value = false
     minSqft.value = 0;
     maxSqft.value = 0;
-    sqftRange.value = [3000, 10000];
+    sqftRange.value = [3000, 12000];
     cityValue.value = '';
     schoolDistrictSelectedValueIn.value = '';
-    garageNumberArrIn.value = [1, 5];
+    garageNumberArrIn.value = [1, 10];
     drawer.value = false;
     if(width.value < 1024 && data.value.length === 0){
         showToast('There is no data!');
@@ -598,10 +602,6 @@ const filterIn = async () => {
     }
     await initMap(data.value)
 }
-const cardContainerTop = ref();
-const cardContainerBottom = ref();
-let observer = null;
-let observer2 = null;
 
 const cMapRef = ref();
 let map = null;

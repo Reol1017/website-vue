@@ -32,7 +32,7 @@
         <div class="md:w-[75%] md:h-[1200px] mx-auto w-full h-[500px] md:flex justify-center">
             <div class="md:w-[85%] h-full w-full ">
                 <p class="h-[30px] md:w-[75%] md:ml-[25%] flex items-center text-lg md:text-xl font-bold">Details</p>
-                <div class="details md:w-[75%] md:ml-[25%] md:text-[14px] w-full h-[200px] md:h-[180px] grid md:grid-cols-6 md:grid-rows-5 min-[1025px]:grid-cols-3 min-[1025px]:grid-rows-4 grid-cols-2 grid-rows-6">
+                <div class="details md:w-[75%] md:ml-[25%] md:text-[14px] w-full h-[200px] grid md:grid-cols-6 md:grid-rows-5 min-[1025px]:grid-cols-3 min-[1025px]:grid-rows-4 grid-cols-2 grid-rows-6">
                     <div class="w-full h-full flex truncate items-center min-[1025px]:row-span-1 min-[1025px]:col-span-1" :class="{ 'md:col-span-2 md:row-span-1': index < 6, 'md:col-span-3 md:row-span-1': index >= 6 }" v-for="(item, index) in propertyArr" :key="item.text">
                         <span :class="[ 'iconfont', `${item.icon}`, 'mx-1' ]"></span>
                         <span>{{ item.text }}:</span>
@@ -40,8 +40,8 @@
                     </div>
                 </div>
                 <p class="h-[30px] md:w-[75%] md:ml-[25%] flex items-center text-lg md:text-xl font-bold md:mt-20 mt-2">Other Details</p>
-                <div class="details md:w-[75%] md:ml-[25%] md:text-[14px] w-full h-[200px] min-[1025px]:h-[225px] grid min-[1025px]:grid-cols-4 min-[1025px]:grid-rows-5 grid-cols-1 grid-rows-6">
-                    <div class="w-full h-full flex min-[1025px]:truncate items-center" :class="[ index < 2 ? 'min-[1025px]:col-span-2': 'min-[1025px]:col-span-4' ]" v-for="(item, index) in propertyArr2" :key="item.text">
+                <div class="details md:w-[75%] md:ml-[25%] md:text-[14px] w-full h-[300px] grid grid-cols-1 grid-rows-6">
+                    <div class="w-full h-full flex min-[1025px]:truncate items-center" v-for="(item, index) in propertyArr2" :key="item.text">
                         <span :class="[ 'iconfont', `${item.icon}`, 'mx-1' ]"></span>
                         <span>{{ item.text }}:<span class="ml-1">{{ (item.label.includes('SQFT')) ? detail[item.label]?.toLocaleString() : detail[item.label] }}</span></span>
                     </div>

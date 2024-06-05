@@ -196,10 +196,9 @@
         <p class="font-bold my-2">
             Status:
         </p>
-        <el-radio-group v-model="status">
-            <el-radio value="For Sale" size="large">For Sale</el-radio>
-            <el-radio value="Pending" size="large">Pending</el-radio>
-        </el-radio-group>
+        <el-checkbox-group v-model="statusArr" size="large">
+            <el-checkbox v-for="(item, index) in allStatus" :key="item" :label="item" :value="item"></el-checkbox>
+        </el-checkbox-group>
         <hr>
         <p class="font-bold my-2">Beds</p>
         <div class="my-4 flex items-center">

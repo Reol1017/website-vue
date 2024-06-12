@@ -387,10 +387,11 @@ async function initMap(data) {
 //     document.querySelector(`#h${item['Project - Street ID'].trim()}`).style.border = '2px solid green'
 // }
 function details(item, e){
-    console.log(item)
+    // console.log(item)
     e.stopPropagation();
     if(item['House Status'] === 'For Sale'){
         router.push(`/detail/${item['Project - Street ID']}`)
+        window.parent.postMessage(item['Project Address'], '*');
     } else {
         ElMessage.info(`The House is ${item['House Status']}!`);
     }

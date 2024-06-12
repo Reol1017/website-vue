@@ -391,7 +391,7 @@ function details(item, e){
     e.stopPropagation();
     if(item['House Status'] === 'For Sale'){
         router.push(`/detail/${item['Project - Street ID']}`)
-        window.parent.postMessage(item['Project Address'], '*');
+        // window.parent.postMessage(item['Project Address'], '*');
     } else {
         ElMessage.info(`The House is ${item['House Status']}!`);
     }

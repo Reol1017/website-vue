@@ -40,10 +40,10 @@
                     </div>
                 </div>
                 <p class="h-[30px] md:w-[75%] md:ml-[25%] flex items-center text-lg md:text-xl font-bold md:mt-20 mt-2">Other Details</p>
-                <div class="details md:w-[75%] md:ml-[25%] md:text-[14px] w-full h-[200px] min-[1025px]:h-[300px] grid grid-cols-1 grid-rows-6">
+                <div class="details md:w-[75%] md:ml-[25%] md:text-[14px] w-full h-[200px] min-[1025px]:h-[200px] min-[1025px]:grid-cols-2 min-[1025px]:grid-rows-4 grid grid-cols-1 grid-rows-8">
                     <div class="w-full h-full flex min-[1025px]:truncate items-center" v-for="(item, index) in propertyArr2" :key="item.text">
                         <span :class="[ 'iconfont', `${item.icon}`, 'mx-1' ]"></span>
-                        <span>{{ item.text }}:<span class="ml-1">{{ (item.label.includes('SQFT')) ? detail[item.label]?.toLocaleString() : detail[item.label] }}</span></span>
+                        <span>{{ item.text }}:<span class="ml-1">{{ (item.label.includes('SQFT')) ? detail[item.label]?.toLocaleString() : item.label.includes('School') ? detail[item.label].split(', ')[0] : item.label !== 'Project Completion Status' ? detail[item.label] : detail[item.label] ? 'Compelete' : 'Not Compelete'}}</span></span>
                     </div>
                 </div>
                 <p class="h-[30px] md:w-[75%] md:ml-[25%] hidden md:flex items-center text-lg md:text-xl font-bold mt-20">Description</p>
@@ -110,7 +110,7 @@ const route = useRoute()
 const router = useRouter()
 const skeletonVisible = ref(true)
 const filedNum = []
-for (let i = 11; i < 48; i++) {
+for (let i = 11; i < 50; i++) {
     filedNum.push(i)
 }
 defineOptions({
@@ -215,6 +215,16 @@ const propertyArr2 = ref([
         icon: 'icon-bg-model',
         text: 'Builder Model'
     },
+    {
+        label: 'Project Completion Status',
+        icon: 'icon-registry_compelete',
+        text: 'Project Completion Status'
+    },
+    {
+        label: 'Estimated completion timeframe',
+        icon: 'icon-shijianpaixu',
+        text: 'Estimated Completion Timeframe'
+    }
 ])
 function returnPrevPage(){
     router.go(-1);

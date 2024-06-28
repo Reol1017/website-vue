@@ -7,7 +7,7 @@
                 <a href="mailto:%E2%80%8BDreamHome@Anchor-Homes.com" class=" text-gray-600 cursor-pointer">DreamHome@Anchor-Homes.com</a>
             </li>
             <li class="flex items-center h-[50px] lg:mr-6">
-                <img src="../../assets/location.PNG" class="w-[20px] mr-2" alt="">
+                <img src="../../assets/location.png" class="w-[20px] mr-2" alt="">
                 <span class=" text-gray-600 cursor-pointer">
                     6862 Elm St, Ste 110 , McLean, VA 22101
                 </span>

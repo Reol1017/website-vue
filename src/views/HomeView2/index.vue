@@ -1,6 +1,7 @@
 <template>
     <el-skeleton v-if="skeletonVisible" :animated="true" :rows="10" />
     <div v-else class="content-container w-full h-full text-xs md:text-sm lg:text-base overflow-y-scroll">
+        <CustomHeader />
         <div class="header h-7/100 w-full">
             <div class="hidden md:flex lg:flex justify-end w-full h-full md:relative">
                 <a-popover style="width: 25%; font-family: 'Font1'" title="Price Filter" trigger="click">
@@ -118,6 +119,7 @@
                 <p style="font-size: 1.5rem;">No Data</p>
             </div>
             <div ref="cMapRef" class="c-map w-[99%] h-[800px] mx-auto"></div>
+            <CustomFooter />
             <!-- <iframe  class="w-full h-[800px] mx-auto" src="https://www-myanchorhomes-com.filesusr.com/html/d7263e_8c3695e6dc63abfe88941479ce2f32ce.html"></iframe> -->
         </div>
     </div>
@@ -390,7 +392,7 @@ function details(item, e){
     // console.log(item)
     e.stopPropagation();
     if(item['House Status'] === 'For Sale'){
-        router.push(`/detail/${item['Project - Street ID']}`)
+        router.push(`/${item['Project - Street ID']}`)
         // window.parent.postMessage(item['Project Address'], '*');
     } else {
         ElMessage.info(`The House is ${item['House Status']}!`);

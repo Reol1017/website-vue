@@ -1,6 +1,7 @@
 <template>
     <el-skeleton v-if="skeletonVisible" :animated="true" :rows="10" />
-    <div v-else class="content-container relative font-c-t w-full h-full text-xs px-2 pb-4 md:text-sm lg:text-base overflow-y-scroll">
+    <div v-else class="content-container relative font-c-t w-full h-full text-xs px-2 pb-4 md:text-sm lg:text-base">
+        <CustomHeader style="font-family: 'Font3';" />
         <div class="pic-container swiper group hidden md:block w-[100%] aspect-[5/2] relative">
             <a-carousel :current="pcCarouselControl" animation-name="fade" indicator-type="line" show-arrow="never" arrow-class="bg-black" :auto-play="false" style="width: 100%; height: 100%;">
                 <a-carousel-item v-for="(item, index) in Math.ceil(picData?.length / 6)" :key="item">
@@ -29,7 +30,7 @@
             </van-swipe>
         </div>
         <p style="font-family: 'Font3';" class="md:text-xl text-base font-bold md:h-[15%] flex items-center justify-center mx-auto w-[100%]">{{ detail['Project Address'] }}</p>
-        <div class="md:w-[75%] md:h-[1200px] mx-auto w-full h-[500px] md:flex justify-center">
+        <div class="md:w-[75%] md:h-fit mx-auto w-full h-[500px] md:flex justify-center">
             <div class="md:w-[85%] h-full w-full ">
                 <p class="h-[30px] md:w-[75%] md:ml-[25%] flex items-center text-lg md:text-xl font-bold">Details</p>
                 <div class="details md:w-[75%] md:ml-[25%] md:text-[14px] w-full h-[200px] grid md:grid-cols-6 md:grid-rows-5 min-[1025px]:grid-cols-3 min-[1025px]:grid-rows-4 grid-cols-2 grid-rows-6">
@@ -95,6 +96,7 @@
         <p class="md:hidden font-bold text-lg h-[30px] mb-2">Description</p>
         <p class="md:hidden text-sm mb-6 leading-[2]">{{ detail['Description'] }}</p>
         <iframe :src="detail['Google Map Link']" class="w-full h-full md:hidden" frameborder="0"></iframe>
+        <CustomFooter />
     </div>
 </template>
 

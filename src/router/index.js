@@ -23,7 +23,7 @@ const routes = [
 
 const router = createRouter({
     routes,
-    history: createWebHashHistory(import.meta.env.BASE_URL)
+    history: createWebHistory(import.meta.env.BASE_URL)
 })
 
 router.beforeEach(async (to, from, next) => {
@@ -33,7 +33,7 @@ router.beforeEach(async (to, from, next) => {
             select: [6, 7, 8, ...filedNum],
             where: `{7.EX."${to.params.id === '6800' ? '6800 ' : to.params.id}"}`
         })
-        console.log(res);
+        // console.log(res, to);
         if(res.status === 200){
            if(res.data.data[0][45].value !== 'For Sale'){
             ElMessage.error('This House is not for sale!')

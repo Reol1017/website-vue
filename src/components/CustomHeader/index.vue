@@ -1,7 +1,9 @@
 <template>
-    <div ref="header" class="header w-full h-[70px] flex items-center sticky top-0 z-10 bg-white/[0.9]">
+    <div ref="header" style="font-family: 'Font3';" class="header w-full h-[70px] flex items-center sticky top-0 z-10 bg-white/[0.9]">
         <div class="logo lg:w-[150px] w-[120px] ml-2 h-[50px] flex items-center justify-center">
-            <img class="max-w-full max-h-full min-w-[90px] min-h-auto" src="https://static.wixstatic.com/media/b1c943_05819fe25f0b4d2c99ad10dc492f8708~mv2.png/v1/fill/w_206,h_63,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/b1c943_05819fe25f0b4d2c99ad10dc492f8708~mv2.png" alt="">
+            <router-link to="/">
+                <img class="max-w-full max-h-full min-w-[90px] min-h-auto cursor-pointer" src="https://static.wixstatic.com/media/b1c943_05819fe25f0b4d2c99ad10dc492f8708~mv2.png/v1/fill/w_206,h_63,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/b1c943_05819fe25f0b4d2c99ad10dc492f8708~mv2.png" alt="">
+            </router-link>
         </div>
         <div class="menu hidden w-[700px] lg:w-[1050px] h-[50px] mx-auto gap-10 text-center text-[16px]  md:flex items-center justify-center">
             <div class="menu-item cursor-pointer group/item1 relative">
@@ -19,7 +21,7 @@
                 </div>
             </div>
             <div class="menu-item cursor-pointer">
-                <a href="https://www.myanchorhomes.com/available-homes">Available Homes</a>
+                <a href="https://available-homes.myanchorhomes.com">Available Homes</a>
             </div>
             <div class="menu-item cursor-pointer group/item2 relative hover:text-gray-500">
                 <span>
@@ -170,7 +172,7 @@
                     </a-menu-item>
                 </a-sub-menu>
                 <a-menu-item key="1">
-                    <a href="https://www.myanchorhomes.com/available-homes">Available Homes</a>
+                    <a href="https://available-homes.myanchorhomes.com/">Available Homes</a>
                 </a-menu-item>
                 <a-sub-menu key="2">
                     <template #title>Virtual Tour</template>

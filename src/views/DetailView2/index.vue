@@ -1,7 +1,7 @@
 <template>
     <el-skeleton v-if="skeletonVisible" :animated="true" :rows="10" />
     <div v-else class="content-container relative font-c-t w-full h-full text-xs px-2 pb-4 md:text-sm lg:text-base">
-        <CustomHeader style="font-family: 'Font3';" />
+        <CustomHeader />
         <div class="pic-container swiper group hidden md:block w-[100%] aspect-[5/2] relative">
             <a-carousel :current="pcCarouselControl" animation-name="fade" indicator-type="line" show-arrow="never" arrow-class="bg-black" :auto-play="false" style="width: 100%; height: 100%;">
                 <a-carousel-item v-for="(item, index) in Math.ceil(picData?.length / 6)" :key="item">
@@ -29,7 +29,7 @@
                 </van-swipe-item>
             </van-swipe>
         </div>
-        <p style="font-family: 'Font3';" class="md:text-xl text-base font-bold md:h-[15%] flex items-center justify-center mx-auto w-[100%]">{{ detail['Project Address'] }}</p>
+        <p style="font-family: 'Font3';" class="md:text-xl text-base font-bold md:h-[15%] flex items-center justify-center mx-auto w-[100%]">{{ detail?.['Project Address'] }}</p>
         <div class="md:w-[75%] md:h-fit mx-auto w-full h-[500px] md:flex justify-center">
             <div class="md:w-[85%] h-full w-full ">
                 <p class="h-[30px] md:w-[75%] md:ml-[25%] flex items-center text-lg md:text-xl font-bold">Details</p>
@@ -37,7 +37,7 @@
                     <div class="w-full h-full flex truncate items-center min-[1025px]:row-span-1 min-[1025px]:col-span-1" :class="{ 'md:col-span-2 md:row-span-1': index < 6, 'md:col-span-3 md:row-span-1': index >= 6 }" v-for="(item, index) in propertyArr" :key="item.text">
                         <span :class="[ 'iconfont', `${item.icon}`, 'mx-1' ]"></span>
                         <span>{{ item.text }}:</span>
-                        <span class="ml-1">{{ (item.label.includes('Price') || item.label.includes('SQFT')) ? detail[item.label]?.toLocaleString() : detail[item.label] }}</span>
+                        <span class="ml-1">{{ (item.label.includes('Price') || item.label.includes('SQFT')) ? detail?.[item.label]?.toLocaleString() : detail?.[item.label] }}</span>
                     </div>
                 </div>
                 <p class="h-[30px] md:w-[75%] md:ml-[25%] flex items-center text-lg md:text-xl font-bold md:mt-20 mt-2">Other Details</p>
@@ -254,7 +254,7 @@ async function initDetail() {
     const res = await httpObj.sendPost('/records/query', {
         from: 'btwxxiycs',
         select: [6, 7, 8, ...filedNum],
-        where: `{7.EX."${route.params.id === '6800' ? '6800 ' : route.params.id}"}`
+        where: `{7.EX."${route.params.name.split('-')[0] === '6800' ? '6800 ' : route.params.name.split('-')[0]}"}`
     })
     detail.value = processData(res.data.data, res.data.fields)[0]
     skeletonVisible.value = false
@@ -264,7 +264,7 @@ async function getPic() {
     const res = await httpObj.sendPost('/records/query', {
         from: 'btwxxjnn4',
         select: [3, 6, 7, 8, 9, 10, 11, 12, 13],
-        where: `{8.EX.'${route.params.id === '6800' ? '6800 ' : route.params.id}'}`
+        where: `{8.EX.'${route.params.name.split('-')[0] === '6800' ? '6800 ' : route.params.name.split('-')[0]}'}`
     })
     picData.value = processData(res.data.data, res.data.fields)
     picData.value.forEach(item => {

@@ -85,7 +85,7 @@
             </div>
             <div @click="returnPrevPage()" class="w-full h-full flex items-center justify-center border rounded">
                 <span class="iconfont icon-return mr-2"></span>
-                <span>Back1</span>
+                <span>Back</span>
             </div>
         </div>
         <!-- 描述和地图 -->

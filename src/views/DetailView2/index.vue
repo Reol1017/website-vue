@@ -254,7 +254,7 @@ async function initDetail() {
     const res = await httpObj.sendPost('/records/query', {
         from: 'btwxxiycs',
         select: [6, 7, 8, ...filedNum],
-        where: `{7.EX."${route.params.name.split('-')[0] === '6800' ? '6800 ' : route.params.name.split('-')[0]}"}`
+        where: `{7.EX."${route.params.id === '6800' ? '6800 ' : route.params.id}"}`
     })
     detail.value = processData(res.data.data, res.data.fields)[0]
     skeletonVisible.value = false
@@ -264,7 +264,7 @@ async function getPic() {
     const res = await httpObj.sendPost('/records/query', {
         from: 'btwxxjnn4',
         select: [3, 6, 7, 8, 9, 10, 11, 12, 13],
-        where: `{8.EX.'${route.params.name.split('-')[0] === '6800' ? '6800 ' : route.params.name.split('-')[0]}'}`
+        where: `{8.EX.'${route.params.id === '6800' ? '6800 ' : route.params.id}'}`
     })
     picData.value = processData(res.data.data, res.data.fields)
     picData.value.forEach(item => {

@@ -392,7 +392,7 @@ function details(item, e){
     console.log(item)
     e.stopPropagation();
     if(item['House Status'] === 'For Sale'){
-        router.push(`/${item['Address in MLS'].replaceAll(' ', '-')}`)
+        router.push(`/${item['Project - Street ID']}`)
         // window.parent.postMessage(item['Project Address'], '*');
     } else {
         ElMessage.info(`The House is ${item['House Status']}!`);

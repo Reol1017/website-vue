@@ -115,11 +115,11 @@
                 </div>
             </template>
             <div v-else class="w-full h-1/2 flex flex-col items-center my-2 ">
+                <el-icon :size="120" color="red">
+                    <WarningFilled />
+                </el-icon>
                 <p class=" text-red-500 w-full text-center h-[20px] font-sans text-[12px] font-bold md:text-[16px] lg:text-[20px] my-4">No properties found with your current filters. </p>
                 <p class=" text-red-500 w-full text-center h-[20px] font-sans text-[12px] font-bold md:text-[16px] lg:text-[20px] my-4">Try adjusting your search or clearing some filters to see more options.</p>
-                <el-icon :size="120">
-                    <CircleClose></CircleClose>
-                </el-icon>
             </div>
             <div ref="cMapRef" class="c-map w-[99%] h-[800px] mx-auto"></div>
             <CustomFooter />
@@ -250,7 +250,7 @@
 </template>
 
 <script setup>
-import { Menu, CircleClose } from '@element-plus/icons-vue'
+import { Menu, CircleClose, WarningFilled } from '@element-plus/icons-vue'
 import { processData } from '../../hooks/index'
 import { computed, onMounted, ref, watch, onUnmounted, nextTick, defineOptions } from 'vue';
 import httpObj from '../../api/api';

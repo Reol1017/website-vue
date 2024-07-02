@@ -114,9 +114,12 @@
                     </div>
                 </div>
             </template>
-            <div v-else class="w-full h-1/2 flex flex-col items-center my-2">
-                <CircleClose style="width: 15vw; height: 50vh;"></CircleClose>
-                <p style="font-size: 1.5rem;">No Data</p>
+            <div v-else class="w-full h-1/2 flex flex-col items-center my-2 ">
+                <p class=" text-red-500 w-full text-center h-[20px] font-sans text-[12px] font-bold md:text-[16px] lg:text-[20px] my-4">No properties found with your current filters. </p>
+                <p class=" text-red-500 w-full text-center h-[20px] font-sans text-[12px] font-bold md:text-[16px] lg:text-[20px] my-4">Try adjusting your search or clearing some filters to see more options.</p>
+                <el-icon :size="120">
+                    <CircleClose></CircleClose>
+                </el-icon>
             </div>
             <div ref="cMapRef" class="c-map w-[99%] h-[800px] mx-auto"></div>
             <CustomFooter />

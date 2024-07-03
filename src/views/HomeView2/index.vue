@@ -115,11 +115,13 @@
                 </div>
             </template>
             <div v-else class="w-full h-1/2 flex flex-col items-center my-2 ">
-                <el-icon :size="120" color="red">
-                    <WarningFilled />
+                <el-icon class="flex-1 flex items-end" :size="120">
+                    <Warning />
                 </el-icon>
-                <p class=" text-red-500 w-full text-center h-[20px] font-sans text-[12px] font-bold md:text-[16px] lg:text-[20px] my-4">No properties found with your current filters. </p>
-                <p class=" text-red-500 w-full text-center h-[20px] font-sans text-[12px] font-bold md:text-[16px] lg:text-[20px] my-4">Try adjusting your search or clearing some filters to see more options.</p>
+                <div class="flex-1 w-full flex flex-col justify-start gap-4 font-sans">
+                    <p class=" w-full text-center h-[20px] text-[12px] md:text-[16px] lg:text-[20px]">No properties found with your current filters. </p>
+                    <p class=" w-full text-center h-[20px] text-[12px] md:text-[16px] lg:text-[20px]">Try adjusting your search or clearing some filters to see more options.</p>
+                </div>
             </div>
             <div ref="cMapRef" class="c-map w-[99%] h-[800px] mx-auto"></div>
             <CustomFooter />
@@ -250,7 +252,7 @@
 </template>
 
 <script setup>
-import { Menu, CircleClose, WarningFilled } from '@element-plus/icons-vue'
+import { Menu, CircleClose, WarningFilled, Warning } from '@element-plus/icons-vue'
 import { processData } from '../../hooks/index'
 import { computed, onMounted, ref, watch, onUnmounted, nextTick, defineOptions } from 'vue';
 import httpObj from '../../api/api';

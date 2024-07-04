@@ -112,7 +112,7 @@ const route = useRoute()
 const router = useRouter()
 const skeletonVisible = ref(true)
 const filedNum = []
-for (let i = 11; i < 50; i++) {
+for (let i = 11; i < 51; i++) {
     filedNum.push(i)
 }
 defineOptions({
@@ -303,7 +303,11 @@ function pressKeyToggle(e) {
 
 
 function locationToggle(url) {
-    window.location.href = url;
+    if(detail.value['Virtual Tour Link']){
+        window.open(detail.value['Virtual Tour Link'], '_blank')
+    } else {
+        window.open(url, '_blank')
+    }
 }
 
 function changeImage(index) {
